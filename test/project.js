@@ -2,7 +2,10 @@
 
 'use strict';
 
-var assert = require('chai').assert,
+var assert, mockery, esprima, modulePath,
+
+assert = require('chai').assert;
+esprima = require('esprima');
 
 modulePath = '../src/project';
 
@@ -32,57 +35,25 @@ suite('project:', function () {
             assert.isFunction(cr.analyse);
         });
 
-        test('analyse throws when source is object', function () {
+        test('analyse throws when modules is object', function () {
             assert.throws(function () {
-                cr.analyse({});
+                cr.analyse({
+                    body: [],
+                    loc: {
+                        start: {
+                            line: 0
+                        },
+                        end: {
+                            line: 0
+                        }
+                    }
+                });
             });
         });
 
-        test('analyse throws when source is string', function () {
-            assert.throws(function () {
-                cr.analyse('function foo () {}');
-            });
-        });
-
-        test('analyse does not throw when source is array', function () {
+        test('analyse does not throw when modules is array', function () {
             assert.doesNotThrow(function () {
                 cr.analyse([]);
-            });
-        });
-
-        test('analyse throws when module array contains non-JavaScript', function () {
-            assert.throws(function () {
-                cr.analyse([ { source: 'foo bar', path: 'baz' } ]);
-            });
-        });
-
-        test('analyse does not throw when module array contains JavaScript', function () {
-            assert.doesNotThrow(function () {
-                cr.analyse([ { source: 'function foo () {}', path: 'foo' } ]);
-            });
-        });
-
-        test('analyse throws when non-JavaScript is not first', function () {
-            assert.throws(function () {
-                cr.analyse([ { source: 'function foo () {}', path: 'foo' }, { source: 'function bar () {}', path: 'bar' }, { source: 'foo bar', path: 'baz' } ]);
-            });
-        });
-
-        test('analyse does not throw when module array contains multiple JavaScript', function () {
-            assert.doesNotThrow(function () {
-                cr.analyse([ { source: 'function foo () {}', path: 'foo' }, { source: 'console.log("bar");', path: 'bar' }, { source: 'var i; for (i = 0; i < 10; i += 1) { alert(i); }', path: 'baz' } ]);
-            });
-        });
-
-        test('analyse throws when module array is missing source', function () {
-            assert.throws(function () {
-                cr.analyse([ { path: 'foo' } ]);
-            });
-        });
-
-        test('analyse throws when module array is missing path', function () {
-            assert.throws(function () {
-                cr.analyse([ { source: 'function foo () {}' } ]);
             });
         });
 
@@ -135,8 +106,8 @@ suite('project:', function () {
 
             setup(function () {
                 result = cr.analyse([
-                    { source: 'function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', path: 'b' },
-                    { source: 'if (true) { "foo"; } else { "bar"; }', path: 'a' }
+                    { ast: esprima.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', { loc: true }), path: 'b' },
+                    { ast: esprima.parse('if (true) { "foo"; } else { "bar"; }', { loc: true }), path: 'a' }
                 ]);
             });
 
@@ -256,10 +227,10 @@ suite('project:', function () {
 
             setup(function () {
                 result = cr.analyse([
-                    { source: 'require("./a");"d";', path: '/d.js' },
-                    { source: 'require("./b");"c";', path: '/a/c.js' },
-                    { source: 'require("./c");"b";', path: '/a/b.js' },
-                    { source: 'require("./a/b");require("./a/c");"a";', path: '/a.js' }
+                    { ast: esprima.parse('require("./a");"d";', { loc: true }), path: '/d.js' },
+                    { ast: esprima.parse('require("./b");"c";', { loc: true }), path: '/a/c.js' },
+                    { ast: esprima.parse('require("./c");"b";', { loc: true }), path: '/a/b.js' },
+                    { ast: esprima.parse('require("./a/b");require("./a/c");"a";', { loc: true }), path: '/a.js' }
                 ]);
             });
 

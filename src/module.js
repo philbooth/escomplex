@@ -2,31 +2,27 @@
 
 'use strict';
 
-var check, esprima, syntaxDefinitions, safeName, syntaxes, report, clearDependencies;
+var check, syntaxDefinitions, safeName, syntaxes, report, clearDependencies;
 
 exports.analyse = analyse;
 
 check = require('check-types');
-esprima = require('esprima');
 safeName = require('./safeName');
 syntaxDefinitions = require('./syntax');
 
-function analyse (source, options) {
+function analyse (ast, options) {
     // TODO: Asynchronize.
 
-    var settings, ast;
+    var settings;
 
-    check.verifyUnemptyString(source, 'Invalid source');
+    check.verifyObject(ast, 'Invalid syntax tree');
+    check.verifyObject(ast.loc, 'Missing loc property in syntax tree');
 
     if (check.isObject(options)) {
         settings = options;
     } else {
         settings = getDefaultSettings();
     }
-
-    ast = esprima.parse(source, {
-        loc: true
-    });
 
     syntaxes = syntaxDefinitions.get(settings);
     report = createReport(ast.loc);

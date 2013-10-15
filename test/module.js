@@ -2,7 +2,10 @@
 
 'use strict';
 
-var assert = require('chai').assert,
+var assert, esprima, modulePath;
+
+assert = require('chai').assert;
+esprima = require('esprima');
 
 modulePath = '../src/module';
 
@@ -18,121 +21,328 @@ suite('module:', function () {
     });
 
     suite('require:', function () {
-        var cr;
+        var escomplex;
 
         setup(function () {
-            cr = require(modulePath);
+            escomplex = require(modulePath);
         });
 
         teardown(function () {
-            cr = undefined;
+            escomplex = undefined;
         });
 
         test('analyse function is exported', function () {
-            assert.isFunction(cr.analyse);
+            assert.isFunction(escomplex.analyse);
         });
 
-        test('analyse throws when source is object', function () {
-            assert.throws(function () {
-                cr.analyse({});
-            });
-        });
-
-        test('analyse throws when source is empty string', function () {
-            assert.throws(function () {
-                cr.analyse('');
-            });
-        });
-
-        test('analyse throws when source is not javascript', function () {
-            assert.throws(function () {
-                cr.analyse('foo bar');
-            });
-        });
-
-        test('analyse does not throw when source is javascript', function () {
+        test('analyse does not throw with valid ast', function () {
             assert.doesNotThrow(function () {
-                cr.analyse('console.log("foo");');
+                escomplex.analyse({
+                    body: [],
+                    loc: {
+                        start: {
+                            line: 0
+                        },
+                        end: {
+                            line: 0
+                        }
+                    }
+                });
+            });
+        });
+
+        test('analyse throws when ast has no body', function () {
+            assert.throws(function () {
+                escomplex.analyse({
+                    loc: {
+                        start: {
+                            line: 0
+                        },
+                        end: {
+                            line: 0
+                        }
+                    }
+                });
+            });
+        });
+
+        test('analyse throws when ast has no loc', function () {
+            assert.throws(function () {
+                escomplex.analyse({
+                    body: []
+                });
+            });
+        });
+
+        test('analyse throws when ast is string', function () {
+            assert.throws(function () {
+                escomplex.analyse('console.log("foo");');
+            });
+        });
+
+        test('analyse throws when ast is array', function () {
+            assert.throws(function () {
+                escomplex.analyse([]);
             });
         });
 
         test('analyse returns object', function () {
-            assert.isObject(cr.analyse('"foo"'));
+            assert.isObject(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }));
         });
 
         test('analyse returns aggregate complexity property', function () {
-            assert.isObject(cr.analyse('"foo"').aggregate.complexity);
+            assert.isObject(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity);
         });
 
         test('analyse returns aggregate lines of code property', function () {
-            assert.isObject(cr.analyse('"foo"').aggregate.complexity.sloc);
+            assert.isObject(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.sloc);
         });
 
         test('analyse returns aggregate physical lines of code property', function () {
-            assert.isNumber(cr.analyse('"foo"').aggregate.complexity.sloc.physical);
+            assert.isNumber(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.sloc.physical);
         });
 
         test('analyse returns aggregate logical lines of code property', function () {
-            assert.isNumber(cr.analyse('"foo"').aggregate.complexity.sloc.logical);
+            assert.isNumber(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.sloc.logical);
         });
 
         test('analyse returns aggregate cyclomatic complexity property', function () {
-            assert.isNumber(cr.analyse('"foo"').aggregate.complexity.cyclomatic);
+            assert.isNumber(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.cyclomatic);
         });
 
         test('analyse returns aggregate halstead property', function () {
-            assert.isObject(cr.analyse('"foo"').aggregate.complexity.halstead);
+            assert.isObject(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.halstead);
         });
 
         test('analyse returns aggregate halstead operators property', function () {
-            assert.isObject(cr.analyse('"foo"').aggregate.complexity.halstead.operators);
+            assert.isObject(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.halstead.operators);
         });
 
         test('analyse returns aggregate halstead total operators property', function () {
-            assert.isNumber(cr.analyse('"foo"').aggregate.complexity.halstead.operators.total);
+            assert.isNumber(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.halstead.operators.total);
         });
 
         test('analyse returns aggregate halstead distinct operators property', function () {
-            assert.isNumber(cr.analyse('"foo"').aggregate.complexity.halstead.operators.distinct);
+            assert.isNumber(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.halstead.operators.distinct);
         });
 
         test('analyse returns aggregate halstead operator identifiers property', function () {
-            assert.isArray(cr.analyse('"foo"').aggregate.complexity.halstead.operators.identifiers);
+            assert.isArray(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.halstead.operators.identifiers);
         });
 
         test('analyse returns aggregate halstead operands property', function () {
-            assert.isObject(cr.analyse('"foo"').aggregate.complexity.halstead.operands);
+            assert.isObject(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.halstead.operands);
         });
 
         test('analyse returns aggregate halstead total operands property', function () {
-            assert.isNumber(cr.analyse('"foo"').aggregate.complexity.halstead.operands.total);
+            assert.isNumber(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.halstead.operands.total);
         });
 
         test('analyse returns aggregate halstead distinct operands property', function () {
-            assert.isNumber(cr.analyse('"foo"').aggregate.complexity.halstead.operands.distinct);
+            assert.isNumber(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.halstead.operands.distinct);
         });
 
         test('analyse returns aggregate halstead operand identifiers property', function () {
-            assert.isArray(cr.analyse('"foo"').aggregate.complexity.halstead.operands.identifiers);
+            assert.isArray(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).aggregate.complexity.halstead.operands.identifiers);
         });
 
         test('analyse returns maintainability property', function () {
-            assert.isNumber(cr.analyse('"foo"').maintainability);
+            assert.isNumber(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).maintainability);
         });
 
         test('analyse returns functions property', function () {
-            assert.isArray(cr.analyse('"foo"').functions);
+            assert.isArray(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).functions);
         });
 
         test('analyse returns dependencies property', function () {
-            assert.isArray(cr.analyse('"foo"').dependencies);
+            assert.isArray(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }).dependencies);
         });
 
         suite('function call:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('parseInt("10", 10);');
+                report = escomplex.analyse(esprima.parse('parseInt("10", 10);', { loc: true }));
             });
 
             teardown(function () {
@@ -234,7 +444,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('if (true) { "foo"; }');
+                report = escomplex.analyse(esprima.parse('if (true) { "foo"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -328,7 +538,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('if (true) { "foo"; } else { "bar"; }');
+                report = escomplex.analyse(esprima.parse('if (true) { "foo"; } else { "bar"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -414,7 +624,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('if (true) { "foo"; } if (false) { "bar"; }');
+                report = escomplex.analyse(esprima.parse('if (true) { "foo"; } if (false) { "bar"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -476,7 +686,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('if (true) { "foo"; } else if (false) { "bar"; }');
+                report = escomplex.analyse(esprima.parse('if (true) { "foo"; } else if (false) { "bar"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -526,7 +736,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('if (true) { "foo"; if (false) { "bar"; } }');
+                report = escomplex.analyse(esprima.parse('if (true) { "foo"; if (false) { "bar"; } }', { loc: true }));
             });
 
             teardown(function () {
@@ -546,7 +756,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('switch (Date.now()) { case 1: "foo"; break; case 2: "bar"; break; default: "baz"; }');
+                report = escomplex.analyse(esprima.parse('switch (Date.now()) { case 1: "foo"; break; case 2: "bar"; break; default: "baz"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -586,7 +796,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('switch (Date.now()) { case 1: case 2: "foo"; break; default: "bar"; }');
+                report = escomplex.analyse(esprima.parse('switch (Date.now()) { case 1: case 2: "foo"; break; default: "bar"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -626,7 +836,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('switch (Date.now()) { case 1: "foo"; break; case 2: "bar"; break; default: if (true) { "baz"; } }');
+                report = escomplex.analyse(esprima.parse('switch (Date.now()) { case 1: "foo"; break; case 2: "bar"; break; default: if (true) { "baz"; } }', { loc: true }));
             });
 
             teardown(function () {
@@ -666,7 +876,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var i; for (i = 0; i < 10; i += 1) { "foo"; }');
+                report = escomplex.analyse(esprima.parse('var i; for (i = 0; i < 10; i += 1) { "foo"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -718,7 +928,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var i; for (i = 0; i < 10; i += 1) { if (true) { "foo"; } }');
+                report = escomplex.analyse(esprima.parse('var i; for (i = 0; i < 10; i += 1) { if (true) { "foo"; } }', { loc: true }));
             });
 
             teardown(function () {
@@ -750,7 +960,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var property; for (property in { foo: "bar", baz: "qux" }) { "wibble"; }');
+                report = escomplex.analyse(esprima.parse('var property; for (property in { foo: "bar", baz: "qux" }) { "wibble"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -802,7 +1012,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var property, object = { foo: "bar", baz: "qux" }; for (property in object) { if (object.hasOwnProperty(property)) { "wibble"; } }');
+                report = escomplex.analyse(esprima.parse('var property, object = { foo: "bar", baz: "qux" }; for (property in object) { if (object.hasOwnProperty(property)) { "wibble"; } }', { loc: true }));
             });
 
             teardown(function () {
@@ -834,7 +1044,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('while (true) { "foo"; }');
+                report = escomplex.analyse(esprima.parse('while (true) { "foo"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -874,7 +1084,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('while (true) { if (true) { "foo"; } }');
+                report = escomplex.analyse(esprima.parse('while (true) { if (true) { "foo"; } }', { loc: true }));
             });
 
             teardown(function () {
@@ -906,7 +1116,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('do { "foo"; } while (true)');
+                report = escomplex.analyse(esprima.parse('do { "foo"; } while (true)', { loc: true }));
             });
 
             teardown(function () {
@@ -946,7 +1156,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('do { if (true) { "foo"; } } while (true)');
+                report = escomplex.analyse(esprima.parse('do { if (true) { "foo"; } } while (true)', { loc: true }));
             });
 
             teardown(function () {
@@ -978,7 +1188,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('try { "foo"; } catch (e) { e.message; }');
+                report = escomplex.analyse(esprima.parse('try { "foo"; } catch (e) { e.message; }', { loc: true }));
             });
 
             teardown(function () {
@@ -1018,7 +1228,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('try { if (true) { "foo"; } } catch (e) { "bar"; }');
+                report = escomplex.analyse(esprima.parse('try { if (true) { "foo"; } } catch (e) { "bar"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -1050,7 +1260,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('try { "foo"; } catch (e) { if (true) { "bar"; } }');
+                report = escomplex.analyse(esprima.parse('try { "foo"; } catch (e) { if (true) { "bar"; } }', { loc: true }));
             });
 
             teardown(function () {
@@ -1082,7 +1292,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo () { "bar"; }');
+                report = escomplex.analyse(esprima.parse('function foo () { "bar"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -1194,7 +1404,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo () { bar(); function bar () { "baz"; } }');
+                report = escomplex.analyse(esprima.parse('function foo () { bar(); function bar () { "baz"; } }', { loc: true }));
             });
 
             teardown(function () {
@@ -1246,7 +1456,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo () { if (true) { "bar"; } }');
+                report = escomplex.analyse(esprima.parse('function foo () { if (true) { "bar"; } }', { loc: true }));
             });
 
             teardown(function () {
@@ -1282,7 +1492,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = "bar";');
+                report = escomplex.analyse(esprima.parse('var foo = "bar";', { loc: true }));
             });
 
             teardown(function () {
@@ -1322,7 +1532,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = true ? "bar" : "baz";');
+                report = escomplex.analyse(esprima.parse('var foo = true ? "bar" : "baz";', { loc: true }));
             });
 
             teardown(function () {
@@ -1358,7 +1568,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = true ? "bar" : (false ? "baz" : "qux");');
+                report = escomplex.analyse(esprima.parse('var foo = true ? "bar" : (false ? "baz" : "qux");', { loc: true }));
             });
 
             teardown(function () {
@@ -1394,7 +1604,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = true || false;');
+                report = escomplex.analyse(esprima.parse('var foo = true || false;', { loc: true }));
             });
 
             teardown(function () {
@@ -1430,7 +1640,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = function () { "bar"; }');
+                report = escomplex.analyse(esprima.parse('var foo = function () { "bar"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -1470,7 +1680,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = function bar () { "baz"; }');
+                report = escomplex.analyse(esprima.parse('var foo = function bar () { "baz"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -1498,7 +1708,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo () { return true ? "bar" : "baz"; }');
+                report = escomplex.analyse(esprima.parse('function foo () { return true ? "bar" : "baz"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -1538,7 +1748,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo () { return true || false; }');
+                report = escomplex.analyse(esprima.parse('function foo () { return true || false; }', { loc: true }));
             });
 
             teardown(function () {
@@ -1570,7 +1780,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo () { return function () { "bar"; }; }');
+                report = escomplex.analyse(esprima.parse('function foo () { return function () { "bar"; }; }', { loc: true }));
             });
 
             teardown(function () {
@@ -1614,7 +1824,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo () { return function bar () { "baz"; }; }');
+                report = escomplex.analyse(esprima.parse('function foo () { return function bar () { "baz"; }; }', { loc: true }));
             });
 
             teardown(function () {
@@ -1638,7 +1848,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('parseInt("10", true ? 10 : 8);');
+                report = escomplex.analyse(esprima.parse('parseInt("10", true ? 10 : 8);', { loc: true }));
             });
 
             teardown(function () {
@@ -1670,7 +1880,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('parseInt("10", 10 || 8);');
+                report = escomplex.analyse(esprima.parse('parseInt("10", 10 || 8);', { loc: true }));
             });
 
             teardown(function () {
@@ -1686,7 +1896,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('setTimeout(function () { "foo"; }, 1000);');
+                report = escomplex.analyse(esprima.parse('setTimeout(function () { "foo"; }, 1000);', { loc: true }));
             });
 
             teardown(function () {
@@ -1726,7 +1936,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('setTimeout(function foo () { "bar"; }, 1000);');
+                report = escomplex.analyse(esprima.parse('setTimeout(function foo () { "bar"; }, 1000);', { loc: true }));
             });
 
             teardown(function () {
@@ -1742,9 +1952,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = true || false;', {
-                    logicalor: false
-                });
+                report = escomplex.analyse(esprima.parse('var foo = true || false;', { loc: true }), { logicalor: false });
             });
 
             teardown(function () {
@@ -1760,9 +1968,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('switch (Date.now()) { case 1: "foo"; break; case 2: "bar"; break; default: "baz"; }', {
-                    switchcase: false
-                });
+                report = escomplex.analyse(esprima.parse('switch (Date.now()) { case 1: "foo"; break; case 2: "bar"; break; default: "baz"; }', { loc: true }), { switchcase: false });
             });
 
             teardown(function () {
@@ -1778,9 +1984,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var property; for (property in { foo: "bar", baz: "qux" }) { "wibble"; }', {
-                    forin: true
-                });
+                report = escomplex.analyse(esprima.parse('var property; for (property in { foo: "bar", baz: "qux" }) { "wibble"; }', { loc: true }), { forin: true });
             });
 
             teardown(function () {
@@ -1796,9 +2000,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('try { "foo"; } catch (e) { e.message; }', {
-                    trycatch: true
-                });
+                report = escomplex.analyse(esprima.parse('try { "foo"; } catch (e) { e.message; }', { loc: true }), { trycatch: true });
             });
 
             teardown(function () {
@@ -1814,7 +2016,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('(function (foo) { if (foo === "foo") { console.log(foo); return; } "bar"; }("foo"));');
+                report = escomplex.analyse(esprima.parse('(function (foo) { if (foo === "foo") { console.log(foo); return; } "bar"; }("foo"));', { loc: true }));
             });
 
             teardown(function () {
@@ -1866,7 +2068,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('if ("foo" && "bar") { "baz"; }');
+                report = escomplex.analyse(esprima.parse('if ("foo" && "bar") { "baz"; }', { loc: true }));
             });
 
             teardown(function () {
@@ -1902,7 +2104,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('(function () { "foo"; }).call(this);');
+                report = escomplex.analyse(esprima.parse('(function () { "foo"; }).call(this);', { loc: true }));
             });
 
             teardown(function () {
@@ -1938,7 +2140,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = {}; foo.bar = function () { "foobar"; };');
+                report = escomplex.analyse(esprima.parse('var foo = {}; foo.bar = function () { "foobar"; };', { loc: true }));
             });
 
             teardown(function () {
@@ -1978,7 +2180,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('"".bar = function () { "bar"; };');
+                report = escomplex.analyse(esprima.parse('"".bar = function () { "bar"; };', { loc: true }));
             });
 
             teardown(function () {
@@ -2002,7 +2204,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = {};');
+                report = escomplex.analyse(esprima.parse('var foo = {};', { loc: true }));
             });
 
             teardown(function () {
@@ -2042,7 +2244,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = { bar: "bar", baz: function () { "baz"; } };');
+                report = escomplex.analyse(esprima.parse('var foo = { bar: "bar", baz: function () { "baz"; } };', { loc: true }));
             });
 
             teardown(function () {
@@ -2082,7 +2284,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = { bar: function () { if (true) { "bar"; } }, bar: function () { "bar"; } };');
+                report = escomplex.analyse(esprima.parse('var foo = { bar: function () { if (true) { "bar"; } }, bar: function () { "bar"; } };', { loc: true }));
             });
 
             teardown(function () {
@@ -2118,7 +2320,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('try { throw new Error("foo"); } catch (e) { alert(error.message); }');
+                report = escomplex.analyse(esprima.parse('try { throw new Error("foo"); } catch (e) { alert(error.message); }', { loc: true }));
             });
 
             teardown(function () {
@@ -2154,7 +2356,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var a = 0; ++a; a++;');
+                report = escomplex.analyse(esprima.parse('var a = 0; ++a; a++;', { loc: true }));
             });
 
             teardown(function () {
@@ -2194,7 +2396,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('[ "foo", "bar" ];');
+                report = escomplex.analyse(esprima.parse('[ "foo", "bar" ];', { loc: true }));
             });
 
             teardown(function () {
@@ -2234,7 +2436,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('// This is a\n// multi-line\n// comment.\nparseInt(\n\t(function () {\n\t\t// Moar\n\t\t// commentz!\n\t\treturn [\n\t\t\t"1",\n\t\t\t"0"\n\t\t].join("");\n\t}()),\n\t10\n);');
+                report = escomplex.analyse(esprima.parse('// This is a\n// multi-line\n// comment.\nparseInt(\n\t(function () {\n\t\t// Moar\n\t\t// commentz!\n\t\treturn [\n\t\t\t"1",\n\t\t\t"0"\n\t\t].join("");\n\t}()),\n\t10\n);', { loc: true }));
             });
 
             teardown(function () {
@@ -2270,7 +2472,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }');
+                report = escomplex.analyse(esprima.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', { loc: true }));
             });
 
             teardown(function () {
@@ -2302,7 +2504,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var callback = arguments[arguments.length-1] instanceof Function ? arguments[arguments.length-1] : function() {};');
+                report = escomplex.analyse(esprima.parse('var callback = arguments[arguments.length-1] instanceof Function ? arguments[arguments.length-1] : function() {};', { loc: true }));
             });
 
             teardown(function () {
@@ -2318,7 +2520,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo () { return; }');
+                report = escomplex.analyse(esprima.parse('function foo () { return; }', { loc: true }));
             });
 
             teardown(function () {
@@ -2358,9 +2560,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', {
-                    newmi: true
-                });
+                report = escomplex.analyse(esprima.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', { loc: true }), { newmi: true });
             });
 
             teardown(function () {
@@ -2376,7 +2576,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo (a) {} function bar (b) {} function baz (c) {}');
+                report = escomplex.analyse(esprima.parse('function foo (a) {} function bar (b) {} function baz (c) {}', { loc: true }));
             });
 
             teardown(function () {
@@ -2396,7 +2596,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('function foo (a, b, c, d, e) {} function bar (a, b, c, d, e) {} function baz (a) {}');
+                report = escomplex.analyse(esprima.parse('function foo (a, b, c, d, e) {} function bar (a, b, c, d, e) {} function baz (a) {}', { loc: true }));
             });
 
             teardown(function () {
@@ -2416,7 +2616,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('require("./foo");');
+                report = escomplex.analyse(esprima.parse('require("./foo");', { loc: true }));
             });
 
             teardown(function () {
@@ -2439,7 +2639,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('require("./bar");');
+                report = escomplex.analyse(esprima.parse('require("./bar");', { loc: true }));
             });
 
             teardown(function () {
@@ -2455,7 +2655,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('require("./foo");\nrequire("./bar");\n\nrequire("./baz");');
+                report = escomplex.analyse(esprima.parse('require("./foo");\nrequire("./bar");\n\nrequire("./baz");', { loc: true }));
             });
 
             teardown(function () {
@@ -2480,7 +2680,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = "./foo";require(foo);');
+                report = escomplex.analyse(esprima.parse('var foo = "./foo";require(foo);', { loc: true }));
             });
 
             teardown(function () {
@@ -2503,7 +2703,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('require([ "foo" ], function (foo) {});');
+                report = escomplex.analyse(esprima.parse('require([ "foo" ], function (foo) {});', { loc: true }));
             });
 
             teardown(function () {
@@ -2526,7 +2726,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('require([ "bar" ], function (barModule) {});');
+                report = escomplex.analyse(esprima.parse('require([ "bar" ], function (barModule) {});', { loc: true }));
             });
 
             teardown(function () {
@@ -2542,7 +2742,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('require([ "foo", "bar", "baz" ], function (foo, bar, baz) {});');
+                report = escomplex.analyse(esprima.parse('require([ "foo", "bar", "baz" ], function (foo, bar, baz) {});', { loc: true }));
             });
 
             teardown(function () {
@@ -2568,7 +2768,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = "foo";\nrequire([ foo ], function (foo) {});');
+                report = escomplex.analyse(esprima.parse('var foo = "foo";\nrequire([ foo ], function (foo) {});', { loc: true }));
             });
 
             teardown(function () {
@@ -2590,7 +2790,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('var foo = [ "foo" ];\nrequire(foo, function (foo) {});');
+                report = escomplex.analyse(esprima.parse('var foo = [ "foo" ];\nrequire(foo, function (foo) {});', { loc: true }));
             });
 
             teardown(function () {
@@ -2611,7 +2811,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('require.config({\n\tpaths: {\n\t\tfoo: "path/to/foo",\n\t\tbaz: "../wibble"\n\t}\n});\nrequire([ "foo", "bar", "baz" ], function (foo, bar, baz) {});');
+                report = escomplex.analyse(esprima.parse('require.config({\n\tpaths: {\n\t\tfoo: "path/to/foo",\n\t\tbaz: "../wibble"\n\t}\n});\nrequire([ "foo", "bar", "baz" ], function (foo, bar, baz) {});', { loc: true }));
             });
 
             teardown(function () {
@@ -2639,7 +2839,7 @@ suite('module:', function () {
             var report;
 
             setup(function () {
-                report = cr.analyse('require("foo", function (foo) {});');
+                report = escomplex.analyse(esprima.parse('require("foo", function (foo) {});', { loc: true }));
             });
 
             teardown(function () {

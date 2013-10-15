@@ -20,10 +20,9 @@ function analyse (modules, options) {
     reports = modules.map(function (m) {
         var report;
 
-        check.verifyUnemptyString(m.source, 'Invalid source');
-        check.verifyUnemptyString(m.path, 'Invalid source');
+        check.verifyUnemptyString(m.path, 'Invalid path');
 
-        report = moduleAnalyser.analyse(m.source, options);
+        report = moduleAnalyser.analyse(m.ast, options);
         report.path = m.path;
 
         return report;
