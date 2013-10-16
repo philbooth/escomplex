@@ -66,14 +66,6 @@ suite('module:', function () {
             });
         });
 
-        test('analyse throws when ast has no loc', function () {
-            assert.throws(function () {
-                escomplex.analyse({
-                    body: []
-                });
-            });
-        });
-
         test('analyse throws when ast is string', function () {
             assert.throws(function () {
                 escomplex.analyse('console.log("foo");');
@@ -2854,6 +2846,100 @@ suite('module:', function () {
                 assert.strictEqual(report.dependencies[0].line, 1);
                 assert.strictEqual(report.dependencies[0].path, 'foo');
                 assert.strictEqual(report.dependencies[0].type, 'AMD');
+            });
+        });
+
+        suite('Missing loc data:', function () {
+            var report;
+
+            setup(function () {
+                report = escomplex.analyse(esprima.parse('parseInt("10", 10);'));
+            });
+
+            teardown(function () {
+                report = undefined;
+            });
+
+            test('aggregate has no sloc property', function () {
+                assert.isUndefined(report.aggregate.complexity.sloc);
+            });
+
+            test('aggregate has correct cyclomatic complexity', function () {
+                assert.strictEqual(report.aggregate.complexity.cyclomatic, 1);
+            });
+
+            test('aggregate has correct Halstead total operators', function () {
+                assert.strictEqual(report.aggregate.complexity.halstead.operators.total, 1);
+            });
+
+            test('aggregate has correct Halstead distinct operators', function () {
+                assert.strictEqual(report.aggregate.complexity.halstead.operators.distinct, 1);
+            });
+
+            test('aggregate has correct Halstead total operands', function () {
+                assert.strictEqual(report.aggregate.complexity.halstead.operands.total, 3);
+            });
+
+            test('aggregate has correct Halstead distinct operands', function () {
+                assert.strictEqual(report.aggregate.complexity.halstead.operands.distinct, 3);
+            });
+
+            test('aggregate has correct Halstead operator identifier length', function () {
+                assert.lengthOf(
+                    report.aggregate.complexity.halstead.operators.identifiers,
+                    report.aggregate.complexity.halstead.operators.distinct
+                );
+            });
+
+            test('aggregate has correct Halstead operand identifier length', function () {
+                assert.lengthOf(
+                    report.aggregate.complexity.halstead.operands.identifiers,
+                    report.aggregate.complexity.halstead.operands.distinct
+                );
+            });
+
+            test('aggregate has correct Halstead length', function () {
+                assert.strictEqual(report.aggregate.complexity.halstead.length, 4);
+            });
+
+            test('aggregate has correct Halstead vocabulary', function () {
+                assert.strictEqual(report.aggregate.complexity.halstead.vocabulary, 4);
+            });
+
+            test('aggregate has correct Halstead difficulty', function () {
+                assert.strictEqual(report.aggregate.complexity.halstead.difficulty, 0.5);
+            });
+
+            test('aggregate has correct Halstead volume', function () {
+                assert.strictEqual(report.aggregate.complexity.halstead.volume, 8);
+            });
+
+            test('aggregate has correct Halstead effort', function () {
+                assert.strictEqual(report.aggregate.complexity.halstead.effort, 4);
+            });
+
+            test('aggregate has correct Halstead bugs', function () {
+                assert.strictEqual(Math.round(report.aggregate.complexity.halstead.bugs), 0);
+            });
+
+            test('aggregate has correct Halstead time', function () {
+                assert.strictEqual(Math.round(report.aggregate.complexity.halstead.time), 0);
+            });
+
+            test('maintainability index is not set', function () {
+                assert.isUndefined(report.maintainability);
+            });
+
+            test('aggregate has correct parameter count', function () {
+                assert.strictEqual(report.aggregate.complexity.params, 0);
+            });
+
+            test('mean parameter count is correct', function () {
+                assert.strictEqual(report.params, 0);
+            });
+
+            test('dependencies is correct', function () {
+                assert.lengthOf(report.dependencies, 0);
             });
         });
     });

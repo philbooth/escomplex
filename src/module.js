@@ -16,7 +16,6 @@ function analyse (ast, options) {
     var settings;
 
     check.verifyObject(ast, 'Invalid syntax tree');
-    check.verifyObject(ast.loc, 'Missing loc property in syntax tree');
 
     if (check.isObject(options)) {
         settings = options;
@@ -54,19 +53,24 @@ function createReport (lines) {
 }
 
 function createFunctionReport (name, lines, params) {
-    return {
+    var result = {
         name: name,
-        line: lines.start.line,
         complexity: {
-            sloc: {
-                physical: lines.end.line - lines.start.line + 1,
-                logical: 0
-            },
             cyclomatic: 1,
             halstead: createInitialHalsteadState(),
             params: params
         }
     };
+
+    if (check.isObject(lines)) {
+        result.line = lines.start.line;
+        result.complexity.sloc = {
+            physical: lines.end.line - lines.start.line + 1,
+            logical: 0
+        };
+    }
+
+    return result;
 }
 
 function createInitialHalsteadState () {
@@ -129,10 +133,12 @@ function incrementCounter (node, name, incrementFn, currentReport) {
 }
 
 function incrementLogicalSloc (currentReport, amount) {
-    report.aggregate.complexity.sloc.logical += amount;
+    if (check.isObject(report.aggregate.complexity.sloc)) {
+        report.aggregate.complexity.sloc.logical += amount;
 
-    if (currentReport) {
-        currentReport.complexity.sloc.logical += amount;
+        if (currentReport) {
+            currentReport.complexity.sloc.logical += amount;
+        }
     }
 }
 
@@ -325,13 +331,20 @@ function nilHalsteadMetrics (data) {
 }
 
 function sumMaintainabilityMetrics (sums, indices, data) {
-    sums[indices.loc] += data.sloc.logical;
+    if (check.isObject(data.sloc)) {
+        sums[indices.loc] += data.sloc.logical;
+    }
     sums[indices.complexity] += data.cyclomatic;
     sums[indices.effort] += data.halstead.effort;
     sums[indices.params] += data.params;
 }
 
 function calculateMaintainabilityIndex (averageEffort, averageComplexity, averageLoc, settings) {
+    if (check.isObject(report.aggregate.complexity.sloc) === false) {
+        // Can't calculate maintainability index if caller didn't provide SLOC data.
+        return;
+    }
+
     if (averageComplexity === 0) {
         throw new Error('Encountered function with cyclomatic complexity zero!');
     }
