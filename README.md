@@ -137,14 +137,14 @@ TODO
 
 [MIT][license]
 
-[ci-image]: https://secure.travis-ci.org/philbooth/complexityReport.js.png?branch=master
-[ci-status]: http://travis-ci.org/#!/philbooth/complexityReport.js
+[ci-image]: https://secure.travis-ci.org/philbooth/escomplex.png?branch=master
+[ci-status]: http://travis-ci.org/#!/philbooth/escomplex
 [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 [esprima]: http://esprima.org/
 [acorn]: http://marijnhaverbeke.nl/acorn
 [coffee]: https://github.com/michaelficarra/CoffeeScriptRedux
 [live]: https://github.com/gkz/LiveScript
-[license]: https://github.com/philbooth/complexityReport.js/blob/master/COPYING
+[license]: https://github.com/philbooth/escomplex/blob/master/COPYING
 [msvariant]: http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx
 [jarrod]: http://jarrodoverson.com/blog/about
 [plato]: https://github.com/jsoverson/plato

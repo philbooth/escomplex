@@ -12,6 +12,7 @@
         "url": "https://github.com/philbooth/escomplex.git"
     },
     "keywords": [
+        "escomplex",
         "complexity",
         "simplicity",
         "cyclomatic",
