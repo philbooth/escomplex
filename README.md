@@ -4,11 +4,18 @@ THIS PROJECT IS (kind of) BRAND NEW AND NOT SAFE TO USE YET! :)
 
 [![Build status][ci-image]][ci-status]
 
-A library
-for reporting code complexity metrics
+A library for reporting code complexity metrics
 in Mozilla-format abstract syntax trees.
 
-## Code complexity metrics?
+* [Metrics][#metrics]
+* [Abstract syntax trees][#abstract-syntax-trees]
+* [Installation][#installation]
+* [Usage][#usage]
+* [Related projects][#related-projects]
+* [Development][#development]
+* [License][#license]
+
+## Metrics
 
 Currently the library reports on:
 
@@ -20,21 +27,26 @@ Currently the library reports on:
 * dependencies (CommonJS and AMD);
 * first-order density.
 
-## Abstract syntax trees?
+## Abstract syntax trees
 
 Mozilla's [Parser API][api]
 has become a de-facto standard
-in-memory data format
-for parsed JavaScript programs.
+for the in-memory data representation
+of parsed JavaScript programs.
+It defines an abstract syntax tree format
+composed of objects that publish their type information,
+allowing consuming programs to easily navigate those trees
+using generic logic.
+
 By accepting a syntax tree
 in such a widely supported format,
 escomplex is decoupled from
-any one specific input language.
-Thus any language
+a specific input language.
+Any language
 that compiles to JavaScript
 and has a conforming parser
 can be the subject of
-the complexity analysis within.
+complexity analysis by this library.
 
 Some examples of conforming parsers are:
 
@@ -43,11 +55,12 @@ Some examples of conforming parsers are:
 * [CoffeeScriptRedux][coffee];
 * [LiveScript][live];
 
-## How do I use it?
+## Installation
 
 The library is published on npm
 under the name `escomplex`.
-You can add it to the dependencies
+To install,
+you can add it to the dependencies
 in your `package.json` file
 or simply run:
 
@@ -55,38 +68,32 @@ or simply run:
 npm install escomplex
 ```
 
-There are two entry points to escomplex,
-one for individual modules,
-the other for entire projects.
-Depending on which of those suits,
-you'll want to `require` it
-in one of two ways:
+## Usage
+
+You can load escomplex
+in your own code
+by calling `require`:
 
 ```javascript
-var escomplex = require('escomplex/module');
+var escomplex = require('escomplex');
 ```
+
+It exports one function,
+called `analyse`:
 
 ```javascript
-var escomplex = require('escomplex/project');
+var result = escomplex.analyse(ast, options);
 ```
 
-Regardless of which option you choose,
-you can then invoke escomplex by calling:
+The first argument, `ast`,
+must be either
+an abstract syntax tree
+as defined by Mozilla's Parser API
+or an array of said syntax trees.
 
-```javascript
-escomplex.analyse(ast, options);
-```
-
-The main difference between the two signatures
-is the `ast` argument,
-which is an abstract syntax tree
-in the module call
-and an array of abstract syntax trees
-in the project call.
-
-The `options` argument is the same for both,
-an optional object containing properties
-that modify some of the complexity calculations:
+The second argument, `options`,
+is an optional object
+containing properties that modify some of the complexity calculations:
 
 * `options.logicalor`:
   Boolean indicating whether operator `||`
@@ -106,18 +113,17 @@ that modify some of the complexity calculations:
   defaults to `false`.
 * `options.newmi`:
   Boolean indicating whether the maintainability
-  index should be rebased on a scale from 0 to 100.
+  index should be rebased on a scale from 0 to 100,
+  defaults to `false`.
 
-The other difference in the two calls
-is the return value.
-For modules it is a single report object
-and for projects it is an object
-that contains an array of reports
-and an array of dependency matrices.
+If a single abstract syntax tree object
+is passed in the `ast` argument,
+the result will be a report object
+detailing the complexity of that syntax tree.
+If `ast` is an array,
+the result will be an array of complexity reports.
 
-## What license is it released under?
-
-[MIT][license]
+TODO: Properties on the returned object
 
 ## Related projects
 
@@ -126,6 +132,10 @@ TODO
 ## Development
 
 TODO
+
+## What license is it released under?
+
+[MIT][license]
 
 [ci-image]: https://secure.travis-ci.org/philbooth/complexityReport.js.png?branch=master
 [ci-status]: http://travis-ci.org/#!/philbooth/complexityReport.js

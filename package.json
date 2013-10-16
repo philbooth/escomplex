@@ -1,15 +1,15 @@
 {
     "name": "escomplex",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "author": "Phil Booth <pmbooth@gmail.com>",
     "description": "Reports code complexity metrics for Mozilla-format abstract syntax trees",
     "contributors": [
         { "name": "Phil Booth", "email": "pmbooth@gmail.com" }
     ],
-    "main": "./src/module",
+    "main": "./src",
     "repository": {
         "type": "git",
-        "url": "https://github.com/philbooth/escomplex"
+        "url": "https://github.com/philbooth/escomplex.git"
     },
     "keywords": [
         "complexity",
