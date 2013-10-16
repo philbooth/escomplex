@@ -4,8 +4,8 @@ THIS PROJECT IS (kind of) BRAND NEW AND NOT SAFE TO USE YET! :)
 
 [![Build status][ci-image]][ci-status]
 
-A library for reporting code complexity metrics
-in Mozilla-format abstract syntax trees.
+Software complexity analysis
+of Mozilla-format abstract syntax trees.
 
 * [Metrics][#metrics]
 * [Abstract syntax trees][#abstract-syntax-trees]
