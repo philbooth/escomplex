@@ -27,7 +27,7 @@ function analyse (ast, options) {
     report = createReport(ast.loc);
     clearDependencies = true;
 
-    processTree(ast.body, undefined, undefined);
+    processTree(ast.body.statements || ast.body, undefined, undefined);
 
     calculateMetrics(settings);
 
