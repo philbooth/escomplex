@@ -2861,12 +2861,20 @@ suite('module:', function () {
                 report = undefined;
             });
 
-            test('aggregate has no sloc property', function () {
-                assert.isUndefined(report.aggregate.complexity.sloc);
+            test('aggregate has correct no physical lines of code', function () {
+                assert.isUndefined(report.aggregate.complexity.sloc.physical);
+            });
+
+            test('aggregate has correct logical lines of code', function () {
+                assert.strictEqual(report.aggregate.complexity.sloc.logical, 1);
             });
 
             test('aggregate has correct cyclomatic complexity', function () {
                 assert.strictEqual(report.aggregate.complexity.cyclomatic, 1);
+            });
+
+            test('functions is empty', function () {
+                assert.lengthOf(report.functions, 0);
             });
 
             test('aggregate has correct Halstead total operators', function () {
@@ -2927,8 +2935,8 @@ suite('module:', function () {
                 assert.strictEqual(Math.round(report.aggregate.complexity.halstead.time), 0);
             });
 
-            test('maintainability index is not set', function () {
-                assert.isUndefined(report.maintainability);
+            test('maintainability index is correct', function () {
+                assert.strictEqual(Math.round(report.maintainability), 166);
             });
 
             test('aggregate has correct parameter count', function () {
@@ -2953,6 +2961,10 @@ suite('module:', function () {
 
             teardown(function () {
                 report = undefined;
+            });
+
+            test('aggregate has correct no physical lines of code', function () {
+                assert.isUndefined(report.aggregate.complexity.sloc.physical);
             });
 
             test('aggregate has correct logical lines of code', function () {

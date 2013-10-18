@@ -56,6 +56,9 @@ function createFunctionReport (name, lines, params) {
     var result = {
         name: name,
         complexity: {
+            sloc: {
+                logical: 0
+            },
             cyclomatic: 1,
             halstead: createInitialHalsteadState(),
             params: params
@@ -64,10 +67,7 @@ function createFunctionReport (name, lines, params) {
 
     if (check.isObject(lines)) {
         result.line = lines.start.line;
-        result.complexity.sloc = {
-            physical: lines.end.line - lines.start.line + 1,
-            logical: 0
-        };
+        result.complexity.sloc.physical: lines.end.line - lines.start.line + 1;
     }
 
     return result;
@@ -133,12 +133,10 @@ function incrementCounter (node, name, incrementFn, currentReport) {
 }
 
 function incrementLogicalSloc (currentReport, amount) {
-    if (check.isObject(report.aggregate.complexity.sloc)) {
-        report.aggregate.complexity.sloc.logical += amount;
+    report.aggregate.complexity.sloc.logical += amount;
 
-        if (currentReport) {
-            currentReport.complexity.sloc.logical += amount;
-        }
+    if (currentReport) {
+        currentReport.complexity.sloc.logical += amount;
     }
 }
 
@@ -331,20 +329,13 @@ function nilHalsteadMetrics (data) {
 }
 
 function sumMaintainabilityMetrics (sums, indices, data) {
-    if (check.isObject(data.sloc)) {
-        sums[indices.loc] += data.sloc.logical;
-    }
+    sums[indices.loc] += data.sloc.logical;
     sums[indices.complexity] += data.cyclomatic;
     sums[indices.effort] += data.halstead.effort;
     sums[indices.params] += data.params;
 }
 
 function calculateMaintainabilityIndex (averageEffort, averageComplexity, averageLoc, settings) {
-    if (check.isObject(report.aggregate.complexity.sloc) === false) {
-        // Can't calculate maintainability index if caller didn't provide SLOC data.
-        return;
-    }
-
     if (averageComplexity === 0) {
         throw new Error('Encountered function with cyclomatic complexity zero!');
     }
