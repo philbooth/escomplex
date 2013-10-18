@@ -67,7 +67,7 @@ function createFunctionReport (name, lines, params) {
 
     if (check.isObject(lines)) {
         result.line = lines.start.line;
-        result.complexity.sloc.physical: lines.end.line - lines.start.line + 1;
+        result.complexity.sloc.physical = lines.end.line - lines.start.line + 1;
     }
 
     return result;
