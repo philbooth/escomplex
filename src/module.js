@@ -2,20 +2,21 @@
 
 'use strict';
 
-var check, syntaxDefinitions, safeName, syntaxes, report, clearDependencies;
+var check, safeName;
 
 exports.analyse = analyse;
 
 check = require('check-types');
 safeName = require('./safeName');
-syntaxDefinitions = require('./syntax');
 
-function analyse (ast, options) {
-    // TODO: Asynchronize.
+function analyse (ast, walker, options) {
+    // TODO: Asynchronise
 
-    var settings;
+    var settings, report, currentReport, clearDependencies = true;
 
     check.verifyObject(ast, 'Invalid syntax tree');
+    check.verifyObject(walker, 'Invalid walker');
+    check.verifyFunction(walker.walk, 'Invalid walker.walk method');
 
     if (check.isObject(options)) {
         settings = options;
@@ -23,15 +24,32 @@ function analyse (ast, options) {
         settings = getDefaultSettings();
     }
 
-    syntaxes = syntaxDefinitions.get(settings);
-    report = createReport(ast.loc);
-    clearDependencies = true;
+    // TODO: loc is moz-specific, move to walker?
+    report = currentReport = createReport(ast.loc);
 
-    processTree(ast.body.statements || ast.body, undefined, undefined);
+    walker.walk(ast, settings, {
+        processNode: processNode,
+        createScope: createScope
+    });
 
     calculateMetrics(settings);
 
     return report;
+
+    function processNode (node) {
+        processLloc(node, currentReport);
+        processComplexity(node, currentReport);
+        processOperators(node, currentReport);
+        processOperands(node, currentReport);
+        processDependencies(node);
+    }
+
+    function createScope (id, assignedName, loc, parameterCount) {
+        currentReport = createFunctionReport(safeName(id, assignedName), loc, parameterCount);
+
+        report.functions.push(currentReport);
+        report.aggregate.complexity.params += node.params.length;
+    }
 }
 
 function getDefaultSettings () {
@@ -86,36 +104,6 @@ function createInitialHalsteadItemState () {
         total: 0,
         identifiers: []
     };
-}
-
-function processTree (tree, assignedName, currentReport) {
-    check.verifyArray(tree, 'Invalid syntax tree');
-
-    tree.forEach(function (node) {
-        processNode(node, assignedName, currentReport);
-    });
-}
-
-function processNode (node, assignedName, currentReport) {
-    var syntax;
-
-    if (check.isObject(node)) {
-        syntax = syntaxes[node.type];
-
-        if (check.isObject(syntax)) {
-            processLloc(node, currentReport);
-            processComplexity(node, currentReport);
-            processOperators(node, currentReport);
-            processOperands(node, currentReport);
-            processDependencies(node);
-
-            if (syntax.newScope) {
-                processChildrenInNewScope(node, assignedName);
-            } else {
-                processChildren(node, currentReport);
-            }
-        }
-    }
 }
 
 function processLloc (node, currentReport) {
@@ -234,34 +222,6 @@ function processDependencies (node) {
         // TODO: Come up with a less crude approach.
         clearDependencies = false;
     }
-}
-
-function processChildrenInNewScope (node, assignedName) {
-    var newReport = createFunctionReport(safeName(node.id, assignedName), node.loc, node.params.length);
-
-    report.functions.push(newReport);
-    report.aggregate.complexity.params += node.params.length;
-
-    processChildren(node, newReport);
-}
-
-function processChildren (node, currentReport) {
-    var syntax = syntaxes[node.type];
-
-    if (check.isArray(syntax.children)) {
-        syntax.children.forEach(function (child) {
-            processChild(
-                node[child],
-                check.isFunction(syntax.assignableName) ? syntax.assignableName(node) : '',
-                currentReport
-            );
-        });
-    }
-}
-
-function processChild (child, assignedName, currentReport) {
-    var fn = check.isArray(child) ? processTree : processNode;
-    fn(child, assignedName, currentReport);
 }
 
 function calculateMetrics (settings) {
