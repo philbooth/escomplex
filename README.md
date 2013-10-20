@@ -5,7 +5,7 @@ THIS PROJECT IS (kind of) BRAND NEW AND NOT SAFE TO USE YET! :)
 [![Build status][ci-image]][ci-status]
 
 Software complexity analysis
-of Mozilla-format abstract syntax trees.
+of JavaScript-family abstract syntax trees.
 
 * [Metrics][#metrics]
 * [Abstract syntax trees][#abstract-syntax-trees]
@@ -29,31 +29,12 @@ Currently the library reports on:
 
 ## Abstract syntax trees
 
-Mozilla's [Parser API][api]
-has become a de-facto standard
-for the in-memory data representation
-of parsed JavaScript programs.
-It defines an abstract syntax tree format
-composed of objects that publish their type information,
-allowing consuming programs to easily navigate those trees
-using generic logic.
-
-By accepting a syntax tree
-in such a widely supported format,
-escomplex is decoupled from
-a specific input language.
-Any language
-that compiles to JavaScript
-and has a conforming parser
-can be the subject of
-complexity analysis by this library.
-
-Some examples of conforming parsers are:
-
 * [Esprima][esprima];
 * [Acorn][acorn];
 * [CoffeeScriptRedux][coffee];
 * [LiveScript][live];
+
+## Abstract syntax tree walkers
 
 ## Installation
 
