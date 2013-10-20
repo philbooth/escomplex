@@ -2,9 +2,10 @@
 
 'use strict';
 
-var assert, mockery, esprima, modulePath,
+var assert, mozWalker, esprima, modulePath,
 
 assert = require('chai').assert;
+mozWalker = require('escomplex-ast-moz');
 esprima = require('esprima');
 
 modulePath = '../src/project';
@@ -47,13 +48,13 @@ suite('project:', function () {
                             line: 0
                         }
                     }
-                });
+                }, mozWalker);
             });
         });
 
         test('analyse does not throw when modules is array', function () {
             assert.doesNotThrow(function () {
-                cr.analyse([]);
+                cr.analyse([], mozWalker);
             });
         });
 
@@ -61,7 +62,7 @@ suite('project:', function () {
             var result;
 
             setup(function () {
-                result = cr.analyse([]);
+                result = cr.analyse([], mozWalker);
             });
 
             teardown(function () {
@@ -108,7 +109,7 @@ suite('project:', function () {
                 result = cr.analyse([
                     { ast: esprima.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', { loc: true }), path: 'b' },
                     { ast: esprima.parse('if (true) { "foo"; } else { "bar"; }', { loc: true }), path: 'a' }
-                ]);
+                ], mozWalker);
             });
 
             teardown(function () {
@@ -231,7 +232,7 @@ suite('project:', function () {
                     { ast: esprima.parse('require("./b");"c";', { loc: true }), path: '/a/c.js' },
                     { ast: esprima.parse('require("./c");"b";', { loc: true }), path: '/a/b.js' },
                     { ast: esprima.parse('require("./a/b");require("./a/c");"a";', { loc: true }), path: '/a.js' }
-                ]);
+                ], mozWalker);
             });
 
             teardown(function () {

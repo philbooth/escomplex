@@ -2,17 +2,14 @@
 
 'use strict';
 
-var check, safeName;
+var check = require('check-types'), report;
 
 exports.analyse = analyse;
-
-check = require('check-types');
-safeName = require('./safeName');
 
 function analyse (ast, walker, options) {
     // TODO: Asynchronise
 
-    var settings, report, currentReport, clearDependencies = true;
+    var settings, currentReport, clearDependencies = true, scopeStack = [];
 
     check.verifyObject(ast, 'Invalid syntax tree');
     check.verifyObject(walker, 'Invalid walker');
@@ -25,30 +22,48 @@ function analyse (ast, walker, options) {
     }
 
     // TODO: loc is moz-specific, move to walker?
-    report = currentReport = createReport(ast.loc);
+    report = createReport(ast.loc);
 
     walker.walk(ast, settings, {
         processNode: processNode,
-        createScope: createScope
+        createScope: createScope,
+        popScope: popScope
     });
 
     calculateMetrics(settings);
 
     return report;
 
-    function processNode (node) {
-        processLloc(node, currentReport);
-        processComplexity(node, currentReport);
-        processOperators(node, currentReport);
-        processOperands(node, currentReport);
-        processDependencies(node);
+    function processNode (node, syntax) {
+        processLloc(node, syntax, currentReport);
+        processComplexity(node, syntax, currentReport);
+        processOperators(node, syntax, currentReport);
+        processOperands(node, syntax, currentReport);
+
+        if (processDependencies(node, syntax, clearDependencies)) {
+            // HACK: This will fail with async or if other syntax than CallExpression introduces dependencies.
+            // TODO: Come up with a less crude approach.
+            clearDependencies = false;
+        }
     }
 
-    function createScope (id, assignedName, loc, parameterCount) {
-        currentReport = createFunctionReport(safeName(id, assignedName), loc, parameterCount);
+    function createScope (name, loc, parameterCount) {
+        currentReport = createFunctionReport(name, loc, parameterCount);
 
         report.functions.push(currentReport);
-        report.aggregate.complexity.params += node.params.length;
+        report.aggregate.complexity.params += parameterCount;
+
+        scopeStack.push(currentReport);
+    }
+
+    function popScope () {
+        scopeStack.pop();
+
+        if (scopeStack.length > 0) {
+            currentReport = scopeStack[scopeStack.length - 1]
+        } else {
+            currentReport = undefined;
+        }
     }
 }
 
@@ -106,12 +121,12 @@ function createInitialHalsteadItemState () {
     };
 }
 
-function processLloc (node, currentReport) {
-    incrementCounter(node, 'lloc', incrementLogicalSloc, currentReport);
+function processLloc (node, syntax, currentReport) {
+    incrementCounter(node, syntax, 'lloc', incrementLogicalSloc, currentReport);
 }
 
-function incrementCounter (node, name, incrementFn, currentReport) {
-    var amount = syntaxes[node.type][name];
+function incrementCounter (node, syntax, name, incrementFn, currentReport) {
+    var amount = syntax[name];
 
     if (check.isNumber(amount)) {
         incrementFn(currentReport, amount);
@@ -128,8 +143,8 @@ function incrementLogicalSloc (currentReport, amount) {
     }
 }
 
-function processComplexity (node, currentReport) {
-    incrementCounter(node, 'complexity', incrementComplexity, currentReport);
+function processComplexity (node, syntax, currentReport) {
+    incrementCounter(node, syntax, 'complexity', incrementComplexity, currentReport);
 }
 
 function incrementComplexity (currentReport, amount) {
@@ -140,17 +155,15 @@ function incrementComplexity (currentReport, amount) {
     }
 }
 
-function processOperators (node, currentReport) {
-    processHalsteadMetric(node, 'operators', currentReport);
+function processOperators (node, syntax, currentReport) {
+    processHalsteadMetric(node, syntax, 'operators', currentReport);
 }
 
-function processOperands (node, currentReport) {
-    processHalsteadMetric(node, 'operands', currentReport);
+function processOperands (node, syntax, currentReport) {
+    processHalsteadMetric(node, syntax, 'operands', currentReport);
 }
 
-function processHalsteadMetric (node, metric, currentReport) {
-    var syntax = syntaxes[node.type];
-
+function processHalsteadMetric (node, syntax, metric, currentReport) {
     if (check.isArray(syntax[metric])) {
         syntax[metric].forEach(function (s) {
             var identifier;
@@ -209,8 +222,8 @@ function incrementTotalHalsteadItems (baseReport, metric) {
     incrementHalsteadMetric(baseReport, metric, 'total');
 }
 
-function processDependencies (node) {
-    var syntax = syntaxes[node.type], dependencies;
+function processDependencies (node, syntax, clearDependencies) {
+    var dependencies;
 
     if (check.isFunction(syntax.dependencies)) {
         dependencies = syntax.dependencies(node, clearDependencies);
@@ -218,10 +231,10 @@ function processDependencies (node) {
             report.dependencies = report.dependencies.concat(dependencies);
         }
 
-        // HACK: This will fail with async or if other syntax than CallExpression introduces dependencies.
-        // TODO: Come up with a less crude approach.
-        clearDependencies = false;
+        return true;
     }
+
+    return false;
 }
 
 function calculateMetrics (settings) {

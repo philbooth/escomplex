@@ -10,7 +10,7 @@ path = require('path');
 check = require('check-types');
 moduleAnalyser = require('./module');
 
-function analyse (modules, options) {
+function analyse (modules, walker, options) {
     // TODO: Asynchronize.
 
     var reports;
@@ -22,7 +22,7 @@ function analyse (modules, options) {
 
         check.verifyUnemptyString(m.path, 'Invalid path');
 
-        report = moduleAnalyser.analyse(m.ast, options);
+        report = moduleAnalyser.analyse(m.ast, walker, options);
         report.path = m.path;
 
         return report;

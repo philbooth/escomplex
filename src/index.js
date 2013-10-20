@@ -17,14 +17,15 @@ exports.analyse = analyse;
  *
  * @param ast {object|array}  The abstract syntax tree(s) to analyse for
  *                            code complexity.
+ * @param walker {object}     The AST walker to use against `ast`.
  * @param [options] {object}  Options to modify the complexity calculation.
  *
  */
-function analyse (ast, options) {
+function analyse (ast, walker, options) {
     if (check.isArray(ast)) {
-        return require('./project').analyse(ast, options);
+        return require('./project').analyse(ast, walker, options);
     }
 
-    return require('./module').analyse(ast, options);
+    return require('./module').analyse(ast, walker, options);
 }
 
