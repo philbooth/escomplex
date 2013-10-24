@@ -50,6 +50,10 @@ function createAdjacencyMatrix (reports) {
         });
     });
 
+    if (density > 0) {
+        density = density / (reports.length * (reports.length - 1));
+    }
+
     return {
         matrix: matrix,
         density: density

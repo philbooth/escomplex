@@ -275,7 +275,9 @@ suite('project:', function () {
             });
 
             test('first order density is correct', function () {
-                assert.strictEqual(result.matrices[0].density, 5);
+                console.log(result.matrices[0].density);
+                assert.isTrue(result.matrices[0].density > 0.416);
+                assert.isTrue(result.matrices[0].density < 0.417);
             });
         });
     });
