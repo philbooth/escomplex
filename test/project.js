@@ -250,32 +250,31 @@ suite('project:', function () {
                 assert.lengthOf(result.matrices[0].matrix, 4);
 
                 assert.lengthOf(result.matrices[0].matrix[0], 4);
-                assert.isNull(result.matrices[0].matrix[0][0]);
+                assert.strictEqual(result.matrices[0].matrix[0][0], 0);
                 assert.strictEqual(result.matrices[0].matrix[0][1], 0);
                 assert.strictEqual(result.matrices[0].matrix[0][2], 1);
                 assert.strictEqual(result.matrices[0].matrix[0][3], 1);
 
                 assert.lengthOf(result.matrices[0].matrix[1], 4);
                 assert.strictEqual(result.matrices[0].matrix[1][0], 1);
-                assert.isNull(result.matrices[0].matrix[1][1]);
+                assert.strictEqual(result.matrices[0].matrix[1][1], 0);
                 assert.strictEqual(result.matrices[0].matrix[1][2], 0);
                 assert.strictEqual(result.matrices[0].matrix[1][3], 0);
 
                 assert.lengthOf(result.matrices[0].matrix[2], 4);
                 assert.strictEqual(result.matrices[0].matrix[2][0], 0);
                 assert.strictEqual(result.matrices[0].matrix[2][1], 0);
-                assert.isNull(result.matrices[0].matrix[2][2]);
+                assert.strictEqual(result.matrices[0].matrix[2][2], 0);
                 assert.strictEqual(result.matrices[0].matrix[2][3], 1);
 
                 assert.lengthOf(result.matrices[0].matrix[3], 4);
                 assert.strictEqual(result.matrices[0].matrix[3][0], 0);
                 assert.strictEqual(result.matrices[0].matrix[3][1], 0);
                 assert.strictEqual(result.matrices[0].matrix[3][2], 1);
-                assert.isNull(result.matrices[0].matrix[3][3]);
+                assert.strictEqual(result.matrices[0].matrix[3][3], 0);
             });
 
             test('first order density is correct', function () {
-                console.log(result.matrices[0].density);
                 assert.isTrue(result.matrices[0].density > 0.416);
                 assert.isTrue(result.matrices[0].density < 0.417);
             });

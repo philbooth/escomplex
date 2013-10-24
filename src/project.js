@@ -76,7 +76,7 @@ function comparePaths (lhs, rhs) {
 
 function getAdjacencyMatrixValue (reports, x, y) {
     if (x === y) {
-        return null;
+        return 0;
     }
 
     if (doesDependencyExist(reports[x], reports[y])) {
