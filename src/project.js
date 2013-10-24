@@ -30,7 +30,9 @@ function analyse (modules, walker, options) {
 
     return {
         reports: reports,
-        matrices: [ createAdjacencyMatrix(reports) ]
+        matrices: {
+            adjacency: createAdjacencyMatrix(reports)
+        }
     };
 }
 
