@@ -27,13 +27,14 @@
         "ast"
     ],
     "dependencies": {
-        "check-types": "0.7.x"
+        "check-types": "0.7.x",
+        "matrix-utilities": "1.2.x"
     },
     "devDependencies": {
         "jshint": "2.1.x",
         "mocha": "1.13.x",
         "chai": "1.8.x",
-        "escomplex-ast-moz": "0.1.0",
+        "escomplex-ast-moz": "0.1.x",
         "esprima": "1.0.x",
         "coffee-script-redux": "2.0.x"
     },

@@ -96,6 +96,10 @@ suite('project:', function () {
             test('first-order density is correct', function () {
                 assert.strictEqual(result.matrices.adjacency.density, 0);
             });
+
+            test('propagation cost is correct', function () {
+                assert.strictEqual(result.matrices.visibility.density, 0);
+            });
         });
 
         suite('two modules:', function () {
@@ -221,6 +225,10 @@ suite('project:', function () {
             test('first order density is correct', function () {
                 assert.strictEqual(result.matrices.adjacency.density, 0);
             });
+
+            test('propagation cost is correct', function () {
+                assert.strictEqual(result.matrices.visibility.density, 0);
+            });
         });
 
         suite('modules with dependencies:', function () {
@@ -277,6 +285,53 @@ suite('project:', function () {
             test('first order density is correct', function () {
                 assert.isTrue(result.matrices.adjacency.density > 0.416);
                 assert.isTrue(result.matrices.adjacency.density < 0.417);
+            });
+
+            test('propagation cost is correct', function () {
+                assert.strictEqual(result.matrices.visibility.density, 0.55);
+            });
+        });
+
+        suite('third level of dependencies:', function () {
+            var result;
+
+            setup(function () {
+                result = cr.analyse([
+                    { ast: esprima.parse('require("./a");"d";', { loc: true }), path: '/d.js' },
+                    { ast: esprima.parse('"e";', { loc: true }), path: '/a/e.js' },
+                    { ast: esprima.parse('require("./b");"c";', { loc: true }), path: '/a/c.js' },
+                    { ast: esprima.parse('require("./c");require("./e");"b";', { loc: true }), path: '/a/b.js' },
+                    { ast: esprima.parse('require("./a/b");require("./a/c");"a";', { loc: true }), path: '/a.js' }
+                ], mozWalker);
+            });
+
+            teardown(function () {
+                result = undefined;
+            });
+
+            test('reports are in correct order', function () {
+                assert.strictEqual(result.reports[0].path, '/a.js');
+                assert.strictEqual(result.reports[1].path, '/d.js');
+                assert.strictEqual(result.reports[2].path, '/a/b.js');
+                assert.strictEqual(result.reports[3].path, '/a/c.js');
+                assert.strictEqual(result.reports[4].path, '/a/e.js');
+            });
+
+            test('adjacency matrix is correct', function () {
+                assert.lengthOf(result.matrices.adjacency.matrix, 5);
+                assert.strictEqual(result.matrices.adjacency.matrix[0][4], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[1][4], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[2][4], 1);
+                assert.strictEqual(result.matrices.adjacency.matrix[3][4], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[4][4], 0);
+            });
+
+            test('first order density is correct', function () {
+                assert.strictEqual(result.matrices.adjacency.density, 0.3);
+            });
+
+            test('propagation cost is correct', function () {
+                assert.strictEqual(result.matrices.visibility.density, 0.55);
             });
         });
     });
