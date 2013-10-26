@@ -79,10 +79,7 @@ function comparePaths (lhs, rhs) {
 
 function getAdjacencyMatrixValue (reports, x, y) {
     if (x === y) {
-        //return 0;
-        // Requires compensation when setting density
-        // TODO: Reinstate to 0, implement summing of matrix powers until transitive closue (drop matrix-utilities), revert density calculation
-        return 1;
+        return 0;
     }
 
     if (doesDependencyExist(reports[x], reports[y])) {
@@ -141,9 +138,7 @@ function isDependency (from, dependency, to) {
 
 function wrapMatrix (density, matrix) {
     if (density > 0) {
-        //density = density / (matrix.length * (matrix.length - 1));
-        // Compensation for diagonal 1s in matrix
-        density = (density - matrix.length) / (matrix.length * (matrix.length - 1));
+        density = density / (matrix.length * matrix.length);
     }
 
     return {
@@ -153,13 +148,17 @@ function wrapMatrix (density, matrix) {
 }
 
 function createVisibilityMatrix (adjacencyMatrix) {
-    var visibilityMatrix = adjacencyMatrix, density = 0;
+    var product = adjacencyMatrix, sum = adjacencyMatrix, density = 0, visibilityMatrix;
 
-    (adjacencyMatrix.length - 1).times(function () {
-        visibilityMatrix = matrix.multiply(visibilityMatrix, adjacencyMatrix);
+    adjacencyMatrix.forEach(function () {
+        product = matrix.multiply(product, adjacencyMatrix);
+        sum = matrix.add(product, sum);
     });
-
-    visibilityMatrix = visibilityMatrix.map(function (row) {
+    // HACK: I'm explicitly not summing the self-reference diagonal here,
+    //       since that punishes single-module projects by giving them a
+    //       change cost of 100%. A case could be made that is ok, but it
+    //       feels wrong to me.
+    visibilityMatrix = sum.map(function (row) {
         return row.map(function (value) {
             if (value > 0) {
                 density += 1;
@@ -171,13 +170,5 @@ function createVisibilityMatrix (adjacencyMatrix) {
     });
 
     return wrapMatrix(density, visibilityMatrix);
-}
-
-Number.prototype.times = function (fn) {
-    var i;
-
-    for (i = 0; i < this; i += 1) {
-        fn(i);
-    }
 }
 

@@ -60,7 +60,7 @@ function analyse (ast, walker, options) {
         scopeStack.pop();
 
         if (scopeStack.length > 0) {
-            currentReport = scopeStack[scopeStack.length - 1]
+            currentReport = scopeStack[scopeStack.length - 1];
         } else {
             currentReport = undefined;
         }

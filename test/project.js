@@ -97,7 +97,7 @@ suite('project:', function () {
                 assert.strictEqual(result.matrices.adjacency.density, 0);
             });
 
-            test('propagation cost is correct', function () {
+            test('change cost is correct', function () {
                 assert.strictEqual(result.matrices.visibility.density, 0);
             });
         });
@@ -226,7 +226,7 @@ suite('project:', function () {
                 assert.strictEqual(result.matrices.adjacency.density, 0);
             });
 
-            test('propagation cost is correct', function () {
+            test('change cost is correct', function () {
                 assert.strictEqual(result.matrices.visibility.density, 0);
             });
         });
@@ -283,24 +283,24 @@ suite('project:', function () {
             });
 
             test('first order density is correct', function () {
-                assert.isTrue(result.matrices.adjacency.density > 0.416);
-                assert.isTrue(result.matrices.adjacency.density < 0.417);
+                assert.strictEqual(result.matrices.adjacency.density, 0.3125);
             });
 
-            test('propagation cost is correct', function () {
-                assert.strictEqual(result.matrices.visibility.density, 0.55);
+            test('change cost is correct', function () {
+                assert.strictEqual(result.matrices.visibility.density, 0.5625);
             });
         });
 
-        suite('third level of dependencies:', function () {
+        suite('MacCormack, Rusnak & Baldwin example:', function () {
             var result;
 
             setup(function () {
                 result = cr.analyse([
-                    { ast: esprima.parse('require("./a");"d";', { loc: true }), path: '/d.js' },
-                    { ast: esprima.parse('"e";', { loc: true }), path: '/a/e.js' },
-                    { ast: esprima.parse('require("./b");"c";', { loc: true }), path: '/a/c.js' },
-                    { ast: esprima.parse('require("./c");require("./e");"b";', { loc: true }), path: '/a/b.js' },
+                    { ast: esprima.parse('"f";', { loc: true }), path: '/a/c/f.js' },
+                    { ast: esprima.parse('require("./f");"e";', { loc: true }), path: '/a/c/e.js' },
+                    { ast: esprima.parse('"d";', { loc: true }), path: '/a/b/d.js' },
+                    { ast: esprima.parse('require("./c/e");"c";', { loc: true }), path: '/a/c.js' },
+                    { ast: esprima.parse('require("./b/d");"b";', { loc: true }), path: '/a/b.js' },
                     { ast: esprima.parse('require("./a/b");require("./a/c");"a";', { loc: true }), path: '/a.js' }
                 ], mozWalker);
             });
@@ -311,27 +311,72 @@ suite('project:', function () {
 
             test('reports are in correct order', function () {
                 assert.strictEqual(result.reports[0].path, '/a.js');
-                assert.strictEqual(result.reports[1].path, '/d.js');
-                assert.strictEqual(result.reports[2].path, '/a/b.js');
-                assert.strictEqual(result.reports[3].path, '/a/c.js');
-                assert.strictEqual(result.reports[4].path, '/a/e.js');
+                assert.strictEqual(result.reports[1].path, '/a/b.js');
+                assert.strictEqual(result.reports[2].path, '/a/c.js');
+                assert.strictEqual(result.reports[3].path, '/a/b/d.js');
+                assert.strictEqual(result.reports[4].path, '/a/c/e.js');
+                assert.strictEqual(result.reports[5].path, '/a/c/f.js');
             });
 
             test('adjacency matrix is correct', function () {
-                assert.lengthOf(result.matrices.adjacency.matrix, 5);
+                assert.lengthOf(result.matrices.adjacency.matrix, 6);
+
+                assert.lengthOf(result.matrices.adjacency.matrix[0], 6);
+                assert.strictEqual(result.matrices.adjacency.matrix[0][0], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[0][1], 1);
+                assert.strictEqual(result.matrices.adjacency.matrix[0][2], 1);
+                assert.strictEqual(result.matrices.adjacency.matrix[0][3], 0);
                 assert.strictEqual(result.matrices.adjacency.matrix[0][4], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[0][5], 0);
+
+                assert.lengthOf(result.matrices.adjacency.matrix[1], 6);
+                assert.strictEqual(result.matrices.adjacency.matrix[1][0], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[1][1], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[1][2], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[1][3], 1);
                 assert.strictEqual(result.matrices.adjacency.matrix[1][4], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[1][5], 0);
+
+                assert.lengthOf(result.matrices.adjacency.matrix[2], 6);
+                assert.strictEqual(result.matrices.adjacency.matrix[2][0], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[2][1], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[2][2], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[2][3], 0);
                 assert.strictEqual(result.matrices.adjacency.matrix[2][4], 1);
+                assert.strictEqual(result.matrices.adjacency.matrix[2][5], 0);
+
+                assert.lengthOf(result.matrices.adjacency.matrix[3], 6);
+                assert.strictEqual(result.matrices.adjacency.matrix[3][0], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[3][1], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[3][2], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[3][3], 0);
                 assert.strictEqual(result.matrices.adjacency.matrix[3][4], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[3][5], 0);
+
+                assert.lengthOf(result.matrices.adjacency.matrix[4], 6);
+                assert.strictEqual(result.matrices.adjacency.matrix[4][0], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[4][1], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[4][2], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[4][3], 0);
                 assert.strictEqual(result.matrices.adjacency.matrix[4][4], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[4][5], 1);
+
+                assert.lengthOf(result.matrices.adjacency.matrix[5], 6);
+                assert.strictEqual(result.matrices.adjacency.matrix[5][0], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[5][1], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[5][2], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[5][3], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[5][4], 0);
+                assert.strictEqual(result.matrices.adjacency.matrix[5][5], 0);
             });
 
             test('first order density is correct', function () {
-                assert.strictEqual(result.matrices.adjacency.density, 0.3);
+                assert.isTrue(result.matrices.adjacency.density > 0.138);
+                assert.isTrue(result.matrices.adjacency.density < 0.139);
             });
 
-            test('propagation cost is correct', function () {
-                assert.strictEqual(result.matrices.visibility.density, 0.55);
+            test('change cost is correct', function () {
+                assert.strictEqual(result.matrices.visibility.density, 0.25);
             });
         });
     });
