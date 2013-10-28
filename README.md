@@ -36,7 +36,7 @@ using methods described by
 Alan MacCormack,
 John Rusnak and
 Carliss Baldwin
-in their 2004 paper
+in their 2004 paper,
 [Exploring the Structure of Complex Software Designs: An Empirical Study of Open Source and Proprietary Code][dsm].
 
 ## Abstract syntax trees
