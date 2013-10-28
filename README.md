@@ -7,13 +7,13 @@ THIS PROJECT IS (kind of) BRAND NEW AND NOT SAFE TO USE YET! :)
 Software complexity analysis
 of JavaScript-family abstract syntax trees.
 
-* [Metrics][#metrics]
-* [Abstract syntax trees][#abstract-syntax-trees]
-* [Installation][#installation]
-* [Usage][#usage]
-* [Related projects][#related-projects]
-* [Development][#development]
-* [License][#license]
+* [Metrics](#metrics)
+* [Abstract syntax trees](#abstract-syntax-trees)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Related projects](#related-projects)
+* [Development](#development)
+* [License](#license)
 
 ## Metrics
 
