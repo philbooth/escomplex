@@ -35,7 +35,9 @@ function analyse (modules, walker, options) {
     };
 }
 
+// TODO: Move this dependency stuff into a separate module
 function createMatrices (reports) {
+    // For discussion of these metrics, see http://www.people.hbs.edu/cbaldwin/DR2/MRBDesignStructure17thSep1.pdf
     var adjacencyMatrix = createAdjacencyMatrix(reports);
 
     return {
@@ -44,7 +46,6 @@ function createMatrices (reports) {
     };
 }
 
-// TODO: Move this dependency stuff into a separate module
 function createAdjacencyMatrix (reports) {
     var adjacencyMatrix = new Array(reports.length), density = 0;
 
