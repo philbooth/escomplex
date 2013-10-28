@@ -25,7 +25,19 @@ Currently the library reports on:
 * Halstead metrics;
 * maintainability index;
 * dependencies (CommonJS and AMD);
-* first-order density.
+* first-order density;
+* change cost;
+
+First-order density
+and change cost
+are calculated from
+design structure matrices,
+using methods described by
+Alan MacCormack,
+John Rusnak and
+Carliss Baldwin
+in their 2004 paper
+[Exploring the Structure of Complex Software Designs: An Empirical Study of Open Source and Proprietary Code][dsm].
 
 ## Abstract syntax trees
 
@@ -120,6 +132,7 @@ TODO
 
 [ci-image]: https://secure.travis-ci.org/philbooth/escomplex.png?branch=master
 [ci-status]: http://travis-ci.org/#!/philbooth/escomplex
+[dsm]: http://www.people.hbs.edu/cbaldwin/DR2/MRBDesignStructure17thSep1.pdf
 [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 [esprima]: http://esprima.org/
 [acorn]: http://marijnhaverbeke.nl/acorn
