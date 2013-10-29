@@ -2953,7 +2953,7 @@ suite('module:', function () {
             });
         });
 
-        suite('CoffeeScript:', function () {
+/*        suite('CoffeeScript:', function () {
             var report;
 
             setup(function () {
@@ -3053,7 +3053,7 @@ suite('module:', function () {
             test('dependencies is correct', function () {
                 assert.lengthOf(report.dependencies, 0);
             });
-        });
+        });*/
     });
 });
 
