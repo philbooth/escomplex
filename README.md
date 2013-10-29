@@ -63,21 +63,28 @@ Currently the library reports on:
 * Lines of code:
   Both physical (the number of lines in a module or function)
   and logical (a count of the imperative statements).
+  A crude measure,
+  easily subverted.
+  Lower is better.
 * Number of parameters:
   Analysed at the function defintion
   rather than the call site,
   so no accounting is done
   for functions that use the `arguments` object.
+  Lower is better.
 * Cyclomatic complexity:
   Defined by Thomas J. McCabe in 1976,
-  this is effectively
-  the number of distinct paths
+  this is a count of the number of cycles
+  in the program flow control graph.
+  Effectively the number of distinct paths
   through a block of code.
+  Lower is better.
 * Halstead metrics:
   Defined by Maurice Halstead in 1977,
   these metrics are calculated
   from the numbers of operators
   and operands in each function.
+  Lower is better.
 * Maintainability index:
   Defined by Paul Oman & Jack Hagemeister in 1991,
   this is a logarithmic scale
@@ -86,26 +93,35 @@ Currently the library reports on:
   the logical lines of code,
   the cyclomatix complexity
   and the Halstead effort.
+  Higher is better.
 * Dependencies (CommonJS and AMD):
   Based on calls to `require`,
   doesn't acccount for dynamic calls
   where a variable or function is
   obscuring the nature of the dependency.
+  Lower is better.
 * First-order density:
   The percentage of all possible internal dependencies
   that are actually realised in the project.
+  Lower is better.
 * Change cost:
   The percentage of modules affected,
   on average,
   when one module in the project
-  is changed;
+  is changed.
+  Lower is better.
 * Core size.
 
 ## Links to research
 
-* [A Complexity Measure][mccabe].
-* [Cyclomatic Complexity Density and Software Maintenance Productivity][gillkemerer].
-* [Exploring the Structure of Complex Software Designs: An Empirical Study of Open Source and Proprietary Code][dsm].
+* [A Complexity Measure][mccabe],
+  by Thomas J McCabe.
+* [Cyclomatic Complexity Density and Software Maintenance Productivity][gillkemerer],
+  by Geoffrey K. Gill and Chris F. Kemerer.
+* [Exploring the Structure of Complex Software Designs: An Empirical Study of Open Source and Proprietary Code][dsm],
+  by Alan MacCormack, John Rusnak and Carliss Baldwin.
+* [How maintainable is the Firefox codebase?][almossawi],
+  by Ali Almossawi.
 
 ## Installation
 
@@ -196,11 +212,12 @@ TODO
 [esprima]: http://esprima.org/
 [acorn]: http://marijnhaverbeke.nl/acorn
 [escomplex-ast-csr]: https://github.com/philbooth/escomplex-ast-csr
-[coffee]: https://github.com/michaelficarra/CoffeeScriptRedux
+[coffeescriptredux]: https://github.com/michaelficarra/CoffeeScriptRedux
 [mccabe]: http://www.literateprogramming.com/mccabe.pdf
 [gillkemerer]: http://www.pitt.edu/~ckemerer/CK%20research%20papers/CyclomaticComplexityDensity_GillKemerer91.pdf
 [omanhagemeister]: http://www.sciencedirect.com/science/article/pii/0164121294900671
 [dsm]: http://www.people.hbs.edu/cbaldwin/DR2/MRBDesignStructure17thSep1.pdf
+[almossawi]: http://almossawi.com/firefox/prose
 [license]: https://github.com/philbooth/escomplex/blob/master/COPYING
 [msvariant]: http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx
 [jarrod]: http://jarrodoverson.com/blog/about
