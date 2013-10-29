@@ -1,52 +1,111 @@
 # escomplex
 
-THIS PROJECT IS (kind of) BRAND NEW AND NOT SAFE TO USE YET! :)
-
 [![Build status][ci-image]][ci-status]
 
 Software complexity analysis
 of JavaScript-family abstract syntax trees.
 
-* [Metrics](#metrics)
 * [Abstract syntax trees](#abstract-syntax-trees)
+* [Metrics](#metrics)
+* [Links to research](#links-to-research)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Related projects](#related-projects)
 * [Development](#development)
 * [License](#license)
 
+## Abstract syntax trees
+
+This library deliberately excludes
+both logic for parsing source code
+and logic for navigating parse trees.
+Both the parsed data format
+and a program that can process that format
+are inputs to escomplex.
+This means that it is not tied
+to any particular source language.
+All that's required
+are an abstract syntax tree
+containing enough data
+from which to calculate
+the complexity metrics
+and a JavaScript library
+that extracts that data
+according to the interface
+defined here.
+
+Currently,
+one such library
+has been written,
+[escomplex-ast-moz],
+which walks the
+syntax tree format
+defined in
+Mozilla's [Parser API][api].
+That format is returned
+by [Esprima]
+and [Acorn],
+two popular JavaScript parsers.
+
+Initial work
+is also underway
+on [escomplex-ast-csr],
+which aims to fulfill
+the same role
+for the syntax tree format
+used by the parser
+in [CoffeeScriptRedux].
+
 ## Metrics
 
 Currently the library reports on:
 
-* lines of code;
-* number of parameters;
-* cyclomatic complexity;
-* Halstead metrics;
-* maintainability index;
-* dependencies (CommonJS and AMD);
-* first-order density;
-* change cost;
+* Lines of code:
+  Both physical (the number of lines in a module or function)
+  and logical (a count of the imperative statements).
+* Number of parameters:
+  Analysed at the function defintion
+  rather than the call site,
+  so no accounting is done
+  for functions that use the `arguments` object.
+* Cyclomatic complexity:
+  Defined by Thomas J. McCabe in 1976,
+  this is effectively
+  the number of distinct paths
+  through a block of code.
+* Halstead metrics:
+  Defined by Maurice Halstead in 1977,
+  these metrics are calculated
+  from the numbers of operators
+  and operands in each function.
+* Maintainability index:
+  Defined by Paul Oman & Jack Hagemeister in 1991,
+  this is a logarithmic scale
+  from negative infinity to 171,
+  calculated from
+  the logical lines of code,
+  the cyclomatix complexity
+  and the Halstead effort.
+* Dependencies (CommonJS and AMD):
+  Based on calls to `require`,
+  doesn't acccount for dynamic calls
+  where a variable or function is
+  obscuring the nature of the dependency.
+* First-order density:
+  The percentage of all possible internal dependencies
+  that are actually realised in the project.
+* Change cost:
+  The percentage of modules affected,
+  on average,
+  when one module in the project
+  is changed;
+* Core size.
 
-First-order density
-and change cost
-are calculated from
-design structure matrices,
-using methods described by
-Alan MacCormack,
-John Rusnak and
-Carliss Baldwin
-in their 2004 paper,
-[Exploring the Structure of Complex Software Designs: An Empirical Study of Open Source and Proprietary Code][dsm].
+## Links to research
 
-## Abstract syntax trees
-
-* [Esprima][esprima];
-* [Acorn][acorn];
-* [CoffeeScriptRedux][coffee];
-* [LiveScript][live];
-
-## Abstract syntax tree walkers
+* [A Complexity Measure][mccabe].
+* [Cyclomatic Complexity Density and Software Maintenance Productivity][gillkemerer].
+* [Exploring the Structure of Complex Software Designs: An Empirical Study of Open Source and Proprietary Code][dsm].
 
 ## Installation
 
@@ -132,12 +191,16 @@ TODO
 
 [ci-image]: https://secure.travis-ci.org/philbooth/escomplex.png?branch=master
 [ci-status]: http://travis-ci.org/#!/philbooth/escomplex
-[dsm]: http://www.people.hbs.edu/cbaldwin/DR2/MRBDesignStructure17thSep1.pdf
+[escomplex-ast-moz]: https://github.com/philbooth/escomplex-ast-moz
 [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 [esprima]: http://esprima.org/
 [acorn]: http://marijnhaverbeke.nl/acorn
+[escomplex-ast-csr]: https://github.com/philbooth/escomplex-ast-csr
 [coffee]: https://github.com/michaelficarra/CoffeeScriptRedux
-[live]: https://github.com/gkz/LiveScript
+[mccabe]: http://www.literateprogramming.com/mccabe.pdf
+[gillkemerer]: http://www.pitt.edu/~ckemerer/CK%20research%20papers/CyclomaticComplexityDensity_GillKemerer91.pdf
+[omanhagemeister]: http://www.sciencedirect.com/science/article/pii/0164121294900671
+[dsm]: http://www.people.hbs.edu/cbaldwin/DR2/MRBDesignStructure17thSep1.pdf
 [license]: https://github.com/philbooth/escomplex/blob/master/COPYING
 [msvariant]: http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx
 [jarrod]: http://jarrodoverson.com/blog/about
