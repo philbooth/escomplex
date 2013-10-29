@@ -35,7 +35,6 @@ function analyse (modules, walker, options) {
     };
 }
 
-// TODO: Move this dependency stuff into a separate module
 function createMatrices (reports) {
     // For discussion of these metrics, see http://www.people.hbs.edu/cbaldwin/DR2/MRBDesignStructure17thSep1.pdf
     var adjacencyMatrix = createAdjacencyMatrix(reports);
@@ -155,6 +154,7 @@ function createVisibilityMatrix (adjacencyMatrix) {
         product = matrix.multiply(product, adjacencyMatrix);
         sum = matrix.add(product, sum);
     });
+
     // HACK: I'm explicitly not summing the self-reference diagonal here,
     //       since that punishes single-module projects by giving them a
     //       change cost of 100%. A case could be made that is ok, but it
