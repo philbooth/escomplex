@@ -110,7 +110,10 @@ Currently the library reports on:
   when one module in the project
   is changed.
   Lower is better.
-* Core size.
+* Core size:
+  the percentage of modules
+  with a high fan-in
+  and a high fan-out.
 
 ## Links to research
 
