@@ -170,6 +170,62 @@ function createVisibilityMatrix (adjacencyMatrix) {
         });
     });
 
-    return wrapMatrix(density, visibilityMatrix);
+    visibilityMatrix = wrapMatrix(density, visibilityMatrix);
+    visibilityMatrix.coreSize = getCoreSize(visibilityMatrix.matrix);
+
+    return visibilityMatrix;
+}
+
+function getCoreSize (visibilityMatrix) {
+    var fanIn = new Array(visibilityMatrix.length),
+        fanOut = new Array(visibilityMatrix.length),
+        boundaries = {}, coreSize = 0;
+
+    visibilityMatrix.forEach(function (row, rowIndex) {
+        fanIn[rowIndex] = row.reduce(function (sum, value, valueIndex) {
+            if (rowIndex === 0) {
+                fanOut[valueIndex] = value;
+            } else {
+                fanOut[valueIndex] += value;
+            }
+
+            return sum + value;
+        }, 0);
+    });
+
+    // Boundary values can also be chosen by looking for discontinuity in the
+    // distribution of values, but I've chosen the median to keep it simple.
+    boundaries.fanIn = getMedian(fanIn.slice());
+    boundaries.fanOut = getMedian(fanOut.slice());
+
+    visibilityMatrix.forEach(function (ignore, index) {
+        if (fanIn[index] >= boundaries.fanIn && fanOut[index] >= boundaries.fanOut) {
+            coreSize += 1;
+        }
+    });
+
+    return coreSize;
+}
+
+function getMedian (values) {
+    values.sort(compareNumbers);
+
+    if (check.isOddNumber(values.length)) {
+        return values[(values.length - 1) / 2];
+    }
+
+    return (values[(values.length - 2) / 2] + values[values.length / 2]) / 2;
+}
+
+function compareNumbers (lhs, rhs) {
+    if (lhs < rhs) {
+        return -1;
+    }
+
+    if (lhs > rhs) {
+        return 1;
+    }
+
+    return 0;
 }
 
