@@ -4,6 +4,7 @@
 
 Software complexity analysis
 of JavaScript-family abstract syntax trees.
+The back-end for [complexity-report].
 
 * [Abstract syntax trees](#abstract-syntax-trees)
 * [Metrics](#metrics)
@@ -17,25 +18,25 @@ of JavaScript-family abstract syntax trees.
 ## Abstract syntax trees
 
 This library deliberately excludes
-both logic for parsing source code
-and logic for navigating parse trees.
-Both the parsed data format
-and a program that can process that format
-are inputs to escomplex.
-This means that it is not tied
+logic for parsing source code
+and for navigating parse trees.
+Both the parse tree
+and a matching navigator
+are inputs to escomplex,
+meaning it is not tied
 to any particular source language.
 All that's required
 are an abstract syntax tree
 containing enough data
 from which to calculate
 the complexity metrics
-and a JavaScript library
+and a JavaScript program
 that extracts that data
 according to the interface
 defined here.
 
 Currently,
-one such library
+one such program
 has been written,
 [escomplex-ast-moz],
 which walks the
@@ -67,8 +68,8 @@ Currently the library reports on:
   easily subverted.
   Lower is better.
 * Number of parameters:
-  Analysed at the function defintion
-  rather than the call site,
+  Analysed statically
+  from the function signature,
   so no accounting is done
   for functions that use the `arguments` object.
   Lower is better.
@@ -112,8 +113,9 @@ Currently the library reports on:
   Lower is better.
 * Core size:
   the percentage of modules
-  with a high fan-in
-  and a high fan-out.
+  that are both widely depended on
+  and themselves depend on other modules.
+  Lower is better.
 
 ## Links to research
 
@@ -210,6 +212,7 @@ TODO
 
 [ci-image]: https://secure.travis-ci.org/philbooth/escomplex.png?branch=master
 [ci-status]: http://travis-ci.org/#!/philbooth/escomplex
+[complexity-report]: https://github.com/philbooth/complexity-report
 [escomplex-ast-moz]: https://github.com/philbooth/escomplex-ast-moz
 [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 [esprima]: http://esprima.org/
