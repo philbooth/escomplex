@@ -117,16 +117,29 @@ Currently the library reports on:
   and themselves depend on other modules.
   Lower is better.
 
+It is important to note
+that none of these metrics
+can compete with the insight
+of a competent developer.
+At best,
+they are an automatable warning system,
+which can help identify areas of code
+that warrant closer inspection.
+
 ## Links to research
 
 * [A Complexity Measure][mccabe],
   by Thomas J McCabe.
 * [Cyclomatic Complexity Density and Software Maintenance Productivity][gillkemerer],
   by Geoffrey K. Gill and Chris F. Kemerer.
+* [Resolving the Mysteries of the Halstead Measures][horstzuse],
+  by Horst Zuse.
 * [Exploring the Structure of Complex Software Designs: An Empirical Study of Open Source and Proprietary Code][dsm],
   by Alan MacCormack, John Rusnak and Carliss Baldwin.
-* [How maintainable is the Firefox codebase?][almossawi],
-  by Ali Almossawi.
+* [The Impact of Software Design Structure on Product Maintenance Costs and Measurement of Economic Benefits of Product Redesign][akaikine],
+  by Andrei Akaikine.
+* [A Systematic Review of Software Maintainability Prediction and Metrics][review],
+  by Mehwish Riaz, Emilia Mendes and Ewan Tempero.
 
 ## Installation
 
@@ -166,7 +179,8 @@ or an array of said syntax trees.
 
 The second argument, `options`,
 is an optional object
-containing properties that modify some of the complexity calculations:
+containing properties that modify
+some of the complexity calculations:
 
 * `options.logicalor`:
   Boolean indicating whether operator `||`
@@ -196,6 +210,8 @@ detailing the complexity of that syntax tree.
 If `ast` is an array,
 the result will be an array of complexity reports.
 
+Each report object
+contains the following properties:
 TODO: Properties on the returned object
 
 ## Related projects
@@ -221,9 +237,10 @@ TODO
 [coffeescriptredux]: https://github.com/michaelficarra/CoffeeScriptRedux
 [mccabe]: http://www.literateprogramming.com/mccabe.pdf
 [gillkemerer]: http://www.pitt.edu/~ckemerer/CK%20research%20papers/CyclomaticComplexityDensity_GillKemerer91.pdf
-[omanhagemeister]: http://www.sciencedirect.com/science/article/pii/0164121294900671
+[horstzuse]: http://horst-zuse.homepage.t-online.de/z-halstead-final-05-1.pdf
 [dsm]: http://www.people.hbs.edu/cbaldwin/DR2/MRBDesignStructure17thSep1.pdf
-[almossawi]: http://almossawi.com/firefox/prose
+[akaikine]: http://sdm.mit.edu/docs/akaikine_thesis.pdf
+[review]: http://www.rose-hulman.edu/Users/faculty/young/CS-Classes/csse575/Resources/maintainabilityMeas05314233.pdf
 [license]: https://github.com/philbooth/escomplex/blob/master/COPYING
 [msvariant]: http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx
 [jarrod]: http://jarrodoverson.com/blog/about
