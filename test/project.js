@@ -100,6 +100,10 @@ suite('project:', function () {
             test('change cost is correct', function () {
                 assert.strictEqual(result.matrices.visibility.density, 0);
             });
+
+            test('core size is correct', function () {
+                assert.strictEqual(result.matrices.visibility.coreSize, 0);
+            });
         });
 
         suite('two modules:', function () {
@@ -229,6 +233,10 @@ suite('project:', function () {
             test('change cost is correct', function () {
                 assert.strictEqual(result.matrices.visibility.density, 0);
             });
+
+            test('core size is correct', function () {
+                assert.strictEqual(result.matrices.visibility.coreSize, 0);
+            });
         });
 
         suite('modules with dependencies:', function () {
@@ -288,6 +296,10 @@ suite('project:', function () {
 
             test('change cost is correct', function () {
                 assert.strictEqual(result.matrices.visibility.density, 0.5625);
+            });
+
+            test('core size is correct', function () {
+                assert.strictEqual(result.matrices.visibility.coreSize, 0.5);
             });
         });
 
@@ -377,6 +389,11 @@ suite('project:', function () {
 
             test('change cost is correct', function () {
                 assert.strictEqual(result.matrices.visibility.density, 0.25);
+            });
+
+            test('core size is correct', function () {
+                assert.isTrue(result.matrices.visibility.coreSize > 0.166);
+                assert.isTrue(result.matrices.visibility.coreSize < 0.167);
             });
         });
     });

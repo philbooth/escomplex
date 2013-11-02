@@ -171,17 +171,24 @@ function createVisibilityMatrix (adjacencyMatrix) {
     });
 
     visibilityMatrix = wrapMatrix(density, visibilityMatrix);
-    visibilityMatrix.coreSize = getCoreSize(visibilityMatrix.matrix);
+    visibilityMatrix.coreSize = getCoreSize(visibilityMatrix);
 
     return visibilityMatrix;
 }
 
-function getCoreSize (visibilityMatrix) {
-    var fanIn = new Array(visibilityMatrix.length),
-        fanOut = new Array(visibilityMatrix.length),
-        boundaries = {}, coreSize = 0;
+function getCoreSize (visibility) {
+    var fanIn, fanOut, boundaries, coreSize;
 
-    visibilityMatrix.forEach(function (row, rowIndex) {
+    if (visibility.density === 0) {
+        return 0;
+    }
+
+    fanIn = new Array(visibility.matrix.length);
+    fanOut = new Array(visibility.matrix.length),
+    boundaries = {};
+    coreSize = 0;
+
+    visibility.matrix.forEach(function (row, rowIndex) {
         fanIn[rowIndex] = row.reduce(function (sum, value, valueIndex) {
             if (rowIndex === 0) {
                 fanOut[valueIndex] = value;
@@ -198,13 +205,13 @@ function getCoreSize (visibilityMatrix) {
     boundaries.fanIn = getMedian(fanIn.slice());
     boundaries.fanOut = getMedian(fanOut.slice());
 
-    visibilityMatrix.forEach(function (ignore, index) {
+    visibility.matrix.forEach(function (ignore, index) {
         if (fanIn[index] >= boundaries.fanIn && fanOut[index] >= boundaries.fanOut) {
             coreSize += 1;
         }
     });
 
-    return coreSize;
+    return coreSize / visibility.matrix.length;
 }
 
 function getMedian (values) {
