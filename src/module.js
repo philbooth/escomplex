@@ -328,7 +328,7 @@ function calculateMaintainabilityIndex (averageEffort, averageCyclomatic, averag
     }
 
     if (settings.newmi) {
-        report.maintainability = Math.max(0, (report.maintainability*100)/171);
+        report.maintainability = Math.max(0, (report.maintainability * 100) / 171);
     }
 }
 
