@@ -14,7 +14,7 @@ moduleAnalyser = require('./module');
 function analyse (modules, walker, options) {
     // TODO: Asynchronize.
 
-    var reports;
+    var reports, result;
 
     check.verifyArray(modules, 'Invalid modules');
 
@@ -29,38 +29,34 @@ function analyse (modules, walker, options) {
         return report;
     }, []);
 
-    return {
+    result = {
         reports: reports,
-        matrices: createMatrices(reports)
     };
+
+    createAdjacencyMatrix(result);
+    createVisibilityMatrix(result);
+    setCoreSize(result);
+
+    return result;
 }
 
-function createMatrices (reports) {
-    // For discussion of these metrics, see http://www.people.hbs.edu/cbaldwin/DR2/MRBDesignStructure17thSep1.pdf
-    var adjacencyMatrix = createAdjacencyMatrix(reports);
+function createAdjacencyMatrix (result) {
+    var adjacencyMatrix = new Array(result.reports.length), density = 0;
 
-    return {
-        adjacency: adjacencyMatrix,
-        visibility: createVisibilityMatrix(adjacencyMatrix)
-    };
-}
-
-function createAdjacencyMatrix (reports) {
-    var adjacencyMatrix = new Array(reports.length), density = 0;
-
-    reports.sort(function (lhs, rhs) {
+    result.reports.sort(function (lhs, rhs) {
         return comparePaths(lhs.path, rhs.path);
     }).forEach(function (ignore, x) {
-        adjacencyMatrix[x] = new Array(reports.length);
-        reports.forEach(function (ignore, y) {
-            adjacencyMatrix[x][y] = getAdjacencyMatrixValue(reports, x, y);
+        adjacencyMatrix[x] = new Array(result.reports.length);
+        result.reports.forEach(function (ignore, y) {
+            adjacencyMatrix[x][y] = getAdjacencyMatrixValue(result.reports, x, y);
             if (adjacencyMatrix[x][y] === 1) {
                 density += 1;
             }
         });
     });
 
-    return wrapMatrix(density, adjacencyMatrix);
+    result.adjacencyMatrix = adjacencyMatrix;
+    result.firstOrderDensity = percentifyDensity(density, adjacencyMatrix);
 }
 
 function comparePaths (lhs, rhs) {
@@ -136,33 +132,34 @@ function isDependency (from, dependency, to) {
     return path.resolve(path.dirname(from), dependencyPath) === to;
 }
 
-function wrapMatrix (density, matrix) {
-    if (density > 0) {
-        density = (density / (matrix.length * matrix.length)) * 100;
-    }
-
-    return {
-        density: density,
-        matrix: matrix
-    };
+function percentifyDensity (density, matrix) {
+    return percentify(density, matrix.length * matrix.length);
 }
 
-function createVisibilityMatrix (adjacency) {
-    var product = adjacency.matrix, sum = adjacency.matrix, density = 0, visibilityMatrix;
+function percentify (value, limit) {
+    if (limit === 0) {
+        return 0;
+    }
 
-    adjacency.matrix.forEach(function () {
-        product = matrix.multiply(product, adjacency.matrix);
+    return (value / limit) * 100;
+}
+
+function createVisibilityMatrix (result) {
+    var product = result.adjacencyMatrix, sum = result.adjacencyMatrix, changeCost = 0, visibilityMatrix;
+
+    result.adjacencyMatrix.forEach(function () {
+        product = matrix.multiply(product, result.adjacencyMatrix);
         sum = matrix.add(product, sum);
     });
 
-    adjacency.matrix.forEach(function (ignore, index) {
+    result.adjacencyMatrix.forEach(function (ignore, index) {
         sum[index][index] = 1;
     });
 
     visibilityMatrix = sum.map(function (row, rowIndex) {
         return row.map(function (value, columnIndex) {
             if (value > 0) {
-                density += 1;
+                changeCost += 1;
 
                 if (columnIndex !== rowIndex) {
                     return 1;
@@ -173,25 +170,24 @@ function createVisibilityMatrix (adjacency) {
         });
     });
 
-    visibilityMatrix = wrapMatrix(density, visibilityMatrix);
-    visibilityMatrix.coreSize = getCoreSize(adjacency, visibilityMatrix);
-
-    return visibilityMatrix;
+    result.visibilityMatrix = visibilityMatrix;
+    result.changeCost = percentifyDensity(changeCost, visibilityMatrix);
 }
 
-function getCoreSize (adjacency, visibility) {
+function setCoreSize (result) {
     var fanIn, fanOut, boundaries, coreSize;
 
-    if (adjacency.density === 0) {
-        return 0;
+    if (result.firstOrderDensity === 0) {
+        result.coreSize = 0;
+        return;
     }
 
-    fanIn = new Array(visibility.matrix.length);
-    fanOut = new Array(visibility.matrix.length);
+    fanIn = new Array(result.visibilityMatrix.length);
+    fanOut = new Array(result.visibilityMatrix.length);
     boundaries = {};
     coreSize = 0;
 
-    visibility.matrix.forEach(function (row, rowIndex) {
+    result.visibilityMatrix.forEach(function (row, rowIndex) {
         fanIn[rowIndex] = row.reduce(function (sum, value, valueIndex) {
             if (rowIndex === 0) {
                 fanOut[valueIndex] = value;
@@ -208,13 +204,13 @@ function getCoreSize (adjacency, visibility) {
     boundaries.fanIn = getMedian(fanIn.slice());
     boundaries.fanOut = getMedian(fanOut.slice());
 
-    visibility.matrix.forEach(function (ignore, index) {
+    result.visibilityMatrix.forEach(function (ignore, index) {
         if (fanIn[index] >= boundaries.fanIn && fanOut[index] >= boundaries.fanOut) {
             coreSize += 1;
         }
     });
 
-    return (coreSize / visibility.matrix.length) * 100;
+    result.coreSize = percentify(coreSize, result.visibilityMatrix.length);
 }
 
 function getMedian (values) {

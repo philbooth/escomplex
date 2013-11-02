@@ -81,28 +81,24 @@ suite('project:', function () {
                 assert.lengthOf(result.reports, 0);
             });
 
-            test('matrices object exists', function () {
-                assert.isObject(result.matrices);
-            });
-
             test('adjacency matrix exists', function () {
-                assert.isArray(result.matrices.adjacency.matrix);
+                assert.isArray(result.adjacencyMatrix);
             });
 
             test('adjacency matrix has zero length', function () {
-                assert.lengthOf(result.matrices.adjacency.matrix, 0);
+                assert.lengthOf(result.adjacencyMatrix, 0);
             });
 
             test('first-order density is correct', function () {
-                assert.strictEqual(result.matrices.adjacency.density, 0);
+                assert.strictEqual(result.firstOrderDensity, 0);
             });
 
             test('change cost is correct', function () {
-                assert.strictEqual(result.matrices.visibility.density, 0);
+                assert.strictEqual(result.changeCost, 0);
             });
 
             test('core size is correct', function () {
-                assert.strictEqual(result.matrices.visibility.coreSize, 0);
+                assert.strictEqual(result.coreSize, 0);
             });
         });
 
@@ -231,15 +227,15 @@ suite('project:', function () {
             });
 
             test('first-order density is correct', function () {
-                assert.strictEqual(result.matrices.adjacency.density, 0);
+                assert.strictEqual(result.firstOrderDensity, 0);
             });
 
             test('change cost is correct', function () {
-                assert.strictEqual(result.matrices.visibility.density, 50);
+                assert.strictEqual(result.changeCost, 50);
             });
 
             test('core size is correct', function () {
-                assert.strictEqual(result.matrices.visibility.coreSize, 0);
+                assert.strictEqual(result.coreSize, 0);
             });
         });
 
@@ -267,43 +263,43 @@ suite('project:', function () {
             });
 
             test('adjacency matrix is correct', function () {
-                assert.lengthOf(result.matrices.adjacency.matrix, 4);
+                assert.lengthOf(result.adjacencyMatrix, 4);
 
-                assert.lengthOf(result.matrices.adjacency.matrix[0], 4);
-                assert.strictEqual(result.matrices.adjacency.matrix[0][0], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[0][1], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[0][2], 1);
-                assert.strictEqual(result.matrices.adjacency.matrix[0][3], 1);
+                assert.lengthOf(result.adjacencyMatrix[0], 4);
+                assert.strictEqual(result.adjacencyMatrix[0][0], 0);
+                assert.strictEqual(result.adjacencyMatrix[0][1], 0);
+                assert.strictEqual(result.adjacencyMatrix[0][2], 1);
+                assert.strictEqual(result.adjacencyMatrix[0][3], 1);
 
-                assert.lengthOf(result.matrices.adjacency.matrix[1], 4);
-                assert.strictEqual(result.matrices.adjacency.matrix[1][0], 1);
-                assert.strictEqual(result.matrices.adjacency.matrix[1][1], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[1][2], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[1][3], 0);
+                assert.lengthOf(result.adjacencyMatrix[1], 4);
+                assert.strictEqual(result.adjacencyMatrix[1][0], 1);
+                assert.strictEqual(result.adjacencyMatrix[1][1], 0);
+                assert.strictEqual(result.adjacencyMatrix[1][2], 0);
+                assert.strictEqual(result.adjacencyMatrix[1][3], 0);
 
-                assert.lengthOf(result.matrices.adjacency.matrix[2], 4);
-                assert.strictEqual(result.matrices.adjacency.matrix[2][0], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[2][1], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[2][2], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[2][3], 1);
+                assert.lengthOf(result.adjacencyMatrix[2], 4);
+                assert.strictEqual(result.adjacencyMatrix[2][0], 0);
+                assert.strictEqual(result.adjacencyMatrix[2][1], 0);
+                assert.strictEqual(result.adjacencyMatrix[2][2], 0);
+                assert.strictEqual(result.adjacencyMatrix[2][3], 1);
 
-                assert.lengthOf(result.matrices.adjacency.matrix[3], 4);
-                assert.strictEqual(result.matrices.adjacency.matrix[3][0], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[3][1], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[3][2], 1);
-                assert.strictEqual(result.matrices.adjacency.matrix[3][3], 0);
+                assert.lengthOf(result.adjacencyMatrix[3], 4);
+                assert.strictEqual(result.adjacencyMatrix[3][0], 0);
+                assert.strictEqual(result.adjacencyMatrix[3][1], 0);
+                assert.strictEqual(result.adjacencyMatrix[3][2], 1);
+                assert.strictEqual(result.adjacencyMatrix[3][3], 0);
             });
 
             test('first order density is correct', function () {
-                assert.strictEqual(result.matrices.adjacency.density, 31.25);
+                assert.strictEqual(result.firstOrderDensity, 31.25);
             });
 
             test('change cost is correct', function () {
-                assert.strictEqual(result.matrices.visibility.density, 68.75);
+                assert.strictEqual(result.changeCost, 68.75);
             });
 
             test('core size is correct', function () {
-                assert.strictEqual(result.matrices.visibility.coreSize, 0);
+                assert.strictEqual(result.coreSize, 0);
             });
         });
 
@@ -335,70 +331,70 @@ suite('project:', function () {
             });
 
             test('adjacency matrix is correct', function () {
-                assert.lengthOf(result.matrices.adjacency.matrix, 6);
+                assert.lengthOf(result.adjacencyMatrix, 6);
 
-                assert.lengthOf(result.matrices.adjacency.matrix[0], 6);
-                assert.strictEqual(result.matrices.adjacency.matrix[0][0], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[0][1], 1);
-                assert.strictEqual(result.matrices.adjacency.matrix[0][2], 1);
-                assert.strictEqual(result.matrices.adjacency.matrix[0][3], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[0][4], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[0][5], 0);
+                assert.lengthOf(result.adjacencyMatrix[0], 6);
+                assert.strictEqual(result.adjacencyMatrix[0][0], 0);
+                assert.strictEqual(result.adjacencyMatrix[0][1], 1);
+                assert.strictEqual(result.adjacencyMatrix[0][2], 1);
+                assert.strictEqual(result.adjacencyMatrix[0][3], 0);
+                assert.strictEqual(result.adjacencyMatrix[0][4], 0);
+                assert.strictEqual(result.adjacencyMatrix[0][5], 0);
 
-                assert.lengthOf(result.matrices.adjacency.matrix[1], 6);
-                assert.strictEqual(result.matrices.adjacency.matrix[1][0], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[1][1], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[1][2], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[1][3], 1);
-                assert.strictEqual(result.matrices.adjacency.matrix[1][4], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[1][5], 0);
+                assert.lengthOf(result.adjacencyMatrix[1], 6);
+                assert.strictEqual(result.adjacencyMatrix[1][0], 0);
+                assert.strictEqual(result.adjacencyMatrix[1][1], 0);
+                assert.strictEqual(result.adjacencyMatrix[1][2], 0);
+                assert.strictEqual(result.adjacencyMatrix[1][3], 1);
+                assert.strictEqual(result.adjacencyMatrix[1][4], 0);
+                assert.strictEqual(result.adjacencyMatrix[1][5], 0);
 
-                assert.lengthOf(result.matrices.adjacency.matrix[2], 6);
-                assert.strictEqual(result.matrices.adjacency.matrix[2][0], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[2][1], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[2][2], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[2][3], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[2][4], 1);
-                assert.strictEqual(result.matrices.adjacency.matrix[2][5], 0);
+                assert.lengthOf(result.adjacencyMatrix[2], 6);
+                assert.strictEqual(result.adjacencyMatrix[2][0], 0);
+                assert.strictEqual(result.adjacencyMatrix[2][1], 0);
+                assert.strictEqual(result.adjacencyMatrix[2][2], 0);
+                assert.strictEqual(result.adjacencyMatrix[2][3], 0);
+                assert.strictEqual(result.adjacencyMatrix[2][4], 1);
+                assert.strictEqual(result.adjacencyMatrix[2][5], 0);
 
-                assert.lengthOf(result.matrices.adjacency.matrix[3], 6);
-                assert.strictEqual(result.matrices.adjacency.matrix[3][0], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[3][1], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[3][2], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[3][3], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[3][4], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[3][5], 0);
+                assert.lengthOf(result.adjacencyMatrix[3], 6);
+                assert.strictEqual(result.adjacencyMatrix[3][0], 0);
+                assert.strictEqual(result.adjacencyMatrix[3][1], 0);
+                assert.strictEqual(result.adjacencyMatrix[3][2], 0);
+                assert.strictEqual(result.adjacencyMatrix[3][3], 0);
+                assert.strictEqual(result.adjacencyMatrix[3][4], 0);
+                assert.strictEqual(result.adjacencyMatrix[3][5], 0);
 
-                assert.lengthOf(result.matrices.adjacency.matrix[4], 6);
-                assert.strictEqual(result.matrices.adjacency.matrix[4][0], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[4][1], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[4][2], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[4][3], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[4][4], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[4][5], 1);
+                assert.lengthOf(result.adjacencyMatrix[4], 6);
+                assert.strictEqual(result.adjacencyMatrix[4][0], 0);
+                assert.strictEqual(result.adjacencyMatrix[4][1], 0);
+                assert.strictEqual(result.adjacencyMatrix[4][2], 0);
+                assert.strictEqual(result.adjacencyMatrix[4][3], 0);
+                assert.strictEqual(result.adjacencyMatrix[4][4], 0);
+                assert.strictEqual(result.adjacencyMatrix[4][5], 1);
 
-                assert.lengthOf(result.matrices.adjacency.matrix[5], 6);
-                assert.strictEqual(result.matrices.adjacency.matrix[5][0], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[5][1], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[5][2], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[5][3], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[5][4], 0);
-                assert.strictEqual(result.matrices.adjacency.matrix[5][5], 0);
+                assert.lengthOf(result.adjacencyMatrix[5], 6);
+                assert.strictEqual(result.adjacencyMatrix[5][0], 0);
+                assert.strictEqual(result.adjacencyMatrix[5][1], 0);
+                assert.strictEqual(result.adjacencyMatrix[5][2], 0);
+                assert.strictEqual(result.adjacencyMatrix[5][3], 0);
+                assert.strictEqual(result.adjacencyMatrix[5][4], 0);
+                assert.strictEqual(result.adjacencyMatrix[5][5], 0);
             });
 
             test('first order density is correct', function () {
-                assert.isTrue(result.matrices.adjacency.density > 13.88);
-                assert.isTrue(result.matrices.adjacency.density < 13.89);
+                assert.isTrue(result.firstOrderDensity > 13.88);
+                assert.isTrue(result.firstOrderDensity < 13.89);
             });
 
             test('change cost is correct', function () {
-                assert.isTrue(result.matrices.visibility.density > 41.66);
-                assert.isTrue(result.matrices.visibility.density < 41.67);
+                assert.isTrue(result.changeCost > 41.66);
+                assert.isTrue(result.changeCost < 41.67);
             });
 
             test('core size is correct', function () {
-                assert.isTrue(result.matrices.visibility.coreSize > 16.66);
-                assert.isTrue(result.matrices.visibility.coreSize < 16.67);
+                assert.isTrue(result.coreSize > 16.66);
+                assert.isTrue(result.coreSize < 16.67);
             });
         });
     });
