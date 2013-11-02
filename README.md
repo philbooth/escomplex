@@ -116,7 +116,8 @@ of a competent developer.
 At best,
 they are an automatable warning system,
 which can help to identify areas of code
-that warrant closer inspection.
+that warrant closer inspection
+by a human being.
 
 ## Links to research
 
