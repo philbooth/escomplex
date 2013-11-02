@@ -41,7 +41,7 @@ function createMatrices (reports) {
 
     return {
         adjacency: adjacencyMatrix,
-        visibility: createVisibilityMatrix(adjacencyMatrix.matrix)
+        visibility: createVisibilityMatrix(adjacencyMatrix)
     };
 }
 
@@ -147,23 +147,26 @@ function wrapMatrix (density, matrix) {
     };
 }
 
-function createVisibilityMatrix (adjacencyMatrix) {
-    var product = adjacencyMatrix, sum = adjacencyMatrix, density = 0, visibilityMatrix;
+function createVisibilityMatrix (adjacency) {
+    var product = adjacency.matrix, sum = adjacency.matrix, density = 0, visibilityMatrix;
 
-    adjacencyMatrix.forEach(function () {
-        product = matrix.multiply(product, adjacencyMatrix);
+    adjacency.matrix.forEach(function () {
+        product = matrix.multiply(product, adjacency.matrix);
         sum = matrix.add(product, sum);
     });
 
-    // HACK: I'm explicitly not summing the self-reference diagonal here,
-    //       since that punishes single-module projects by giving them a
-    //       change cost of 100%. A case could be made that is ok, but it
-    //       feels wrong to me.
-    visibilityMatrix = sum.map(function (row) {
-        return row.map(function (value) {
+    adjacency.matrix.forEach(function (ignore, index) {
+        sum[index][index] = 1;
+    });
+
+    visibilityMatrix = sum.map(function (row, rowIndex) {
+        return row.map(function (value, columnIndex) {
             if (value > 0) {
                 density += 1;
-                return 1;
+
+                if (columnIndex !== rowIndex) {
+                    return 1;
+                }
             }
 
             return 0;
@@ -171,20 +174,20 @@ function createVisibilityMatrix (adjacencyMatrix) {
     });
 
     visibilityMatrix = wrapMatrix(density, visibilityMatrix);
-    visibilityMatrix.coreSize = getCoreSize(visibilityMatrix);
+    visibilityMatrix.coreSize = getCoreSize(adjacency, visibilityMatrix);
 
     return visibilityMatrix;
 }
 
-function getCoreSize (visibility) {
+function getCoreSize (adjacency, visibility) {
     var fanIn, fanOut, boundaries, coreSize;
 
-    if (visibility.density === 0) {
+    if (adjacency.density === 0) {
         return 0;
     }
 
     fanIn = new Array(visibility.matrix.length);
-    fanOut = new Array(visibility.matrix.length),
+    fanOut = new Array(visibility.matrix.length);
     boundaries = {};
     coreSize = 0;
 
