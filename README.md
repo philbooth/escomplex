@@ -7,6 +7,7 @@ of JavaScript-family abstract syntax trees.
 The back-end for [complexity-report].
 
 * [Abstract syntax trees](#abstract-syntax-trees)
+* [Syntax tree walkers](#syntax-tree-walkers)
 * [Metrics](#metrics)
 * [Links to research](#links-to-research)
 * [Installation](#installation)
@@ -20,42 +21,24 @@ The back-end for [complexity-report].
 This library deliberately excludes
 logic for parsing source code
 and for navigating parse trees.
-Both the parse tree
-and a matching navigator
+Both the syntax tree
+and a matching [syntax tree walker](#syntax-tree-walkers)
 are inputs to escomplex,
 meaning it is not tied
-to any particular source language.
-All that's required
-are an abstract syntax tree
-containing enough data
-from which to calculate
-the complexity metrics
-and a JavaScript program
-that extracts that data
-according to the interface
-defined here.
+to any particular language,
+parser
+or data format.
 
-Currently,
-one such program
-has been written,
-[escomplex-ast-moz],
-which walks the
-syntax tree format
-defined in
-Mozilla's [Parser API][api].
-That format is returned
-by [Esprima]
-and [Acorn],
-two popular JavaScript parsers.
+## Syntax tree walkers
 
-Initial work
-is also underway
-on [escomplex-ast-csr],
-which aims to fulfill
-the same role
-for the syntax tree format
-used by the parser
-in [CoffeeScriptRedux].
+* [escomplex-ast-moz]:
+  Walks syntax trees
+  that conform to the format
+  defined in Mozilla's [Parser API][api].
+  This format is returned
+  by [Esprima]
+  and [Acorn],
+  two popular JavaScript parsers.
 
 ## Metrics
 
@@ -175,16 +158,28 @@ It exports one function,
 called `analyse`:
 
 ```javascript
-var result = escomplex.analyse(ast, options);
+var result = escomplex.analyse(ast, walker, options);
 ```
 
 The first argument, `ast`,
 must be either
 an abstract syntax tree
-as defined by Mozilla's Parser API
-or an array of said syntax trees.
+or an array of syntax trees.
+If it is an array,
+each tree should include
+an extra property, `path`,
+that is either a relative
+or full path to equivalent module
+on disk.
+As well as identifying
+each of the result objects,
+that path is also used
+during dependency analysis.
 
-The second argument, `options`,
+The second argument, `walker`,
+must be a [syntax tree walker](#syntax-tree-walkers).
+
+The third argument, `options`,
 is an optional object
 containing properties that modify
 some of the complexity calculations:
@@ -213,21 +208,129 @@ some of the complexity calculations:
 If a single abstract syntax tree object
 is passed in the `ast` argument,
 the result will be a report object
-detailing the complexity of that syntax tree.
-If `ast` is an array,
-the result will be an array of complexity reports.
+containing the following properties:
 
-Each report object
-contains the following properties:
-TODO: Properties on the returned object
+* `report.maintainability`:
+  The maintainability index for the module.
+* `report.dependencies`:
+  The array of CommonJS/AMD dependencies for the module.
+* `report.aggregate.sloc.physical`:
+  Physical lines of code for the module.
+  Will be `undefined`
+  if the syntax tree
+  is not annotated
+  with line number data.
+* `report.aggregate.sloc.logical`:
+  Logical lines of code for the module.
+* `report.aggregate.params`:
+  Parameter count for the module.
+* `report.aggregate.cyclomatic`:
+  Cyclomatic complexity for the module.
+* `report.aggregate.cyclomaticDensity`:
+  Cyclomatic complexity density for the module.
+* `report.aggregate.halstead.vocabulary`:
+  Halstead vocabulary size for the module.
+* `report.aggregate.halstead.difficulty`:
+  Halstead difficulty for the module.
+* `report.aggregate.halstead.volume`:
+  Halstead volume for the module.
+* `report.aggregate.halstead.effort`:
+  Halstead effort for the module.
+* `report.aggregate.halstead.bugs`:
+  Halstead bugs for the module.
+* `report.aggregate.halstead.time`:
+  Halstead time for the module.
+* `report.functions[n].name`:
+  Function name.
+* `report.functions[n].line`:
+  Line number that the function starts on.
+  Will be `undefined`
+  if the syntax tree
+  is not annotated
+  with line number data.
+* `report.functions[n].sloc.physical`:
+  Physical lines of code for the function.
+  Will be `undefined`
+  if the syntax tree
+  is not annotated
+  with line number data.
+* `report.functions[n].sloc.logical`:
+  Logical lines of code for the function.
+* `report.functions[n].params`:
+  Parameter count for the function.
+* `report.functions[n].cyclomatic`:
+  Cyclomatic complexity for the function.
+* `report.functions[n].cyclomaticDensity`:
+  Cyclomatic complexity density for the function.
+* `report.functions[n].halstead.vocabulary`:
+  Halstead vocabulary size for the function.
+* `report.functions[n].halstead.difficulty`:
+  Halstead difficulty for the function.
+* `report.functions[n].halstead.volume`:
+  Halstead volume for the function.
+* `report.functions[n].halstead.effort`:
+  Halstead effort for the function.
+* `report.functions[n].halstead.bugs`:
+  Halstead bugs for the function.
+* `report.functions[n].halstead.time`:
+  Halstead time for the function.
 
-## Related projects
+If an array of syntax trees
+is passed in the `ast` argument,
+the result will be a result object
+containing the following properties:
 
-TODO
+* `result.reports`:
+  An array of report objects,
+  each one in the same format described above
+  but with an extra property `path`
+  that matches the `path` property
+  from its corresponding syntax tree.
+  This `path` property is required
+  because the reports array gest sorted
+  during dependency analysis.
+* `result.adjacencyMatrix`:
+  The adjacency
+  design structure matrix (DSM)
+  for the project.
+  This is a two-dimensional array,
+  each dimension with the same order and length
+  as the `reports` array.
+  Each row and column
+  represents its equivalent
+  indexed module
+  from the `reports` array,
+  with values along the horizontal
+  being `1`
+  when that module
+  directly depends on another
+  and values along the vertical
+  being `1`
+  when that module
+  is directly depended on by another.
+  All other values are `0`.
+* `result.firstOrderDensity`:
+  The first-order density for the project.
+* `result.visibilityMatrix`:
+  The visibility DSM for the project.
+  Like the adjacency matrix,
+  but expanded to incorporate
+  indirect dependencies.
+* `result.changeCost`:
+  The change cost for the project.
+* `result.coreSize`:
+  The core size for the project.
 
 ## Development
 
-TODO
+Source code is in `/src`.
+Unit tests are in `/test`.
+You can run them with `npm test`.
+You can run the linter with `npm run lint`.
+Make sure you've installed
+all the dependencies
+with `npm install`
+first.
 
 ## What license is it released under?
 
@@ -249,13 +352,6 @@ TODO
 [akaikine]: http://sdm.mit.edu/docs/akaikine_thesis.pdf
 [review]: http://www.rose-hulman.edu/Users/faculty/young/CS-Classes/csse575/Resources/maintainabilityMeas05314233.pdf
 [license]: https://github.com/philbooth/escomplex/blob/master/COPYING
-[msvariant]: http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx
-[jarrod]: http://jarrodoverson.com/blog/about
-[plato]: https://github.com/jsoverson/plato
-[grunt-complexity]: https://github.com/vigetlabs/grunt-complexity
-[bob]: https://github.com/cliffano/bob
-[cardio]: https://github.com/auchenberg/cardio
-[brackets-crjs]: https://github.com/sahlas/brackets-crjs
 [node]: http://nodejs.org/
 [npm]: https://npmjs.org/
 [jshint]: https://github.com/jshint/node-jshint
