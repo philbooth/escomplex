@@ -47,14 +47,12 @@ Currently the library reports on:
 * Lines of code:
   Both physical (the number of lines in a module or function)
   and logical (a count of the imperative statements).
-  A crude measure,
-  easily subverted.
-  Lower is better.
+  A crude measure.
 * Number of parameters:
   Analysed statically
   from the function signature,
-  so no accounting is done
-  for functions that use the `arguments` object.
+  so no accounting is made
+  for functions that rely on the `arguments` object.
   Lower is better.
 * Cyclomatic complexity:
   Defined by Thomas J. McCabe in 1976,
@@ -85,9 +83,13 @@ Currently the library reports on:
   the cyclomatix complexity
   and the Halstead effort.
   Higher is better.
-* Dependencies (CommonJS and AMD):
-  Based on calls to `require`,
-  doesn't acccount for dynamic calls
+* Dependencies:
+  A count of the calls
+  to CommonJS and AMD `require`.
+  Analysed statically
+  from the function signature,
+  so no accounting is made
+  for dynamic calls
   where a variable or function is
   obscuring the nature of the dependency.
   Lower is better.
@@ -113,7 +115,7 @@ can compete with the insight
 of a competent developer.
 At best,
 they are an automatable warning system,
-which can help identify areas of code
+which can help to identify areas of code
 that warrant closer inspection.
 
 ## Links to research
@@ -277,7 +279,7 @@ containing the following properties:
 
 If an array of syntax trees
 is passed in the `ast` argument,
-the result will be a result object
+the result will be an object
 containing the following properties:
 
 * `result.reports`:
@@ -287,7 +289,7 @@ containing the following properties:
   that matches the `path` property
   from its corresponding syntax tree.
   This `path` property is required
-  because the reports array gest sorted
+  because the reports array gets sorted
   during dependency analysis.
 * `result.adjacencyMatrix`:
   The adjacency
@@ -332,7 +334,7 @@ all the dependencies
 with `npm install`
 first.
 
-## What license is it released under?
+## License
 
 [MIT][license]
 
