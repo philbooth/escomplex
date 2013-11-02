@@ -164,6 +164,20 @@ suite('module:', function () {
             }, mozWalker).aggregate.complexity.cyclomatic);
         });
 
+        test('analyse returns aggregate cyclomatic complexity density property', function () {
+            assert.isNumber(escomplex.analyse({
+                body: [],
+                loc: {
+                    start: {
+                        line: 0
+                    },
+                    end: {
+                        line: 0
+                    }
+                }
+            }, mozWalker).aggregate.complexity.cyclomaticDensity);
+        });
+
         test('analyse returns aggregate halstead property', function () {
             assert.isObject(escomplex.analyse({
                 body: [],
@@ -355,6 +369,10 @@ suite('module:', function () {
                 assert.strictEqual(report.aggregate.complexity.cyclomatic, 1);
             });
 
+            test('aggregate has correct cyclomatic complexity density', function () {
+                assert.strictEqual(report.aggregate.complexity.cyclomaticDensity, 100);
+            });
+
             test('functions is empty', function () {
                 assert.lengthOf(report.functions, 0);
             });
@@ -455,6 +473,10 @@ suite('module:', function () {
 
             test('aggregate has correct cyclomatic complexity', function () {
                 assert.strictEqual(report.aggregate.complexity.cyclomatic, 2);
+            });
+
+            test('aggregate has correct cyclomatic complexity', function () {
+                assert.strictEqual(report.aggregate.complexity.cyclomaticDensity, 100);
             });
 
             test('functions is empty', function () {
@@ -763,6 +785,11 @@ suite('module:', function () {
 
             test('aggregate has correct cyclomatic complexity', function () {
                 assert.strictEqual(report.aggregate.complexity.cyclomatic, 3);
+            });
+
+            test('aggregate has correct cyclomatic complexity density', function () {
+                assert.isTrue(report.aggregate.complexity.cyclomaticDensity > 33.3);
+                assert.isTrue(report.aggregate.complexity.cyclomaticDensity < 33.4);
             });
 
             test('functions is empty', function () {
@@ -1463,6 +1490,10 @@ suite('module:', function () {
 
             test('function has correct cyclomatic complexity', function () {
                 assert.strictEqual(report.functions[0].complexity.cyclomatic, 2);
+            });
+
+            test('function has correct cyclomatic complexity', function () {
+                assert.strictEqual(report.functions[0].complexity.cyclomaticDensity, 100);
             });
 
             test('aggregate has correct Halstead total operators', function () {

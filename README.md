@@ -80,6 +80,13 @@ Currently the library reports on:
   Effectively the number of distinct paths
   through a block of code.
   Lower is better.
+* Cyclomatic complexity density:
+  Proposed as a modification
+  to cyclomatic complexity
+  by Geoffrey K. Gill and Chris F. Kemerer in 1991,
+  this metric simply re-expresses it
+  as a percentage of the logical lines of code.
+  Lower is better.
 * Halstead metrics:
   Defined by Maurice Halstead in 1977,
   these metrics are calculated

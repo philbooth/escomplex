@@ -252,10 +252,12 @@ function calculateMetrics (settings) {
     for (i = 0; i < report.functions.length; i += 1) {
         data = report.functions[i].complexity;
 
+        calculateCyclomaticDensity(data);
         calculateHalsteadMetrics(data.halstead);
         sumMaintainabilityMetrics(sums, indices, data);
     }
 
+    calculateCyclomaticDensity(report.aggregate.complexity);
     calculateHalsteadMetrics(report.aggregate.complexity.halstead);
     if (i === 0) {
         // Sane handling of modules that contain no functions.
@@ -273,6 +275,10 @@ function calculateMetrics (settings) {
     );
 
     report.params = averages[indices.params];
+}
+
+function calculateCyclomaticDensity (data) {
+    data.cyclomaticDensity = data.cyclomatic / data.sloc.logical * 100;
 }
 
 function calculateHalsteadMetrics (data) {
