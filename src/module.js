@@ -36,7 +36,7 @@ function analyse (ast, walker, options) {
 
     function processNode (node, syntax) {
         processLloc(node, syntax, currentReport);
-        processComplexity(node, syntax, currentReport);
+        processCyclomatic(node, syntax, currentReport);
         processOperators(node, syntax, currentReport);
         processOperands(node, syntax, currentReport);
 
@@ -51,7 +51,7 @@ function analyse (ast, walker, options) {
         currentReport = createFunctionReport(name, loc, parameterCount);
 
         report.functions.push(currentReport);
-        report.aggregate.complexity.params += parameterCount;
+        report.aggregate.params += parameterCount;
 
         scopeStack.push(currentReport);
     }
@@ -88,19 +88,17 @@ function createReport (lines) {
 function createFunctionReport (name, lines, params) {
     var result = {
         name: name,
-        complexity: {
-            sloc: {
-                logical: 0
-            },
-            cyclomatic: 1,
-            halstead: createInitialHalsteadState(),
-            params: params
-        }
+        sloc: {
+            logical: 0
+        },
+        cyclomatic: 1,
+        halstead: createInitialHalsteadState(),
+        params: params
     };
 
     if (check.isObject(lines)) {
         result.line = lines.start.line;
-        result.complexity.sloc.physical = lines.end.line - lines.start.line + 1;
+        result.sloc.physical = lines.end.line - lines.start.line + 1;
     }
 
     return result;
@@ -136,22 +134,22 @@ function incrementCounter (node, syntax, name, incrementFn, currentReport) {
 }
 
 function incrementLogicalSloc (currentReport, amount) {
-    report.aggregate.complexity.sloc.logical += amount;
+    report.aggregate.sloc.logical += amount;
 
     if (currentReport) {
-        currentReport.complexity.sloc.logical += amount;
+        currentReport.sloc.logical += amount;
     }
 }
 
-function processComplexity (node, syntax, currentReport) {
-    incrementCounter(node, syntax, 'complexity', incrementComplexity, currentReport);
+function processCyclomatic (node, syntax, currentReport) {
+    incrementCounter(node, syntax, 'cyclomatic', incrementCyclomatic, currentReport);
 }
 
-function incrementComplexity (currentReport, amount) {
-    report.aggregate.complexity.cyclomatic += amount;
+function incrementCyclomatic (currentReport, amount) {
+    report.aggregate.cyclomatic += amount;
 
     if (currentReport) {
-        currentReport.complexity.cyclomatic += amount;
+        currentReport.cyclomatic += amount;
     }
 }
 
@@ -205,16 +203,16 @@ function incrementDistinctHalsteadItems (baseReport, metric, identifier) {
 }
 
 function isHalsteadMetricDistinct (baseReport, metric, identifier) {
-    return baseReport.complexity.halstead[metric].identifiers.indexOf(identifier) === -1;
+    return baseReport.halstead[metric].identifiers.indexOf(identifier) === -1;
 }
 
 function recordDistinctHalsteadMetric (baseReport, metric, identifier) {
-    baseReport.complexity.halstead[metric].identifiers.push(identifier);
+    baseReport.halstead[metric].identifiers.push(identifier);
 }
 
 function incrementHalsteadMetric (baseReport, metric, type) {
     if (baseReport) {
-        baseReport.complexity.halstead[metric][type] += 1;
+        baseReport.halstead[metric][type] += 1;
     }
 }
 
@@ -244,24 +242,24 @@ function calculateMetrics (settings) {
 
     indices = {
         loc: 0,
-        complexity: 1,
+        cyclomatic: 1,
         effort: 2,
         params: 3
     };
 
     for (i = 0; i < report.functions.length; i += 1) {
-        data = report.functions[i].complexity;
+        data = report.functions[i];
 
         calculateCyclomaticDensity(data);
         calculateHalsteadMetrics(data.halstead);
         sumMaintainabilityMetrics(sums, indices, data);
     }
 
-    calculateCyclomaticDensity(report.aggregate.complexity);
-    calculateHalsteadMetrics(report.aggregate.complexity.halstead);
+    calculateCyclomaticDensity(report.aggregate);
+    calculateHalsteadMetrics(report.aggregate.halstead);
     if (i === 0) {
         // Sane handling of modules that contain no functions.
-        sumMaintainabilityMetrics(sums, indices, report.aggregate.complexity);
+        sumMaintainabilityMetrics(sums, indices, report.aggregate);
         i = 1;
     }
 
@@ -269,7 +267,7 @@ function calculateMetrics (settings) {
 
     calculateMaintainabilityIndex(
         averages[indices.effort],
-        averages[indices.complexity],
+        averages[indices.cyclomatic],
         averages[indices.loc],
         settings
     );
@@ -309,13 +307,13 @@ function nilHalsteadMetrics (data) {
 
 function sumMaintainabilityMetrics (sums, indices, data) {
     sums[indices.loc] += data.sloc.logical;
-    sums[indices.complexity] += data.cyclomatic;
+    sums[indices.cyclomatic] += data.cyclomatic;
     sums[indices.effort] += data.halstead.effort;
     sums[indices.params] += data.params;
 }
 
-function calculateMaintainabilityIndex (averageEffort, averageComplexity, averageLoc, settings) {
-    if (averageComplexity === 0) {
+function calculateMaintainabilityIndex (averageEffort, averageCyclomatic, averageLoc, settings) {
+    if (averageCyclomatic === 0) {
         throw new Error('Encountered function with cyclomatic complexity zero!');
     }
 
@@ -325,7 +323,7 @@ function calculateMaintainabilityIndex (averageEffort, averageComplexity, averag
         report.maintainability =
             171 -
             (3.42 * Math.log(averageEffort)) -
-            (0.23 * Math.log(averageComplexity)) -
+            (0.23 * Math.log(averageCyclomatic)) -
             (16.2 * Math.log(averageLoc));
     }
 

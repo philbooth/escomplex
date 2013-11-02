@@ -125,15 +125,19 @@ suite('project:', function () {
             });
 
             test('first report aggregate has correct physical lines of code', function () {
-                assert.strictEqual(result.reports[0].aggregate.complexity.sloc.physical, 1);
+                assert.strictEqual(result.reports[0].aggregate.sloc.physical, 1);
             });
 
             test('first report aggregate has correct logical lines of code', function () {
-                assert.strictEqual(result.reports[0].aggregate.complexity.sloc.logical, 4);
+                assert.strictEqual(result.reports[0].aggregate.sloc.logical, 4);
             });
 
             test('first report aggregate has correct cyclomatic complexity', function () {
-                assert.strictEqual(result.reports[0].aggregate.complexity.cyclomatic, 2);
+                assert.strictEqual(result.reports[0].aggregate.cyclomatic, 2);
+            });
+
+            test('first report aggregate has correct cyclomatic complexity density', function () {
+                assert.strictEqual(result.reports[0].aggregate.cyclomaticDensity, 50);
             });
 
             test('first report functions is empty', function () {
@@ -141,61 +145,61 @@ suite('project:', function () {
             });
 
             test('first report aggregate has correct Halstead total operators', function () {
-                assert.strictEqual(result.reports[0].aggregate.complexity.halstead.operators.total, 2);
+                assert.strictEqual(result.reports[0].aggregate.halstead.operators.total, 2);
             });
 
             test('first report aggregate has correct Halstead distinct operators', function () {
-                assert.strictEqual(result.reports[0].aggregate.complexity.halstead.operators.distinct, 2);
+                assert.strictEqual(result.reports[0].aggregate.halstead.operators.distinct, 2);
             });
 
             test('first report aggregate has correct Halstead total operands', function () {
-                assert.strictEqual(result.reports[0].aggregate.complexity.halstead.operands.total, 3);
+                assert.strictEqual(result.reports[0].aggregate.halstead.operands.total, 3);
             });
 
             test('first report aggregate has correct Halstead distinct operands', function () {
-                assert.strictEqual(result.reports[0].aggregate.complexity.halstead.operands.distinct, 3);
+                assert.strictEqual(result.reports[0].aggregate.halstead.operands.distinct, 3);
             });
 
             test('first report aggregate has correct Halstead operator identifier length', function () {
                 assert.lengthOf(
-                    result.reports[0].aggregate.complexity.halstead.operators.identifiers,
-                    result.reports[0].aggregate.complexity.halstead.operators.distinct
+                    result.reports[0].aggregate.halstead.operators.identifiers,
+                    result.reports[0].aggregate.halstead.operators.distinct
                 );
             });
 
             test('first report aggregate has correct Halstead operand identifier length', function () {
                 assert.lengthOf(
-                    result.reports[0].aggregate.complexity.halstead.operands.identifiers,
-                    result.reports[0].aggregate.complexity.halstead.operands.distinct
+                    result.reports[0].aggregate.halstead.operands.identifiers,
+                    result.reports[0].aggregate.halstead.operands.distinct
                 );
             });
 
             test('first report aggregate has correct Halstead length', function () {
-                assert.strictEqual(result.reports[0].aggregate.complexity.halstead.length, 5);
+                assert.strictEqual(result.reports[0].aggregate.halstead.length, 5);
             });
 
             test('first report aggregate has correct Halstead vocabulary', function () {
-                assert.strictEqual(result.reports[0].aggregate.complexity.halstead.vocabulary, 5);
+                assert.strictEqual(result.reports[0].aggregate.halstead.vocabulary, 5);
             });
 
             test('first report aggregate has correct Halstead difficulty', function () {
-                assert.strictEqual(result.reports[0].aggregate.complexity.halstead.difficulty, 1);
+                assert.strictEqual(result.reports[0].aggregate.halstead.difficulty, 1);
             });
 
             test('first report aggregate has correct Halstead volume', function () {
-                assert.strictEqual(Math.round(result.reports[0].aggregate.complexity.halstead.volume), 12);
+                assert.strictEqual(Math.round(result.reports[0].aggregate.halstead.volume), 12);
             });
 
             test('first report aggregate has correct Halstead effort', function () {
-                assert.strictEqual(Math.round(result.reports[0].aggregate.complexity.halstead.effort), 12);
+                assert.strictEqual(Math.round(result.reports[0].aggregate.halstead.effort), 12);
             });
 
             test('first report aggregate has correct Halstead bugs', function () {
-                assert.strictEqual(Math.round(result.reports[0].aggregate.complexity.halstead.bugs), 0);
+                assert.strictEqual(Math.round(result.reports[0].aggregate.halstead.bugs), 0);
             });
 
             test('first report aggregate has correct Halstead time', function () {
-                assert.strictEqual(Math.round(result.reports[0].aggregate.complexity.halstead.time), 1);
+                assert.strictEqual(Math.round(result.reports[0].aggregate.halstead.time), 1);
             });
 
             test('first report has correct path', function () {
@@ -207,15 +211,15 @@ suite('project:', function () {
             });
 
             test('second report first function has correct parameter count', function () {
-                assert.strictEqual(result.reports[1].functions[0].complexity.params, 2);
+                assert.strictEqual(result.reports[1].functions[0].params, 2);
             });
 
             test('second report second function has correct parameter count', function () {
-                assert.strictEqual(result.reports[1].functions[1].complexity.params, 2);
+                assert.strictEqual(result.reports[1].functions[1].params, 2);
             });
 
             test('second report aggregate has correct parameter count', function () {
-                assert.strictEqual(result.reports[1].aggregate.complexity.params, 4);
+                assert.strictEqual(result.reports[1].aggregate.params, 4);
             });
 
             test('second report mean parameter count is correct', function () {
@@ -226,7 +230,7 @@ suite('project:', function () {
                 assert.strictEqual(result.reports[1].path, 'b');
             });
 
-            test('first order density is correct', function () {
+            test('first-order density is correct', function () {
                 assert.strictEqual(result.matrices.adjacency.density, 0);
             });
 
