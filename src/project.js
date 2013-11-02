@@ -138,7 +138,7 @@ function isDependency (from, dependency, to) {
 
 function wrapMatrix (density, matrix) {
     if (density > 0) {
-        density = density / (matrix.length * matrix.length);
+        density = (density / (matrix.length * matrix.length)) * 100;
     }
 
     return {
@@ -214,7 +214,7 @@ function getCoreSize (adjacency, visibility) {
         }
     });
 
-    return coreSize / visibility.matrix.length;
+    return (coreSize / visibility.matrix.length) * 100;
 }
 
 function getMedian (values) {

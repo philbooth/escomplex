@@ -235,7 +235,7 @@ suite('project:', function () {
             });
 
             test('change cost is correct', function () {
-                assert.strictEqual(result.matrices.visibility.density, 0.5);
+                assert.strictEqual(result.matrices.visibility.density, 50);
             });
 
             test('core size is correct', function () {
@@ -295,11 +295,11 @@ suite('project:', function () {
             });
 
             test('first order density is correct', function () {
-                assert.strictEqual(result.matrices.adjacency.density, 0.3125);
+                assert.strictEqual(result.matrices.adjacency.density, 31.25);
             });
 
             test('change cost is correct', function () {
-                assert.strictEqual(result.matrices.visibility.density, 0.6875);
+                assert.strictEqual(result.matrices.visibility.density, 68.75);
             });
 
             test('core size is correct', function () {
@@ -387,18 +387,18 @@ suite('project:', function () {
             });
 
             test('first order density is correct', function () {
-                assert.isTrue(result.matrices.adjacency.density > 0.138);
-                assert.isTrue(result.matrices.adjacency.density < 0.139);
+                assert.isTrue(result.matrices.adjacency.density > 13.88);
+                assert.isTrue(result.matrices.adjacency.density < 13.89);
             });
 
             test('change cost is correct', function () {
-                assert.isTrue(result.matrices.visibility.density > 0.4166);
-                assert.isTrue(result.matrices.visibility.density < 0.4167);
+                assert.isTrue(result.matrices.visibility.density > 41.66);
+                assert.isTrue(result.matrices.visibility.density < 41.67);
             });
 
             test('core size is correct', function () {
-                assert.isTrue(result.matrices.visibility.coreSize > 0.166);
-                assert.isTrue(result.matrices.visibility.coreSize < 0.167);
+                assert.isTrue(result.matrices.visibility.coreSize > 16.66);
+                assert.isTrue(result.matrices.visibility.coreSize < 16.67);
             });
         });
     });
