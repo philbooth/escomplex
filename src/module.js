@@ -276,7 +276,7 @@ function calculateMetrics (settings) {
 }
 
 function calculateCyclomaticDensity (data) {
-    data.cyclomaticDensity = data.cyclomatic / data.sloc.logical * 100;
+    data.cyclomaticDensity = (data.cyclomatic / data.sloc.logical) * 100;
 }
 
 function calculateHalsteadMetrics (data) {
