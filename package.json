@@ -40,7 +40,9 @@
     },
     "scripts": {
         "lint": "./node_modules/jshint/bin/jshint src --config config/jshint.json",
-        "test": "./node_modules/mocha/bin/mocha --ui tdd --reporter spec --colors test"
+        "test": "npm run test-module && npm run test-project",
+        "test-module": "./node_modules/mocha/bin/mocha --ui tdd --reporter spec --colors test/module",
+        "test-project": "./node_modules/mocha/bin/mocha --ui tdd --reporter spec --colors test/project"
     }
 }
 
