@@ -419,9 +419,12 @@ are defined as follows:
 
 ## Development
 
+Refer to the [contrubution guidelines][contributions]
+before submitting a pull request.
+
 Source code is in `/src`.
 Unit tests are in `/test`.
-You can run them with `npm test`.
+You can run the tests with `npm test`.
 You can run the linter with `npm run lint`.
 Make sure you've installed
 all the dependencies
@@ -448,9 +451,5 @@ first.
 [akaikine]: http://sdm.mit.edu/docs/akaikine_thesis.pdf
 [review]: http://www.rose-hulman.edu/Users/faculty/young/CS-Classes/csse575/Resources/maintainabilityMeas05314233.pdf
 [license]: https://github.com/philbooth/escomplex/blob/master/COPYING
-[node]: http://nodejs.org/
-[npm]: https://npmjs.org/
-[jshint]: https://github.com/jshint/node-jshint
-[mocha]: http://visionmedia.github.com/mocha
-[chai]: http://chaijs.com/
+[contributions]: https://github.com/philbooth/escomplex/blob/master/CONTRIBUTING.md
 
