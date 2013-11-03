@@ -111,7 +111,7 @@ Currently the library reports on:
   is changed.
   Lower is better.
 * Core size:
-  the percentage of modules
+  The percentage of modules
   that are both widely depended on
   and themselves depend on other modules.
   Lower is better.
