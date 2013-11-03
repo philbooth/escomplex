@@ -1,17 +1,11 @@
-# Contributing
+# Contribution guidelines
 
 * Install/update the dependencies.
-  ```
-  npm install
-  ```
+  `npm install`
 * Make sure the code lints.
-  ```
-  npm run lint
-  ```
+  `npm run lint`
 * Make sure all of the tests pass.
-  ```
-  npm test
-  ```
+  `npm test`
 * New code must have new unit tests.
 * New features/metrics
   or changes to existing features/metrics
