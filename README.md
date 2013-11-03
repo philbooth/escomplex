@@ -12,6 +12,13 @@ The back-end for [complexity-report].
 * [Links to research](#links-to-research)
 * [Installation](#installation)
 * [Usage](#usage)
+    * [Arguments](#arguments)
+        * [ast](#ast)
+        * [walker](#walker)
+        * [options](#options)
+    * [Result](#result)
+        * [For a single module](#for-a-single-module)
+        * [For multiple modules](#for-multiple-modules)
 * [Related projects](#related-projects)
 * [Development](#development)
 * [License](#license)
@@ -164,6 +171,10 @@ called `analyse`:
 var result = escomplex.analyse(ast, walker, options);
 ```
 
+### Arguments
+
+#### ast
+
 The first argument, `ast`,
 must be either
 an abstract syntax tree
@@ -171,16 +182,19 @@ or an array of syntax trees.
 If it is an array,
 each tree should include
 an extra property, `path`,
-that is either a relative
-or full path to equivalent module
-on disk.
+that is either a relative or full path
+to the equivalent module on disk.
 As well as identifying
 each of the result objects,
 that path is also used
 during dependency analysis.
 
+#### walker
+
 The second argument, `walker`,
 must be a [syntax tree walker](#syntax-tree-walkers).
+
+#### options
 
 The third argument, `options`,
 is an optional object
@@ -208,10 +222,66 @@ some of the complexity calculations:
   index should be rebased on a scale from 0 to 100,
   defaults to `false`.
 
+### Result
+
+#### For a single module
+
 If a single abstract syntax tree object
 is passed in the `ast` argument,
 the result will be a report object
-containing the following properties:
+that looks like the following:
+
+```javascript
+{
+    maintainability: 171,
+    dependencies: [],
+    aggregate: {
+        sloc: {
+            logical: 0,
+            physical: 0
+        },
+        params: 0,
+        cyclomatic: 1,
+        cyclomaticDensity: 1,
+        halstead: {
+            vocabulary: 0,
+            difficulty: 0,
+            volume: 0,
+            effort: 0,
+            bugs: 0,
+            time: 0
+        }
+    },
+    functions: [
+        {
+            name: '',
+            line: 0,
+            sloc: {
+                logical: 0,
+                physical: 0
+            },
+            params: 0,
+            cyclomatic: 1,
+            cyclomaticDensity: 1,
+            halstead: {
+                vocabulary: 0,
+                difficulty: 0,
+                volume: 0,
+                effort: 0,
+                bugs: 0,
+                time: 0
+            }
+        },
+        ...
+    ]
+}
+```
+
+The meaning of those values, briefly,
+is as follows
+(see [metrics](#metrics)
+for more information
+on each one):
 
 * `report.maintainability`:
   The maintainability index for the module.
@@ -278,14 +348,37 @@ containing the following properties:
 * `report.functions[n].halstead.time`:
   Halstead time for the function.
 
+#### For multiple modules
+
 If an array of syntax trees
 is passed in the `ast` argument,
 the result will be an object
-containing the following properties:
+that looks like the following:
+
+```javascript
+{
+    reports: [
+        ...
+    ],
+    adjacencyMatrix: [
+        [ 0 ]
+    ],
+    firstOrderDensity: 0,
+    visibilityMatrix: [
+        [ 0 ]
+    ],
+    changeCost: 100,
+    coreSize: 100
+}
+```
+
+Those properties
+are defined as follows:
 
 * `result.reports`:
   An array of report objects,
-  each one in the same format described above
+  each one in the same format
+  [described above](#for-a-single-module)
   but with an extra property `path`
   that matches the `path` property
   from its corresponding syntax tree.
