@@ -417,6 +417,18 @@ are defined as follows:
 * `result.coreSize`:
   The core size for the project.
 
+## Related projects
+
+* [plato]: JavaScript source code visualization, static analysis, and complexity tool.
+* [jsc]: JavaScript source code complexity tool.
+* [bob]: Minimalist-omakase build tool for node.js projects.
+* [cardio]: A web application health tool.
+* [grunt-complexity][grunt]: A JavaScript complexity analysis grunt task.
+* [brackets-crjs][brackets]: Brackets extension.
+* [jscomplexity]: JS cyclomatic complexity report generator.
+* [karma-complexity-processor][karma]: A preprocessor for karma runner to give some metrics about code complexity.
+* [crlint]: JS linter based on complexity report results.
+
 ## Development
 
 Refer to the [contrubution guidelines][contributions]
@@ -450,6 +462,15 @@ first.
 [dsm]: http://www.people.hbs.edu/cbaldwin/DR2/MRBDesignStructure17thSep1.pdf
 [akaikine]: http://sdm.mit.edu/docs/akaikine_thesis.pdf
 [review]: http://www.rose-hulman.edu/Users/faculty/young/CS-Classes/csse575/Resources/maintainabilityMeas05314233.pdf
-[license]: https://github.com/philbooth/escomplex/blob/master/COPYING
+[plato]: https://github.com/es-analysis/plato
+[jsc]: https://github.com/bahmutov/js-complexity-viz
+[bob]: https://github.com/cliffano/bob
+[cardio]: https://github.com/auchenberg/cardio
+[grunt]: https://github.com/vigetlabs/grunt-complexity
+[brackets]: https://github.com/sahlas/brackets-crjs
+[jscomplexity]: https://github.com/slyg/jscomplexity
+[karma]: https://github.com/lorenzofox3/karma-complexity-preprocessor
+[crlint]: https://github.com/spion/crlint.js
 [contributions]: https://github.com/philbooth/escomplex/blob/master/CONTRIBUTING.md
+[license]: https://github.com/philbooth/escomplex/blob/master/COPYING
 
