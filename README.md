@@ -419,15 +419,24 @@ are defined as follows:
 
 ## Related projects
 
-* [plato]: JavaScript source code visualization, static analysis, and complexity tool.
-* [jsc]: JavaScript source code complexity tool.
-* [bob]: Minimalist-omakase build tool for node.js projects.
-* [cardio]: A web application health tool.
-* [grunt-complexity][grunt]: A JavaScript complexity analysis grunt task.
-* [brackets-crjs][brackets]: Brackets extension.
-* [jscomplexity]: JS cyclomatic complexity report generator.
-* [karma-complexity-processor][karma]: A preprocessor for karma runner to give some metrics about code complexity.
-* [crlint]: JS linter based on complexity report results.
+* [plato]:
+  JavaScript source code visualization, static analysis, and complexity tool.
+* [jsc]:
+  JavaScript source code complexity tool.
+* [bob]:
+  Minimalist-omakase build tool for node.js projects.
+* [cardio]:
+  A web application health tool.
+* [grunt-complexity][grunt]:
+  A JavaScript complexity analysis grunt task.
+* [brackets-crjs][brackets]:
+  Brackets extension.
+* [jscomplexity]:
+  JS cyclomatic complexity report generator.
+* [karma-complexity-processor][karma]:
+  A preprocessor for karma runner to give some metrics about code complexity.
+* [crlint]:
+  JS linter based on complexity report results.
 
 ## Development
 
