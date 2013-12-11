@@ -11,11 +11,11 @@ function analyse (ast, walker, options) {
 
     var settings, currentReport, clearDependencies = true, scopeStack = [];
 
-    check.verifyObject(ast, 'Invalid syntax tree');
-    check.verifyObject(walker, 'Invalid walker');
-    check.verifyFunction(walker.walk, 'Invalid walker.walk method');
+    check.verify.object(ast, 'Invalid syntax tree');
+    check.verify.object(walker, 'Invalid walker');
+    check.verify.fn(walker.walk, 'Invalid walker.walk method');
 
-    if (check.isObject(options)) {
+    if (check.object(options)) {
         settings = options;
     } else {
         settings = getDefaultSettings();
@@ -96,7 +96,7 @@ function createFunctionReport (name, lines, params) {
         params: params
     };
 
-    if (check.isObject(lines)) {
+    if (check.object(lines)) {
         result.line = lines.start.line;
         result.sloc.physical = lines.end.line - lines.start.line + 1;
     }
@@ -126,9 +126,9 @@ function processLloc (node, syntax, currentReport) {
 function incrementCounter (node, syntax, name, incrementFn, currentReport) {
     var amount = syntax[name];
 
-    if (check.isNumber(amount)) {
+    if (check.number(amount)) {
         incrementFn(currentReport, amount);
-    } else if (check.isFunction(amount)) {
+    } else if (check.fn(amount)) {
         incrementFn(currentReport, amount(node));
     }
 }
@@ -162,17 +162,17 @@ function processOperands (node, syntax, currentReport) {
 }
 
 function processHalsteadMetric (node, syntax, metric, currentReport) {
-    if (check.isArray(syntax[metric])) {
+    if (check.array(syntax[metric])) {
         syntax[metric].forEach(function (s) {
             var identifier;
 
-            if (check.isFunction(s.identifier)) {
+            if (check.fn(s.identifier)) {
                 identifier = s.identifier(node);
             } else {
                 identifier = s.identifier;
             }
 
-            if (check.isFunction(s.filter) === false || s.filter(node) === true) {
+            if (check.fn(s.filter) === false || s.filter(node) === true) {
                 halsteadItemEncountered(currentReport, metric, identifier);
             }
         });
@@ -223,9 +223,9 @@ function incrementTotalHalsteadItems (baseReport, metric) {
 function processDependencies (node, syntax, clearDependencies) {
     var dependencies;
 
-    if (check.isFunction(syntax.dependencies)) {
+    if (check.fn(syntax.dependencies)) {
         dependencies = syntax.dependencies(node, clearDependencies);
-        if (check.isObject(dependencies) || check.isArray(dependencies)) {
+        if (check.object(dependencies) || check.array(dependencies)) {
             report.dependencies = report.dependencies.concat(dependencies);
         }
 

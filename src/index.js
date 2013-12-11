@@ -22,7 +22,7 @@ exports.analyse = analyse;
  *
  */
 function analyse (ast, walker, options) {
-    if (check.isArray(ast)) {
+    if (check.array(ast)) {
         return require('./project').analyse(ast, walker, options);
     }
 
