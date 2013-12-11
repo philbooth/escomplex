@@ -16,12 +16,12 @@ function analyse (modules, walker, options) {
 
     var reports, result;
 
-    check.verifyArray(modules, 'Invalid modules');
+    check.verify.array(modules, 'Invalid modules');
 
     reports = modules.map(function (m) {
         var report;
 
-        check.verifyUnemptyString(m.path, 'Invalid path');
+        check.verify.unemptyString(m.path, 'Invalid path');
 
         report = moduleAnalyser.analyse(m.ast, walker, options);
         report.path = m.path;
@@ -216,7 +216,7 @@ function setCoreSize (result) {
 function getMedian (values) {
     values.sort(compareNumbers);
 
-    if (check.isOddNumber(values.length)) {
+    if (check.oddNumber(values.length)) {
         return values[(values.length - 1) / 2];
     }
 
