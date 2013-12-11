@@ -27,7 +27,7 @@
         "ast"
     ],
     "dependencies": {
-        "check-types": "1.1.1",
+        "check-types": "1.1.x",
         "matrix-utilities": "1.2.x"
     },
     "devDependencies": {
