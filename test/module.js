@@ -2577,6 +2577,22 @@ suite('module:', function () {
             });
         });
 
+        suite('Empty nested functions', function () {
+            var report;
+
+            setup(function () {
+                report = escomplex.analyse(esprima.parse('function foo () { function bar () {} }', { loc: true }), mozWalker);
+            });
+
+            teardown(function () {
+                report = undefined;
+            });
+
+            test('maintainability index is correct', function () {
+                assert.strictEqual(report.maintainability, 171);
+            });
+        });
+
         suite('Microsoft variant maintainability index:', function () {
             var report;
 

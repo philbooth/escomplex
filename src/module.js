@@ -317,14 +317,14 @@ function calculateMaintainabilityIndex (averageEffort, averageCyclomatic, averag
         throw new Error('Encountered function with cyclomatic complexity zero!');
     }
 
-    if (averageEffort === 0 || averageLoc === 0) {
+    report.maintainability =
+        171 -
+        (3.42 * Math.log(averageEffort)) -
+        (0.23 * Math.log(averageCyclomatic)) -
+        (16.2 * Math.log(averageLoc));
+
+    if (report.maintainability > 171) {
         report.maintainability = 171;
-    } else {
-        report.maintainability =
-            171 -
-            (3.42 * Math.log(averageEffort)) -
-            (0.23 * Math.log(averageCyclomatic)) -
-            (16.2 * Math.log(averageLoc));
     }
 
     if (settings.newmi) {
