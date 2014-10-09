@@ -23,10 +23,16 @@ function analyse (modules, walker, options) {
 
         check.verify.unemptyString(m.path, 'Invalid path');
 
-        report = moduleAnalyser.analyse(m.ast, walker, options);
-        report.path = m.path;
+        try {
+            report = moduleAnalyser.analyse(m.ast, walker, options);
 
-        return report;
+            report.path = m.path;
+
+            return report;
+        } catch (error) {
+            // These error messages are useless unless they contain the error message.
+            error.message = m.path + ': ' + error.message;
+        }
     }, []);
 
     result = {
