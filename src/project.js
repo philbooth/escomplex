@@ -32,6 +32,7 @@ function analyse (modules, walker, options) {
         } catch (error) {
             // These error messages are useless unless they contain the error message.
             error.message = m.path + ': ' + error.message;
+            throw error;
         }
     }, []);
 
