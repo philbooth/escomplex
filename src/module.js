@@ -11,9 +11,9 @@ function analyse (ast, walker, options) {
 
     var settings, currentReport, clearDependencies = true, scopeStack = [];
 
-    check.verify.object(ast, 'Invalid syntax tree');
-    check.verify.object(walker, 'Invalid walker');
-    check.verify.fn(walker.walk, 'Invalid walker.walk method');
+    check.assert.object(ast, 'Invalid syntax tree');
+    check.assert.object(walker, 'Invalid walker');
+    check.assert.function(walker.walk, 'Invalid walker.walk method');
 
     if (check.object(options)) {
         settings = options;
@@ -128,7 +128,7 @@ function incrementCounter (node, syntax, name, incrementFn, currentReport) {
 
     if (check.number(amount)) {
         incrementFn(currentReport, amount);
-    } else if (check.fn(amount)) {
+    } else if (check.function(amount)) {
         incrementFn(currentReport, amount(node));
     }
 }
@@ -166,13 +166,13 @@ function processHalsteadMetric (node, syntax, metric, currentReport) {
         syntax[metric].forEach(function (s) {
             var identifier;
 
-            if (check.fn(s.identifier)) {
+            if (check.function(s.identifier)) {
                 identifier = s.identifier(node);
             } else {
                 identifier = s.identifier;
             }
 
-            if (check.fn(s.filter) === false || s.filter(node) === true) {
+            if (check.function(s.filter) === false || s.filter(node) === true) {
                 halsteadItemEncountered(currentReport, metric, identifier);
             }
         });
@@ -223,7 +223,7 @@ function incrementTotalHalsteadItems (baseReport, metric) {
 function processDependencies (node, syntax, clearDependencies) {
     var dependencies;
 
-    if (check.fn(syntax.dependencies)) {
+    if (check.function(syntax.dependencies)) {
         dependencies = syntax.dependencies(node, clearDependencies);
         if (check.object(dependencies) || check.array(dependencies)) {
             report.dependencies = report.dependencies.concat(dependencies);
