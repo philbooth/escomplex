@@ -463,8 +463,6 @@ first.
 [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 [esprima]: http://esprima.org/
 [acorn]: http://marijnhaverbeke.nl/acorn
-[escomplex-ast-csr]: https://github.com/philbooth/escomplex-ast-csr
-[coffeescriptredux]: https://github.com/michaelficarra/CoffeeScriptRedux
 [mccabe]: http://www.literateprogramming.com/mccabe.pdf
 [gillkemerer]: http://www.pitt.edu/~ckemerer/CK%20research%20papers/CyclomaticComplexityDensity_GillKemerer91.pdf
 [horstzuse]: http://horst-zuse.homepage.t-online.de/z-halstead-final-05-1.pdf
