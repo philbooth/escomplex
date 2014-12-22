@@ -30,7 +30,7 @@ function analyse (modules, walker, options) {
 
             return report;
         } catch (error) {
-            // These error messages are useless unless they contain the error message.
+            // These error messages are useless unless they contain the module path.
             error.message = m.path + ': ' + error.message;
             throw error;
         }
