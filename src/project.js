@@ -44,6 +44,8 @@ function analyse (modules, walker, options) {
     createVisibilityMatrix(result);
     setCoreSize(result);
 
+    // TODO: Aggregate module metrics into a project-level summary.
+
     return result;
 }
 
