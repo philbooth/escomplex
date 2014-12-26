@@ -236,34 +236,32 @@ function processDependencies (node, syntax, clearDependencies) {
 }
 
 function calculateMetrics (settings) {
-    var i, data, averages,
+    var count, indices, sums, averages,
 
-    sums = [ 0, 0, 0, 0 ],
-
+    count = report.functions.length;
     indices = {
         loc: 0,
         cyclomatic: 1,
         effort: 2,
         params: 3
     };
+    sums = [ 0, 0, 0, 0 ];
 
-    for (i = 0; i < report.functions.length; i += 1) {
-        data = report.functions[i];
-
-        calculateCyclomaticDensity(data);
-        calculateHalsteadMetrics(data.halstead);
-        sumMaintainabilityMetrics(sums, indices, data);
-    }
+    report.functions.forEach(function (functionReport) {
+        calculateCyclomaticDensity(functionReport);
+        calculateHalsteadMetrics(functionReport.halstead);
+        sumMaintainabilityMetrics(sums, indices, functionReport);
+    });
 
     calculateCyclomaticDensity(report.aggregate);
     calculateHalsteadMetrics(report.aggregate.halstead);
-    if (i === 0) {
+    if (count === 0) {
         // Sane handling of modules that contain no functions.
         sumMaintainabilityMetrics(sums, indices, report.aggregate);
-        i = 1;
+        count = 1;
     }
 
-    averages = sums.map(function (sum) { return sum / i; });
+    averages = sums.map(function (sum) { return sum / count; });
 
     calculateMaintainabilityIndex(
         averages[indices.effort],
@@ -272,7 +270,9 @@ function calculateMetrics (settings) {
         settings
     );
 
-    report.params = averages[indices.params];
+    Object.keys(indices).forEach(function (index) {
+        report[index] = averages[indices[index]];
+    });
 }
 
 function calculateCyclomaticDensity (data) {

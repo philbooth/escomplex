@@ -442,6 +442,18 @@ suite('module:', function () {
                 assert.strictEqual(report.aggregate.params, 0);
             });
 
+            test('mean logical LOC is correct', function () {
+                assert.strictEqual(report.loc, 1);
+            });
+
+            test('mean cyclomatic complexity is correct', function () {
+                assert.strictEqual(report.cyclomatic, 1);
+            });
+
+            test('mean Halstead effort is correct', function () {
+                assert.strictEqual(report.effort, 4);
+            });
+
             test('mean parameter count is correct', function () {
                 assert.strictEqual(report.params, 0);
             });
@@ -542,6 +554,22 @@ suite('module:', function () {
 
             test('maintainability index is correct', function () {
                 assert.strictEqual(Math.round(report.maintainability), 157);
+            });
+
+            test('mean logical LOC is correct', function () {
+                assert.strictEqual(report.loc, 2);
+            });
+
+            test('mean cyclomatic complexity is correct', function () {
+                assert.strictEqual(report.cyclomatic, 2);
+            });
+
+            test('mean Halstead effort is correct', function () {
+                assert.strictEqual(report.effort, 2.3774437510817346);
+            });
+
+            test('mean parameter count is correct', function () {
+                assert.strictEqual(report.params, 0);
             });
 
             test('dependencies is correct', function () {
@@ -2513,6 +2541,18 @@ suite('module:', function () {
 
             test('aggregate has correct parameter count', function () {
                 assert.strictEqual(report.aggregate.params, 4);
+            });
+
+            test('mean logical LOC is correct', function () {
+                assert.strictEqual(report.loc, 4);
+            });
+
+            test('mean cyclomatic complexity is correct', function () {
+                assert.strictEqual(report.cyclomatic, 2);
+            });
+
+            test('mean Halstead effort is correct', function () {
+                assert.strictEqual(report.effort, 374.7133081440434);
             });
 
             test('mean parameter count is correct', function () {
