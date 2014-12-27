@@ -100,6 +100,26 @@ suite('project:', function () {
             test('core size is correct', function () {
                 assert.strictEqual(result.coreSize, 0);
             });
+
+            test('mean per-function logical LOC is correct', function () {
+                assert.strictEqual(result.loc, 0);
+            });
+
+            test('mean per-function cyclomatic complexity is correct', function () {
+                assert.strictEqual(result.cyclomatic, 0);
+            });
+
+            test('mean per-function Halstead effort is correct', function () {
+                assert.strictEqual(result.effort, 0);
+            });
+
+            test('mean per-function parameter count is correct', function () {
+                assert.strictEqual(result.params, 0);
+            });
+
+            test('mean per-function maintainability index is correct', function () {
+                assert.strictEqual(result.maintainability, 0);
+            });
         });
 
         suite('two modules:', function () {
@@ -236,6 +256,26 @@ suite('project:', function () {
 
             test('core size is correct', function () {
                 assert.strictEqual(result.coreSize, 0);
+            });
+
+            test('mean per-function logical LOC is correct', function () {
+                assert.strictEqual(result.loc, 4);
+            });
+
+            test('mean per-function cyclomatic complexity is correct', function () {
+                assert.strictEqual(result.cyclomatic, 2);
+            });
+
+            test('mean per-function Halstead effort is correct', function () {
+                assert.strictEqual(result.effort, 193.1614743092401);
+            });
+
+            test('mean per-function parameter count is correct', function () {
+                assert.strictEqual(result.params, 1);
+            });
+
+            test('mean per-function maintainability index is correct', function () {
+                assert.strictEqual(result.maintainability, 134.05623254229997);
             });
         });
 

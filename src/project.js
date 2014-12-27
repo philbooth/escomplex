@@ -43,8 +43,7 @@ function analyse (modules, walker, options) {
     createAdjacencyMatrix(result);
     createVisibilityMatrix(result);
     setCoreSize(result);
-
-    // TODO: Aggregate module metrics into a project-level summary.
+    calculateAverages(result);
 
     return result;
 }
@@ -242,5 +241,33 @@ function compareNumbers (lhs, rhs) {
     }
 
     return 0;
+}
+
+function calculateAverages (result) {
+    var sums, divisor;
+
+    sums = {
+        loc: 0,
+        cyclomatic: 0,
+        effort: 0,
+        params: 0,
+        maintainability: 0
+    };
+
+    if (result.reports.length === 0) {
+        divisor = 1;
+    } else {
+        divisor = result.reports.length;
+    }
+
+    result.reports.forEach(function (report) {
+        Object.keys(sums).forEach(function (key) {
+            sums[key] += report[key];
+        });
+    });
+
+    Object.keys(sums).forEach(function (key) {
+        result[key] = sums[key] / divisor;
+    });
 }
 
