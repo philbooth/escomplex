@@ -368,7 +368,12 @@ that looks like the following:
         [ 0 ]
     ],
     changeCost: 100,
-    coreSize: 100
+    coreSize: 100,
+    loc: 0,
+    cyclomatic: 1,
+    effort: 0,
+    params: 0,
+    maintainability: 171
 }
 ```
 
@@ -416,6 +421,21 @@ are defined as follows:
   The change cost for the project.
 * `result.coreSize`:
   The core size for the project.
+* `result.loc`:
+  The average per-function
+  count of logical lines of code.
+* `result.cyclomatic`:
+  The average per-function
+  cyclomatic complexity.
+* `result.effort`:
+  The average per-function
+  Halstead effort.
+* `result.params`:
+  The average per-function
+  parameter count.
+* `result.maintainability`:
+  The average per-module
+  maintainability index.
 
 ## Related projects
 
