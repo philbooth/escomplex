@@ -236,7 +236,7 @@ function processDependencies (node, syntax, clearDependencies) {
 }
 
 function calculateMetrics (settings) {
-    var count, indices, sums, averages,
+    var count, indices, sums, averages;
 
     count = report.functions.length;
     indices = {
