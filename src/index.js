@@ -9,6 +9,7 @@
 var check = require('check-types');
 
 exports.analyse = analyse;
+exports.processResults = processResults;
 
 /**
  * Public function `analyse`.
@@ -29,3 +30,14 @@ function analyse (ast, walker, options) {
     return require('./module').analyse(ast, walker, options);
 }
 
+/**
+ * Public function `processResults`.
+ *
+ * Given an object with an array of results, it returns results with calculated aggregate values.
+ *
+ * @param report {object}  The report object with an array of results for calculating aggregates.
+ *
+ */
+function processResults(report) {
+    return require('./project').processResults(report);
+}

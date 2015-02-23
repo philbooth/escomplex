@@ -1,6 +1,6 @@
 {
     "name": "escomplex",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Software complexity analysis of JavaScript-family abstract syntax trees.",
     "homepage": "https://github.com/philbooth/escomplex",
     "bugs": "https://github.com/philbooth/escomplex/issues",

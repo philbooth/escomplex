@@ -5,6 +5,7 @@
 var path, check, matrix, moduleAnalyser;
 
 exports.analyse = analyse;
+exports.processResults = processResults;
 
 path = require('path');
 check = require('check-types');
@@ -36,10 +37,12 @@ function analyse (modules, walker, options) {
         }
     }, []);
 
-    result = {
+    return processResults({
         reports: reports,
-    };
+    });
+}
 
+function processResults(result) {
     createAdjacencyMatrix(result);
     createVisibilityMatrix(result);
     setCoreSize(result);
