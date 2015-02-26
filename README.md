@@ -164,12 +164,24 @@ by calling `require`:
 var escomplex = require('escomplex');
 ```
 
-It exports one function,
-called `analyse`:
+It exports two functions,
+the primary interface, called `analyse`:
 
 ```javascript
 var result = escomplex.analyse(ast, walker, options);
 ```
+
+and a second function, called `processResults`:
+
+``` javascript
+escomplex.processResults(result, false);
+```
+
+This function takes a report object and computes
+aggregate scores for all individual files and also adjaceny and
+visibility matrices. The second parameter corresponds to `noCoreSize`
+option below.
+
 
 ### Arguments
 
@@ -221,6 +233,14 @@ some of the complexity calculations:
   Boolean indicating whether the maintainability
   index should be rebased on a scale from 0 to 100,
   defaults to `false`.
+* `options.skipCalculation`:
+  *only valid for when ast is an array of files*
+  Boolean indicating if we should skip processing of certain
+  values, such as the adjacency and visibility matrixes, core sizes,
+  and average values loc, etc.
+* `options.noCoreSize`:
+  Skips creating the visibility matrix and calculating the coreSize,
+  which can be very expensive for large projects
 
 ### Result
 
