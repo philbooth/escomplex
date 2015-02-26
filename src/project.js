@@ -15,7 +15,7 @@ moduleAnalyser = require('./module');
 function analyse (modules, walker, options) {
     // TODO: Asynchronize.
 
-    var reports, result;
+    var reports;
     options = options || {};
 
     check.assert.array(modules, 'Invalid modules');
@@ -39,9 +39,9 @@ function analyse (modules, walker, options) {
     }, []);
 
     if (options.skipCalculation) {
-      return {
-        reports: reports
-      };
+        return {
+            reports: reports
+        };
     }
 
     return processResults({
@@ -50,13 +50,13 @@ function analyse (modules, walker, options) {
 }
 
 function processResults(result, noCoreSize) {
-    if (noCoreSize == null) {
+    if (noCoreSize === null) {
         noCoreSize = false;
     }
     createAdjacencyMatrix(result);
     if (!noCoreSize) {
-      createVisibilityMatrix(result);
-      setCoreSize(result);
+        createVisibilityMatrix(result);
+        setCoreSize(result);
     }
     calculateAverages(result);
 
@@ -170,13 +170,12 @@ function percentify (value, limit) {
 // implementation of floydWarshall alg for calculating visibility matrix in O(n^3) instead of O(n^4) with successive raising of powers
 function createVisibilityMatrix (result) {
 
-    var changeCost = 0;
-    var visibilityMatrix = adjacencyToDistMatrix(result.adjacencyMatrix);
-    var matrixLen = visibilityMatrix.length;
-    for (var k = 0; k < matrixLen; k++) {
-        for (var i = 0; i < matrixLen; i++) {
-            for (var j = 0; j < matrixLen; j++) {
-              visibilityMatrix[i][j] = Math.min(visibilityMatrix[i][j], visibilityMatrix[i][k] + visibilityMatrix[k][j]);
+    var changeCost = 0, visibilityMatrix = adjacencyToDistMatrix(result.adjacencyMatrix), matrixLen = visibilityMatrix.length, k, i, j;
+
+    for (k = 0; k < matrixLen; k += 1) {
+        for (i = 0; i < matrixLen; i += 1) {
+            for (j = 0; j < matrixLen; j += 1) {
+                visibilityMatrix[i][j] = Math.min(visibilityMatrix[i][j], visibilityMatrix[i][k] + visibilityMatrix[k][j]);
             }
         }
     }
@@ -203,31 +202,20 @@ function createVisibilityMatrix (result) {
 
 // where we have 0, set distance to Infinity and copy the matrix so its special
 function adjacencyToDistMatrix(matrix) {
-    var distMatrix = [];
-    for (var i = 0; i < matrix.length; i++) {
+    var distMatrix = [], i, j, value;
+    for (i = 0; i < matrix.length; i += 1) {
         distMatrix.push([]);
-        for (var j = 0; j < matrix[i].length; j++) {
-            var value = null;
-            if (i == j) {
-              value = 1
+        for (j = 0; j < matrix[i].length; j += 1) {
+            value = null;
+            if (i === j) {
+                value = 1;
             } else {
-              value = matrix[i][j] || Infinity
+                value = matrix[i][j] || Infinity;
             }
-            distMatrix[i][j] = value
+            distMatrix[i][j] = value;
         }
     }
     return distMatrix;
-}
-function emptyMatrix(size) {
-    var mat = [];
-    for (var i = 0; i < size; i++) {
-        var newRow = [];
-        for (var j = 0; j < size; i++) {
-          newRow.push(0);
-        }
-        mat.push(newRow);
-    }
-    return mat;
 }
 
 function setCoreSize (result) {
