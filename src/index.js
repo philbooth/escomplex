@@ -6,7 +6,10 @@
 
 'use strict';
 
-var check = require('check-types');
+var check = require('check-types'),
+    project = require('./project'),
+    module = require('./module');
+
 
 exports.analyse = analyse;
 exports.processResults = processResults;
@@ -24,10 +27,10 @@ exports.processResults = processResults;
  */
 function analyse (ast, walker, options) {
     if (check.array(ast)) {
-        return require('./project').analyse(ast, walker, options);
+        return project.analyse(ast, walker, options);
     }
 
-    return require('./module').analyse(ast, walker, options);
+    return module.analyse(ast, walker, options);
 }
 
 /**
@@ -36,8 +39,9 @@ function analyse (ast, walker, options) {
  * Given an object with an array of results, it returns results with calculated aggregate values.
  *
  * @param report {object}  The report object with an array of results for calculating aggregates.
+ * @param noCoreSize {boolean} Don't compute coresize or the visibility matrix.
  *
  */
-function processResults(report) {
-    return require('./project').processResults(report);
+function processResults(report, noCoreSize) {
+    return project.processResults(report, noCoreSize);
 }
