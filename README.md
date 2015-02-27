@@ -164,28 +164,18 @@ by calling `require`:
 var escomplex = require('escomplex');
 ```
 
-It exports two functions,
-the primary interface, called `analyse`:
+escomplex exports two primary functions,
+`analyze` and `processResults`
+
+### anaylze
 
 ```javascript
 var result = escomplex.analyse(ast, walker, options);
 ```
 
-and a second function, called `processResults`:
+#### Arguments
 
-``` javascript
-escomplex.processResults(result, false);
-```
-
-This function takes a report object and computes
-aggregate scores for all individual files and also adjaceny and
-visibility matrices. The second parameter corresponds to `noCoreSize`
-option below.
-
-
-### Arguments
-
-#### ast
+##### ast
 
 The first argument, `ast`,
 must be either
@@ -201,12 +191,12 @@ each of the result objects,
 that path is also used
 during dependency analysis.
 
-#### walker
+##### walker
 
 The second argument, `walker`,
 must be a [syntax tree walker](#syntax-tree-walkers).
 
-#### options
+##### options
 
 The third argument, `options`,
 is an optional object
@@ -235,14 +225,49 @@ some of the complexity calculations:
   defaults to `false`.
 * `options.skipCalculation`:
   *only valid for when ast is an array of files*
-  Boolean indicating if we should skip processing of certain
-  values, such as the adjacency and visibility matrixes, core sizes,
-  and average values loc, etc.
+  Boolean indicating if we should skip processing of certain values,
+  such as the adjacency and visibility matrixes,
+  core sizes, and average values loc, etc.
 * `options.noCoreSize`:
   Skips creating the visibility matrix and calculating the coreSize,
   which can be very expensive for large projects
 
-### Result
+### processResults
+
+``` javascript
+escomplex.processResults(result, false);
+```
+
+This function takes a report object
+and computes aggregate scores for all individual files
+and also adjacency and visibility matrices.
+This is useful for combining together multiple report objects
+(say from different languages)
+and recomputing aggregate scores.
+
+#### Arguments
+
+##### Result
+A result object of the form:
+
+```JavaScript
+var result = {
+  reports: [
+    {
+      // same format as module return
+    }
+  ]
+}
+```
+
+#### noCoreSize
+a boolean indicating not to calculate the visibilityMatrix or core size
+
+
+### Result Format
+Both `analyze` and `processResults`
+return a report of the following format,
+with some variation depending on the given options.
 
 #### For a single module
 
@@ -437,8 +462,12 @@ are defined as follows:
   Like the adjacency matrix,
   but expanded to incorporate
   indirect dependencies.
+  Will be missing if `noCoreSize` is passed
+  as an option.
 * `result.changeCost`:
   The change cost for the project.
+  Will be missing if `noCoreSize` is passed
+  as an option.
 * `result.coreSize`:
   The core size for the project.
 * `result.loc`:

@@ -7,8 +7,8 @@
 'use strict';
 
 var check = require('check-types'),
-    project = require('./project'),
-    module = require('./module');
+    projectHandler = require('./project'),
+    moduleHandler = require('./module');
 
 
 exports.analyse = analyse;
@@ -27,10 +27,10 @@ exports.processResults = processResults;
  */
 function analyse (ast, walker, options) {
     if (check.array(ast)) {
-        return project.analyse(ast, walker, options);
+        return projectHandler.analyse(ast, walker, options);
     }
 
-    return module.analyse(ast, walker, options);
+    return moduleHandler.analyse(ast, walker, options);
 }
 
 /**
@@ -43,5 +43,5 @@ function analyse (ast, walker, options) {
  *
  */
 function processResults(report, noCoreSize) {
-    return project.processResults(report, noCoreSize);
+    return projectHandler.processResults(report, noCoreSize);
 }

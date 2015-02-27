@@ -50,14 +50,12 @@ function analyse (modules, walker, options) {
 }
 
 function processResults(result, noCoreSize) {
-    if (noCoreSize === null) {
-        noCoreSize = false;
-    }
     createAdjacencyMatrix(result);
     if (!noCoreSize) {
         createVisibilityMatrix(result);
         setCoreSize(result);
     }
+
     calculateAverages(result);
 
     return result;
@@ -170,7 +168,10 @@ function percentify (value, limit) {
 // implementation of floydWarshall alg for calculating visibility matrix in O(n^3) instead of O(n^4) with successive raising of powers
 function createVisibilityMatrix (result) {
 
-    var changeCost = 0, visibilityMatrix = adjacencyToDistMatrix(result.adjacencyMatrix), matrixLen = visibilityMatrix.length, k, i, j;
+    var changeCost = 0, visibilityMatrix, matrixLen, k, i, j;
+
+    visibilityMatrix = adjacencyToDistMatrix(result.adjacencyMatrix);
+    matrixLen = visibilityMatrix.length;
 
     for (k = 0; k < matrixLen; k += 1) {
         for (i = 0; i < matrixLen; i += 1) {
@@ -180,6 +181,7 @@ function createVisibilityMatrix (result) {
         }
     }
 
+    //convert back from a distance matrix to adjacency matrix, while also calculating change cost
     visibilityMatrix = visibilityMatrix.map(function (row, rowIndex) {
         return row.map(function (value, columnIndex) {
             if (value < Infinity) {
@@ -200,7 +202,6 @@ function createVisibilityMatrix (result) {
     result.changeCost = percentifyDensity(changeCost, visibilityMatrix);
 }
 
-// where we have 0, set distance to Infinity and copy the matrix so its special
 function adjacencyToDistMatrix(matrix) {
     var distMatrix = [], i, j, value;
     for (i = 0; i < matrix.length; i += 1) {
@@ -210,6 +211,7 @@ function adjacencyToDistMatrix(matrix) {
             if (i === j) {
                 value = 1;
             } else {
+                // where we have 0, set distance to Infinity
                 value = matrix[i][j] || Infinity;
             }
             distMatrix[i][j] = value;
