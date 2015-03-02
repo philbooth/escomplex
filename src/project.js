@@ -15,7 +15,8 @@ moduleAnalyser = require('./module');
 function analyse (modules, walker, options) {
     // TODO: Asynchronize.
 
-    var reports, result;
+    var reports;
+    options = options || {};
 
     check.assert.array(modules, 'Invalid modules');
 
@@ -37,15 +38,24 @@ function analyse (modules, walker, options) {
         }
     }, []);
 
+    if (options.skipCalculation) {
+        return {
+            reports: reports
+        };
+    }
+
     return processResults({
         reports: reports,
-    });
+    }, options.noCoreSize);
 }
 
-function processResults(result) {
+function processResults(result, noCoreSize) {
     createAdjacencyMatrix(result);
-    createVisibilityMatrix(result);
-    setCoreSize(result);
+    if (!noCoreSize) {
+        createVisibilityMatrix(result);
+        setCoreSize(result);
+    }
+
     calculateAverages(result);
 
     return result;
@@ -155,21 +165,26 @@ function percentify (value, limit) {
     return (value / limit) * 100;
 }
 
+// implementation of floydWarshall alg for calculating visibility matrix in O(n^3) instead of O(n^4) with successive raising of powers
 function createVisibilityMatrix (result) {
-    var product = result.adjacencyMatrix, sum = result.adjacencyMatrix, changeCost = 0, visibilityMatrix;
 
-    result.adjacencyMatrix.forEach(function () {
-        product = matrix.multiply(product, result.adjacencyMatrix);
-        sum = matrix.add(product, sum);
-    });
+    var changeCost = 0, visibilityMatrix, matrixLen, k, i, j;
 
-    result.adjacencyMatrix.forEach(function (ignore, index) {
-        sum[index][index] = 1;
-    });
+    visibilityMatrix = adjacencyToDistMatrix(result.adjacencyMatrix);
+    matrixLen = visibilityMatrix.length;
 
-    visibilityMatrix = sum.map(function (row, rowIndex) {
+    for (k = 0; k < matrixLen; k += 1) {
+        for (i = 0; i < matrixLen; i += 1) {
+            for (j = 0; j < matrixLen; j += 1) {
+                visibilityMatrix[i][j] = Math.min(visibilityMatrix[i][j], visibilityMatrix[i][k] + visibilityMatrix[k][j]);
+            }
+        }
+    }
+
+    //convert back from a distance matrix to adjacency matrix, while also calculating change cost
+    visibilityMatrix = visibilityMatrix.map(function (row, rowIndex) {
         return row.map(function (value, columnIndex) {
-            if (value > 0) {
+            if (value < Infinity) {
                 changeCost += 1;
 
                 if (columnIndex !== rowIndex) {
@@ -183,6 +198,24 @@ function createVisibilityMatrix (result) {
 
     result.visibilityMatrix = visibilityMatrix;
     result.changeCost = percentifyDensity(changeCost, visibilityMatrix);
+}
+
+function adjacencyToDistMatrix(matrix) {
+    var distMatrix = [], i, j, value;
+    for (i = 0; i < matrix.length; i += 1) {
+        distMatrix.push([]);
+        for (j = 0; j < matrix[i].length; j += 1) {
+            value = null;
+            if (i === j) {
+                value = 1;
+            } else {
+                // where we have 0, set distance to Infinity
+                value = matrix[i][j] || Infinity;
+            }
+            distMatrix[i][j] = value;
+        }
+    }
+    return distMatrix;
 }
 
 function setCoreSize (result) {

@@ -1,47 +1,46 @@
 {
-    "name": "escomplex",
-    "version": "1.1.0",
-    "description": "Software complexity analysis of JavaScript-family abstract syntax trees.",
-    "homepage": "https://github.com/philbooth/escomplex",
-    "bugs": "https://github.com/philbooth/escomplex/issues",
-    "license": "MIT",
-    "author": "Phil Booth <pmbooth@gmail.com> (https://github.com/philbooth)",
-    "main": "./src",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/philbooth/escomplex.git"
-    },
-    "keywords": [
-        "escomplex",
-        "complexity",
-        "simplicity",
-        "cyclomatic",
-        "halstead",
-        "maintainability",
-        "dependencies",
-        "static",
-        "analysis",
-        "metrics",
-        "esprima",
-        "acorn",
-        "ast"
-    ],
-    "dependencies": {
-        "check-types": "2.1.x",
-        "matrix-utilities": "1.2.x"
-    },
-    "devDependencies": {
-        "jshint": "2.1.x",
-        "mocha": "1.13.x",
-        "chai": "1.8.x",
-        "escomplex-ast-moz": "0.1.x",
-        "esprima": "1.0.x"
-    },
-    "scripts": {
-        "lint": "./node_modules/jshint/bin/jshint src --config config/jshint.json",
-        "test": "npm run test-module && npm run test-project",
-        "test-module": "./node_modules/mocha/bin/mocha --ui tdd --reporter spec --colors test/module",
-        "test-project": "./node_modules/mocha/bin/mocha --ui tdd --reporter spec --colors test/project"
-    }
+  "name": "escomplex",
+  "version": "1.2.0",
+  "description": "Software complexity analysis of JavaScript-family abstract syntax trees.",
+  "homepage": "https://github.com/philbooth/escomplex",
+  "bugs": "https://github.com/philbooth/escomplex/issues",
+  "license": "MIT",
+  "author": "Phil Booth <pmbooth@gmail.com> (https://github.com/philbooth)",
+  "main": "./src",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/philbooth/escomplex.git"
+  },
+  "keywords": [
+    "escomplex",
+    "complexity",
+    "simplicity",
+    "cyclomatic",
+    "halstead",
+    "maintainability",
+    "dependencies",
+    "static",
+    "analysis",
+    "metrics",
+    "esprima",
+    "acorn",
+    "ast"
+  ],
+  "dependencies": {
+    "check-types": "2.1.x",
+    "matrix-utilities": "1.2.x"
+  },
+  "devDependencies": {
+    "jshint": "2.1.x",
+    "mocha": "1.13.x",
+    "chai": "1.8.x",
+    "escomplex-ast-moz": "0.1.x",
+    "esprima": "1.0.x"
+  },
+  "scripts": {
+    "lint": "./node_modules/jshint/bin/jshint src --config config/jshint.json",
+    "test": "npm run test-module && npm run test-project",
+    "test-module": "./node_modules/mocha/bin/mocha --ui tdd --reporter spec --colors test/module",
+    "test-project": "./node_modules/mocha/bin/mocha --ui tdd --reporter spec --colors test/project"
+  }
 }
-

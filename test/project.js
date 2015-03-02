@@ -36,6 +36,10 @@ suite('project:', function () {
             assert.isFunction(cr.analyse);
         });
 
+        test('processResults function is exported', function() {
+            assert.isFunction(cr.processResults);
+        });
+
         test('analyse throws when modules is object', function () {
             assert.throws(function () {
                 cr.analyse({
@@ -279,6 +283,48 @@ suite('project:', function () {
             });
         });
 
+        suite('two modules with different options:', function() {
+            var modules = [], reportsOnly;
+            setup(function() {
+                modules.push({
+                    ast: esprima.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', { loc: true }),
+                    path: 'b'
+                });
+                modules.push({ ast: esprima.parse('if (true) { "foo"; } else { "bar"; }', { loc: true }), path: 'a' });
+                reportsOnly = cr.analyse(modules, mozWalker, {skipCalculation: true});
+            });
+
+            test('should not have aggregates if we call with skipCalculation', function() {
+                assert.deepEqual(Object.keys(reportsOnly), ['reports']);
+            });
+
+            test('should not have coreSize or visibilityMatrix if we call with noCoreSize', function() {
+                var results = cr.analyse(modules, mozWalker, {noCoreSize: true});
+                assert.notOk(results.coreSize);
+                assert.notOk(results.visibilityMatrix);
+                // make sure we still have a few things though
+                assert.ok(results.adjacencyMatrix);
+                assert.ok(results.loc);
+            });
+
+            test('should be able to run processResults', function() {
+                var fullReport, calcReport;
+                fullReport = cr.analyse(modules, mozWalker);
+                calcReport = cr.processResults(reportsOnly);
+                assert.deepEqual(calcReport, fullReport);
+            });
+
+            test('should be able to run processResults without calculating coreSize', function() {
+                var results = cr.processResults(reportsOnly, true);
+                assert.notOk(results.coreSize);
+                assert.notOk(results.visibilityMatrix);
+                // make sure we still have a few things though
+                assert.ok(results.adjacencyMatrix);
+                assert.ok(results.loc);
+            });
+
+        });
+
         suite('modules with dependencies:', function () {
             var result;
 
@@ -436,6 +482,19 @@ suite('project:', function () {
                 assert.isTrue(result.coreSize > 16.66);
                 assert.isTrue(result.coreSize < 16.67);
             });
+        });
+
+        suite('large project calculation performance and accuracy', function() {
+            var resultFixture;
+            setup(function() {
+                resultFixture = require('./fixture/ast_moz');
+            });
+
+            test('running calculations should be sufficently fast', function() {
+                this.timeout(50);
+                cr.processResults(resultFixture);
+            });
+
         });
     });
 });
