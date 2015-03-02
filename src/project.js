@@ -189,8 +189,6 @@ function createVisibilityMatrix (result) {
 
                 if (columnIndex !== rowIndex) {
                     return 1;
-                } else {
-                    return 0;
                 }
             }
 
