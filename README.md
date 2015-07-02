@@ -2,7 +2,7 @@
 
 [![Build status][ci-image]][ci-status]
 
-**NOTE: This project is no longer maintained. If you're interested in taking ownership of this repo, please contact me.**
+**NOTE: This project is no longer maintained. If you're interested in taking ownership, please contact me.**
 
 Software complexity analysis
 of JavaScript-family abstract syntax trees.
