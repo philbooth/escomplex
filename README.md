@@ -169,7 +169,7 @@ var escomplex = require('escomplex');
 escomplex exports two primary functions,
 `analyze` and `processResults`
 
-### anaylze
+### analyze
 
 ```javascript
 var result = escomplex.analyse(ast, walker, options);
