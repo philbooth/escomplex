@@ -2,8 +2,6 @@
 
 [![Build status][ci-image]][ci-status]
 
-**NOTE: This project is no longer maintained. If you're interested in taking ownership, please contact me.**
-
 Software complexity analysis
 of JavaScript-family abstract syntax trees.
 The back-end for [complexity-report].
@@ -527,10 +525,10 @@ first.
 
 [MIT][license]
 
-[ci-image]: https://secure.travis-ci.org/philbooth/escomplex.png?branch=master
-[ci-status]: http://travis-ci.org/#!/philbooth/escomplex
-[complexity-report]: https://github.com/philbooth/complexity-report
-[escomplex-ast-moz]: https://github.com/philbooth/escomplex-ast-moz
+[ci-image]: https://secure.travis-ci.org/jared-stilwell/escomplex.png?branch=master
+[ci-status]: http://travis-ci.org/#!/jared-stilwell/escomplex
+[complexity-report]: https://github.com/jared-stilwell/complexity-report
+[escomplex-ast-moz]: https://github.com/jared-stilwell/escomplex-ast-moz
 [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 [esprima]: http://esprima.org/
 [acorn]: http://marijnhaverbeke.nl/acorn
@@ -549,6 +547,6 @@ first.
 [jscomplexity]: https://github.com/slyg/jscomplexity
 [karma]: https://github.com/lorenzofox3/karma-complexity-preprocessor
 [crlint]: https://github.com/spion/crlint.js
-[contributions]: https://github.com/philbooth/escomplex/blob/master/CONTRIBUTING.md
-[license]: https://github.com/philbooth/escomplex/blob/master/COPYING
+[contributions]: https://github.com/jared-stilwell/escomplex/blob/master/CONTRIBUTING.md
+[license]: https://github.com/jared-stilwell/escomplex/blob/master/COPYING
 

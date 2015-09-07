@@ -2,14 +2,14 @@
   "name": "escomplex",
   "version": "1.2.0",
   "description": "Software complexity analysis of JavaScript-family abstract syntax trees.",
-  "homepage": "https://github.com/philbooth/escomplex",
-  "bugs": "https://github.com/philbooth/escomplex/issues",
+  "homepage": "https://github.com/jared-stilwell/escomplex",
+  "bugs": "https://github.com/jared-stilwell/escomplex/issues",
   "license": "MIT",
   "author": "Phil Booth <pmbooth@gmail.com> (https://github.com/philbooth)",
   "main": "./src",
   "repository": {
     "type": "git",
-    "url": "https://github.com/philbooth/escomplex.git"
+    "url": "https://github.com/jared-stilwell/escomplex.git"
   },
   "keywords": [
     "escomplex",
