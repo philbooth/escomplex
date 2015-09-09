@@ -2,7 +2,11 @@
 
 [![Build status][ci-image]][ci-status]
 
-**NOTE: This project is no longer maintained. If you're interested in taking ownership, please contact me.**
+:exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation:
+
+**NOTE: This fork is no longer maintained. Use [Jared's fork](https://github.com/jared-stilwell/complexity-report) instead.**
+
+:exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation:
 
 Software complexity analysis
 of JavaScript-family abstract syntax trees.
