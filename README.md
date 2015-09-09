@@ -4,7 +4,7 @@
 
 :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation:
 
-**NOTE: This fork is no longer maintained. Use [Jared's fork](https://github.com/jared-stilwell/complexity-report) instead.**
+**NOTE: This fork is no longer maintained. Use [Jared's fork](https://github.com/jared-stilwell/escomplex) instead.**
 
 :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation: :anguished: :exclamation:
 
