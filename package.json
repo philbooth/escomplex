@@ -5,7 +5,7 @@
   "homepage": "https://github.com/jared-stilwell/escomplex",
   "bugs": "https://github.com/jared-stilwell/escomplex/issues",
   "license": "MIT",
-  "author": "Phil Booth <pmbooth@gmail.com> (https://github.com/philbooth)",
+  "author": "Jared Stilwell <jared.k.stilwell@gmail.com> (https://github.com/jared-stilwell)",
   "main": "./src",
   "repository": {
     "type": "git",
