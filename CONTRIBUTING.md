@@ -15,12 +15,11 @@
 * Add yourself to the [authors] file.
 * Feel free to [open an issue][newissue] first,
   if the change is one that you think
-  needs some discussion.
-  I'm not precious
-  about the [issue list][issues].
+  needs some discussion. Please check the [issue list][issues]
+  first to avoid opening duplicate issues.
 
-[readme]: https://github.com/philbooth/escomplex/blob/master/README.md
-[authors]: https://github.com/philbooth/escomplex/blob/master/AUTHORS
-[newissue]: https://github.com/philbooth/escomplex/issues/new
-[issues]: https://github.com/philbooth/escomplex/issues
+[readme]: https://github.com/jared-stilwell/escomplex/blob/master/README.md
+[authors]: https://github.com/jared-stilwell/escomplex/blob/master/AUTHORS
+[newissue]: https://github.com/jared-stilwell/escomplex/issues/new
+[issues]: https://github.com/jared-stilwell/escomplex/issues
 
