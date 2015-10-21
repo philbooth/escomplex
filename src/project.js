@@ -23,7 +23,7 @@ function analyse (modules, walker, options) {
     reports = modules.map(function (m) {
         var report;
 
-        check.assert.unemptyString(m.path, 'Invalid path');
+        check.assert.nonEmptyString(m.path, 'Invalid path');
 
         try {
             report = moduleAnalyser.analyse(m.ast, walker, options);

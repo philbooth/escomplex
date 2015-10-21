@@ -27,15 +27,15 @@
     "ast"
   ],
   "dependencies": {
-    "check-types": "2.1.x",
-    "matrix-utilities": "1.2.x"
+    "check-types": "^4.2.0",
+    "matrix-utilities": "^1.2.4"
   },
   "devDependencies": {
-    "jshint": "2.1.x",
-    "mocha": "1.13.x",
-    "chai": "1.8.x",
-    "escomplex-ast-moz": "0.1.x",
-    "esprima": "2.6.x"
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.3",
+    "chai": "^3.3.0",
+    "escomplex-ast-moz": "^0.2.1",
+    "esprima": "^2.6.0"
   },
   "scripts": {
     "lint": "./node_modules/jshint/bin/jshint src --config config/jshint.json",

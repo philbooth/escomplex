@@ -5,11 +5,11 @@
 var check = require('check-types');
 
 module.exports = function (object, defaultName) {
-    if (check.object(object) && check.unemptyString(object.name)) {
+    if (check.object(object) && check.nonEmptyString(object.name)) {
         return object.name;
     }
 
-    if (check.unemptyString(defaultName)) {
+    if (check.nonEmptyString(defaultName)) {
         return defaultName;
     }
 

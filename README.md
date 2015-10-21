@@ -1,6 +1,8 @@
 # escomplex
 
 [![Build status][ci-image]][ci-status]
+[![Dependencies][dep-image]][dep-status]
+[![Dev Dependencies][devdep-image]][devdep-status]
 
 Software complexity analysis
 of JavaScript-family abstract syntax trees.
@@ -527,6 +529,10 @@ first.
 
 [ci-image]: https://secure.travis-ci.org/jared-stilwell/escomplex.png?branch=master
 [ci-status]: http://travis-ci.org/#!/jared-stilwell/escomplex
+[dep-image]:https://david-dm.org/jared-stilwell/escomplex.svg
+[dep-status]:https://david-dm.org/jared-stilwell/escomplex
+[devdep-image]:https://david-dm.org/jared-stilwell/escomplex/dev-status.svg
+[devdep-status]:https://david-dm.org/jared-stilwell/escomplex#info=devDependencies&view=table
 [complexity-report]: https://github.com/jared-stilwell/complexity-report
 [escomplex-ast-moz]: https://github.com/jared-stilwell/escomplex-ast-moz
 [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
