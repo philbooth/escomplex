@@ -176,7 +176,9 @@ function createVisibilityMatrix (result) {
     for (k = 0; k < matrixLen; k += 1) {
         for (i = 0; i < matrixLen; i += 1) {
             for (j = 0; j < matrixLen; j += 1) {
-                visibilityMatrix[i][j] = Math.min(visibilityMatrix[i][j], visibilityMatrix[i][k] + visibilityMatrix[k][j]);
+                if (visibilityMatrix[i][j] > visibilityMatrix[i][k] + visibilityMatrix[k][j]) {
+                    visibilityMatrix[i][j] = visibilityMatrix[i][k] + visibilityMatrix[k][j];
+                }
             }
         }
     }
