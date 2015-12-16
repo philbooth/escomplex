@@ -27,14 +27,14 @@
     "ast"
   ],
   "dependencies": {
-    "check-types": "^4.2.0"
+    "check-types": "^5.1.0"
   },
   "devDependencies": {
-    "jshint": "^2.8.0",
-    "mocha": "^2.3.3",
-    "chai": "^3.3.0",
+    "chai": "^3.4.1",
     "escomplex-ast-moz": "^0.2.1",
-    "esprima": "^2.6.0"
+    "esprima": "^2.7.1",
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.4"
   },
   "scripts": {
     "lint": "./node_modules/jshint/bin/jshint src --config config/jshint.json",
