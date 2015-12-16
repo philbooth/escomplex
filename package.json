@@ -27,8 +27,7 @@
     "ast"
   ],
   "dependencies": {
-    "check-types": "^4.2.0",
-    "matrix-utilities": "^1.2.4"
+    "check-types": "^4.2.0"
   },
   "devDependencies": {
     "jshint": "^2.8.0",
