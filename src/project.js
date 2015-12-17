@@ -2,14 +2,13 @@
 
 'use strict';
 
-var path, check, matrix, moduleAnalyser;
+var path, check, moduleAnalyser;
 
 exports.analyse = analyse;
 exports.processResults = processResults;
 
 path = require('path');
 check = require('check-types');
-matrix = require('matrix-utilities');
 moduleAnalyser = require('./module');
 
 function analyse (modules, walker, options) {
