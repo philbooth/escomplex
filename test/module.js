@@ -5,7 +5,7 @@
 var assert, mozWalker, esprima, modulePath;
 
 assert = require('chai').assert;
-mozWalker = require('escomplex-ast-moz');
+mozWalker = require('../src/walker');
 esprima = require('esprima');
 
 modulePath = '../src/module';
@@ -3037,4 +3037,3 @@ suite('module:', function () {
 
     });
 });
-
