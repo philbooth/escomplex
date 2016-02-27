@@ -1,0 +1,6 @@
+.git
+.gitignore
+.travis.yml
+CONTRIBUTING.md
+config
+test
