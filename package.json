@@ -5,12 +5,29 @@
   "homepage": "https://github.com/jared-stilwell/escomplex",
   "bugs": "https://github.com/jared-stilwell/escomplex/issues",
   "license": "MIT",
-  "author": "Jared Stilwell <jared.k.stilwell@gmail.com> (https://github.com/jared-stilwell)",
+  "author": "Phil Booth <pmbooth@gmail.com> (https://github.com/philbooth)",
   "main": "./src",
   "repository": {
     "type": "git",
     "url": "https://github.com/jared-stilwell/escomplex.git"
   },
+  "maintainers": [
+    {
+      "name": "Jared Stilwell",
+      "email": "jared.k.stilwell@gmail.com",
+      "url": "https://github.com/jared-stilwell"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Will Boyd",
+      "url": "https://github.com/lonekorean"
+    },
+    {
+      "name": "Addison Higham",
+      "url": "https://github.com/addisonj"
+    }
+  ],
   "keywords": [
     "escomplex",
     "complexity",
@@ -21,25 +38,30 @@
     "dependencies",
     "static",
     "analysis",
-    "metrics",
-    "esprima",
-    "acorn",
-    "ast"
+    "metrics"
   ],
   "dependencies": {
     "check-types": "^5.1.0"
   },
   "devDependencies": {
     "chai": "^3.4.1",
-    "escomplex-ast-moz": "^0.2.1",
+    "eslint": "^2.2.0",
     "esprima": "^2.7.1",
-    "jshint": "^2.8.0",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "mockery": "1.4.x",
+    "sinon": "^1.16.1",
+    "spooks": "0.5.x"
   },
   "scripts": {
-    "lint": "./node_modules/jshint/bin/jshint src --config config/jshint.json",
-    "test": "npm run test-module && npm run test-project",
-    "test-module": "./node_modules/mocha/bin/mocha --ui tdd --reporter spec --colors test/module",
-    "test-project": "./node_modules/mocha/bin/mocha --ui tdd --reporter spec --colors test/project"
+    "lint": "eslint test src",
+    "test": "mocha --ui tdd --reporter spec --colors"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parser": "esprima",
+    "env": {
+      "node": true,
+      "mocha": true
+    }
   }
 }

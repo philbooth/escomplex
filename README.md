@@ -8,8 +8,6 @@ Software complexity analysis
 of JavaScript-family abstract syntax trees.
 The back-end for [complexity-report].
 
-* [Abstract syntax trees](#abstract-syntax-trees)
-* [Syntax tree walkers](#syntax-tree-walkers)
 * [Metrics](#metrics)
 * [Links to research](#links-to-research)
 * [Installation](#installation)
@@ -24,30 +22,6 @@ The back-end for [complexity-report].
 * [Related projects](#related-projects)
 * [Development](#development)
 * [License](#license)
-
-## Abstract syntax trees
-
-This library deliberately excludes
-logic for parsing source code
-and for navigating parse trees.
-Both the syntax tree
-and a matching [syntax tree walker](#syntax-tree-walkers)
-are inputs to escomplex,
-meaning it is not tied
-to any particular language,
-parser
-or data format.
-
-## Syntax tree walkers
-
-* [escomplex-ast-moz]:
-  Walks syntax trees
-  that conform to the format
-  defined in Mozilla's [Parser API][api].
-  This format is returned
-  by [Esprima]
-  and [Acorn],
-  two popular JavaScript parsers.
 
 ## Metrics
 
@@ -153,7 +127,7 @@ in your `package.json` file
 or simply run:
 
 ```
-npm install escomplex
+npm i escomplex --save
 ```
 
 ## Usage
@@ -163,40 +137,23 @@ in your own code
 by calling `require`:
 
 ```javascript
-var escomplex = require('escomplex');
+const escomplex = require('escomplex');
 ```
 
 escomplex exports two primary functions,
 `analyze` and `processResults`
 
-### analyze
+### analyse
 
 ```javascript
-var result = escomplex.analyse(ast, walker, options);
+const result = escomplex.analyse(source, options);
 ```
 
 #### Arguments
 
 ##### ast
 
-The first argument, `ast`,
-must be either
-an abstract syntax tree
-or an array of syntax trees.
-If it is an array,
-each tree should include
-an extra property, `path`,
-that is either a relative or full path
-to the equivalent module on disk.
-As well as identifying
-each of the result objects,
-that path is also used
-during dependency analysis.
-
-##### walker
-
-The second argument, `walker`,
-must be a [syntax tree walker](#syntax-tree-walkers).
+The first argument, `source`, must be either a string or an array of objects. If it is an array, each object should include a `path` property that is either a relative or full path to the equivalent module on disk and a `code` with the contents of the module. As well as identifying each of the result objects, the path property is also used during dependency analysis.
 
 ##### options
 
@@ -226,7 +183,7 @@ some of the complexity calculations:
   index should be rebased on a scale from 0 to 100,
   defaults to `false`.
 * `options.skipCalculation`:
-  *only valid for when ast is an array of files*
+  *only valid for when source is an array of files*
   Boolean indicating if we should skip processing of certain values,
   such as the adjacency and visibility matrixes,
   core sizes, and average values loc, etc.
@@ -237,15 +194,12 @@ some of the complexity calculations:
 ### processResults
 
 ``` javascript
-escomplex.processResults(result, false);
+const noCoreSize = false;
+escomplex.processResults(result, noCoreSize);
 ```
 
 This function takes a report object
-and computes aggregate scores for all individual files
-and also adjacency and visibility matrices.
-This is useful for combining together multiple report objects
-(say from different languages)
-and recomputing aggregate scores.
+and computes aggregate scores for all individual files and also adjacency and visibility matrices. This is useful for combining together multiple report objects and recomputing aggregate scores.
 
 #### Arguments
 
@@ -397,9 +351,7 @@ on each one):
 
 #### For multiple modules
 
-If an array of syntax trees
-is passed in the `ast` argument,
-the result will be an object
+If an array of sources is passed in the `source` argument, the result will be an object
 that looks like the following:
 
 ```javascript
@@ -511,7 +463,7 @@ are defined as follows:
 
 ## Development
 
-Refer to the [contrubution guidelines][contributions]
+Refer to the [contribution guidelines][contributions]
 before submitting a pull request.
 
 Source code is in `/src`.
@@ -555,4 +507,3 @@ first.
 [crlint]: https://github.com/spion/crlint.js
 [contributions]: https://github.com/jared-stilwell/escomplex/blob/master/CONTRIBUTING.md
 [license]: https://github.com/jared-stilwell/escomplex/blob/master/COPYING
-

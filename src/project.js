@@ -44,7 +44,7 @@ function analyse (modules, walker, options) {
     }
 
     return processResults({
-        reports: reports,
+        reports: reports
     }, options.noCoreSize);
 }
 
@@ -307,4 +307,3 @@ function calculateAverages (result) {
         result[key] = sums[key] / divisor;
     });
 }
-

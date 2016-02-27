@@ -2,13 +2,10 @@
 
 'use strict';
 
-var assert, mozWalker, esprima, modulePath,
-
-assert = require('chai').assert;
-mozWalker = require('escomplex-ast-moz');
-esprima = require('esprima');
-
-modulePath = '../src/project';
+var assert = require('chai').assert;
+var mozWalker = require('../src/walker');
+var esprima = require('esprima');
+var modulePath = '../src/project';
 
 suite('project:', function () {
     test('require does not throw', function () {
@@ -498,4 +495,3 @@ suite('project:', function () {
         });
     });
 });
-
