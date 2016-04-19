@@ -1996,7 +1996,18 @@ suite('module:', function () {
             });
         });
 
-        suite('logical or expression with logicalor false:', function () {
+        suite('logical AND expression:', function () {
+            test('aggregate has correct cyclomatic complexity', function () {
+                var report = escomplex.analyse(
+                    esprima.parse('var foo = true && false;'),
+                    mozWalker,
+                    {}
+                );
+                assert.strictEqual(report.cyclomatic, 2);
+            });
+        });
+
+        suite('logical OR expression with logicalor false:', function () {
             var report;
 
             setup(function () {
@@ -2128,7 +2139,7 @@ suite('module:', function () {
             });
 
             test('aggregate has correct cyclomatic complexity', function () {
-                assert.strictEqual(report.aggregate.cyclomatic, 2);
+                assert.strictEqual(report.aggregate.cyclomatic, 3);
             });
 
             test('aggregate has correct Halstead total operators', function () {

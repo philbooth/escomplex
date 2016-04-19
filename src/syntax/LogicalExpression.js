@@ -10,7 +10,9 @@ function get (settings) {
     return traits.actualise(
         0,
         function (node) {
-            return settings.logicalor && node.operator === '||' ? 1 : 0;
+            var isAnd = node.operator === '&&';
+            var isOr = node.operator === '||';
+            return (isAnd || (settings.logicalor && isOr)) ? 1 : 0;
         },
         function (node) {
             return node.operator;

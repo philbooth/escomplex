@@ -220,7 +220,21 @@ suite('AST Walker', function () {
         test('binary expression');
         test('assignment expression');
         test('update expression');
-        test('logical expression');
+
+        test('logical expression: &&', function () {
+            this.walk('1 && 1');
+            var expression = this.callbacks.processNode.firstCall.args[0].expression;
+            assert.strictEqual(expression.type, 'LogicalExpression');
+            assert.strictEqual(expression.operator, '&&');
+        });
+
+        test('logical expression: ||', function () {
+            this.walk('1 || 1');
+            var expression = this.callbacks.processNode.firstCall.args[0].expression;
+            assert.strictEqual(expression.type, 'LogicalExpression');
+            assert.strictEqual(expression.operator, '||');
+        });
+
         test('conditional expression');
         test('call expression');
         test('new expression');
