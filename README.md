@@ -114,6 +114,7 @@ by a human being.
   by Alan MacCormack, John Rusnak and Carliss Baldwin.
 * [The Impact of Software Design Structure on Product Maintenance Costs and Measurement of Economic Benefits of Product Redesign][akaikine],
   by Andrei Akaikine.
+* [Think Twice Before Using the “Maintainability Index”][maintainability-index] by Arie van Deursen.
 * [A Systematic Review of Software Maintainability Prediction and Metrics][review],
   by Mehwish Riaz, Emilia Mendes and Ewan Tempero.
 
@@ -495,6 +496,7 @@ first.
 [horstzuse]: http://horst-zuse.homepage.t-online.de/z-halstead-final-05-1.pdf
 [dsm]: http://www.people.hbs.edu/cbaldwin/DR2/MRBDesignStructure17thSep1.pdf
 [akaikine]: http://sdm.mit.edu/docs/akaikine_thesis.pdf
+[maintainability-index]: https://avandeursen.com/2014/08/29/think-twice-before-using-the-maintainability-index/
 [review]: http://www.rose-hulman.edu/Users/faculty/young/CS-Classes/csse575/Resources/maintainabilityMeas05314233.pdf
 [plato]: https://github.com/es-analysis/plato
 [jsc]: https://github.com/bahmutov/js-complexity-viz
