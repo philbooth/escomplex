@@ -3,6 +3,7 @@
 [![Build status][ci-image]][ci-status]
 [![Dependencies][dep-image]][dep-status]
 [![Dev Dependencies][devdep-image]][devdep-status]
+[![Known Vulnerabilities](https://snyk.io/test/github/jared-stilwell/escomplex/badge.svg)](https://snyk.io/test/github/jared-stilwell/escomplex)
 
 Software complexity analysis
 of JavaScript-family abstract syntax trees.
