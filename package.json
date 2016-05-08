@@ -55,7 +55,7 @@
   },
   "scripts": {
     "lint": "eslint test src",
-    "test": "snyk test && mocha --ui tdd --reporter spec --colors"
+    "test": "snyk test --dev && mocha --ui tdd --reporter spec --colors"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
