@@ -4,6 +4,8 @@
 
 [Full Changelog](https://github.com/jared-stilwell/escomplex/compare/1.3.0...master)
 
+- Updated spooks dependency, fixed tests and made versions static [\#29](https://github.com/jared-stilwell/escomplex/pull/29)
+([apergy](https://github.com/apergy))
 - Updated dependencies: check-types (7.0.0) and mockery (1.7.x)[\#27](https://github.com/jared-stilwell/escomplex/pull/27)
 ([adam-moss](https://github.com/adam-moss))
 - Updated dependencies: check-types, mockery (1.6.x), and add snyk (1.14.2) [\#25](https://github.com/jared-stilwell/escomplex/pull/25)
