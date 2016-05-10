@@ -22,7 +22,7 @@ suite('index:', function () {
             parse: spooks.fn({
                 name: 'esprima.parse',
                 log: log,
-                result: 'esprima.parse result'
+                results: [ 'esprima.parse result' ]
             })
         });
         mockery.registerMock('./walker', walker);
@@ -30,7 +30,7 @@ suite('index:', function () {
             analyse: spooks.fn({
                 name: 'core.analyse',
                 log: log,
-                result: 'core.analyse result'
+                results: [ 'core.analyse result' ]
             })
         });
     });

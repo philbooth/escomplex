@@ -20,14 +20,14 @@ suite('index:', function () {
             actualise: spooks.fn({
                 name: 'operands.actualise',
                 log: log,
-                result: 'operands result'
+                results: [ 'operands result' ]
             })
         });
         mockery.registerMock('./operators', {
             actualise: spooks.fn({
                 name: 'operators.actualise',
                 log: log,
-                result: 'operators result'
+                results: [ 'operators result' ]
             })
         });
     });
