@@ -322,6 +322,62 @@ suite('project:', function () {
 
         });
 
+        suite('require directory (index.js)', function () {
+          setup(function () {
+              this.path1 = '/b.js';
+              this.path2 = '/mod/index.js';
+              this.path3 = '/mod/a.js';
+
+              var result = cr.analyse([
+                  { ast: esprima.parse('require("./mod")',   { loc: true }), path: this.path1 },
+                  { ast: esprima.parse('require("./a")',     { loc: true }), path: this.path2 },
+                  { ast: esprima.parse('require("../b.js")', { loc: true }), path: this.path3 }
+              ], mozWalker);
+
+              this.processResults = cr.processResults(result);
+          });
+
+          test('adjacency matrix is correct', function () {
+              assert.strictEqual(this.processResults.reports[0].path, this.path1);
+              assert.strictEqual(this.processResults.reports[1].path, this.path3);
+              assert.strictEqual(this.processResults.reports[2].path, this.path2);
+
+              assert.strictEqual(this.processResults.adjacencyMatrix.length, 3);
+
+              assert.strictEqual(this.processResults.adjacencyMatrix[0][0], 0);
+              assert.strictEqual(this.processResults.adjacencyMatrix[0][1], 0);
+              assert.strictEqual(this.processResults.adjacencyMatrix[0][2], 1);
+
+              assert.strictEqual(this.processResults.adjacencyMatrix[1][0], 1);
+              assert.strictEqual(this.processResults.adjacencyMatrix[1][1], 0);
+              assert.strictEqual(this.processResults.adjacencyMatrix[1][2], 0);
+
+              assert.strictEqual(this.processResults.adjacencyMatrix[2][0], 0);
+              assert.strictEqual(this.processResults.adjacencyMatrix[2][1], 1);
+              assert.strictEqual(this.processResults.adjacencyMatrix[2][2], 0);
+          });
+
+          test('visibility matrix is correct', function () {
+              assert.strictEqual(this.processResults.reports[0].path, this.path1);
+              assert.strictEqual(this.processResults.reports[1].path, this.path3);
+              assert.strictEqual(this.processResults.reports[2].path, this.path2);
+
+              assert.strictEqual(this.processResults.visibilityMatrix.length, 3);
+
+              assert.strictEqual(this.processResults.visibilityMatrix[0][0], 0);
+              assert.strictEqual(this.processResults.visibilityMatrix[0][1], 1);
+              assert.strictEqual(this.processResults.visibilityMatrix[0][2], 1);
+
+              assert.strictEqual(this.processResults.visibilityMatrix[1][0], 1);
+              assert.strictEqual(this.processResults.visibilityMatrix[1][1], 0);
+              assert.strictEqual(this.processResults.visibilityMatrix[1][2], 1);
+
+              assert.strictEqual(this.processResults.visibilityMatrix[2][0], 1);
+              assert.strictEqual(this.processResults.visibilityMatrix[2][1], 1);
+              assert.strictEqual(this.processResults.visibilityMatrix[2][2], 0);
+          });
+        });
+
         suite('modules with dependencies:', function () {
             var result;
 

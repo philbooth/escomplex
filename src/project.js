@@ -144,12 +144,21 @@ function isInternalCommonJSDependency (dependency) {
 
 function isDependency (from, dependency, to) {
     var dependencyPath = dependency.path;
+    var fromFileAbsolutePath = path.resolve(from)
+    var toFileAbsolutePath = path.resolve(to)
+    var dependencyAbsolutePath = path.resolve(path.dirname(fromFileAbsolutePath), dependencyPath)
 
     if (path.extname(dependencyPath) === '') {
-        dependencyPath += path.extname(to);
+        var index = path.join(dependencyAbsolutePath, 'index.js')
+
+        if (index === toFileAbsolutePath) {
+            return true
+        } else {
+            dependencyAbsolutePath += path.extname(to);
+        }
     }
 
-    return path.resolve(path.dirname(from), dependencyPath) === to;
+    return dependencyAbsolutePath === toFileAbsolutePath
 }
 
 function percentifyDensity (density, matrix) {
