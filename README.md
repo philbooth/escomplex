@@ -3,7 +3,7 @@
 [![Build status][ci-image]][ci-status]
 [![Dependencies][dep-image]][dep-status]
 [![Dev Dependencies][devdep-image]][devdep-status]
-[![Known Vulnerabilities](https://snyk.io/test/github/jared-stilwell/escomplex/badge.svg)](https://snyk.io/test/github/jared-stilwell/escomplex)
+[![Known Vulnerabilities](https://snyk.io/test/github/escomplex/escomplex/badge.svg)](https://snyk.io/test/github/escomplex/escomplex)
 
 Software complexity analysis
 of JavaScript-family abstract syntax trees.
@@ -481,14 +481,14 @@ first.
 
 [MIT][license]
 
-[ci-image]: https://secure.travis-ci.org/jared-stilwell/escomplex.png?branch=master
-[ci-status]: http://travis-ci.org/#!/jared-stilwell/escomplex
-[dep-image]:https://david-dm.org/jared-stilwell/escomplex.svg
-[dep-status]:https://david-dm.org/jared-stilwell/escomplex
-[devdep-image]:https://david-dm.org/jared-stilwell/escomplex/dev-status.svg
-[devdep-status]:https://david-dm.org/jared-stilwell/escomplex#info=devDependencies&view=table
-[complexity-report]: https://github.com/jared-stilwell/complexity-report
-[escomplex-ast-moz]: https://github.com/jared-stilwell/escomplex-ast-moz
+[ci-image]: https://secure.travis-ci.org/escomplex/escomplex.png?branch=master
+[ci-status]: http://travis-ci.org/#!/escomplex/escomplex
+[dep-image]:https://david-dm.org/escomplex/escomplex.svg
+[dep-status]:https://david-dm.org/escomplex/escomplex
+[devdep-image]:https://david-dm.org/escomplex/escomplex/dev-status.svg
+[devdep-status]:https://david-dm.org/escomplex/escomplex#info=devDependencies&view=table
+[complexity-report]: https://github.com/escomplex/complexity-report
+[escomplex-ast-moz]: https://github.com/escomplex/escomplex-ast-moz
 [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 [esprima]: http://esprima.org/
 [acorn]: http://marijnhaverbeke.nl/acorn
@@ -508,5 +508,5 @@ first.
 [jscomplexity]: https://github.com/slyg/jscomplexity
 [karma]: https://github.com/lorenzofox3/karma-complexity-preprocessor
 [crlint]: https://github.com/spion/crlint.js
-[contributions]: https://github.com/jared-stilwell/escomplex/blob/master/CONTRIBUTING.md
-[license]: https://github.com/jared-stilwell/escomplex/blob/master/COPYING
+[contributions]: https://github.com/escomplex/escomplex/blob/master/CONTRIBUTING.md
+[license]: https://github.com/escomplex/escomplex/blob/master/COPYING
