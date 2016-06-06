@@ -17,6 +17,8 @@
   if the change is one that you think
   needs some discussion. Please check the [issue list][issues]
   first to avoid opening duplicate issues.
+* Issues marked with the "beginners only" label are reserved
+  for first-time contributors only.
 
 [readme]: https://github.com/jared-stilwell/escomplex/blob/master/README.md
 [authors]: https://github.com/jared-stilwell/escomplex/blob/master/AUTHORS
