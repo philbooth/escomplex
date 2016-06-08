@@ -9,7 +9,8 @@ spooks = require('spooks');
 modulePath = '../src';
 
 mockery.registerAllowable(modulePath);
-mockery.registerAllowable('check-types');
+mockery.registerAllowable('lodash');
+mockery.registerAllowable('cluster');
 
 suite('index:', function () {
     var log, walker;

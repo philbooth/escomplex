@@ -536,18 +536,5 @@ suite('project:', function () {
                 assert.isTrue(result.coreSize < 16.67);
             });
         });
-
-        suite('large project calculation performance and accuracy', function() {
-            var resultFixture;
-            setup(function() {
-                resultFixture = require('./fixture/ast_moz');
-            });
-
-            test('running calculations should be sufficently fast', function() {
-                this.timeout(50);
-                cr.processResults(resultFixture);
-            });
-
-        });
     });
 });

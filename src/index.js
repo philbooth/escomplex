@@ -1,58 +1,61 @@
 /*globals require, exports */
 'use strict';
 
-var check = require('check-types');
+var _ = require('lodash');
 var esprima = require('esprima');
 var walker = require('./walker');
 var core = require('./core');
 
-exports.analyse = analyse;
+module.exports.analyse = function analyse (source, options, parsing) {
+    var ast;
+    var parser = defaultParser;
+    var parserOptions = {
+        loc: true
+    };
 
-function analyse (source, options) {
-    if (check.array(source)) {
-        return analyseSources(source, options);
+    if (typeof parsing === 'function') {
+        parser = parsing;
     }
 
-    return analyseSource(source, options);
-}
-
-function analyseSources (sources, options) {
-    return performAnalysis(
-        sources.map(
-            mapSource.bind(null, options)
-        ).filter(filterSource),
-        options
-    );
-}
-
-function mapSource (options, source) {
-    try {
-        return {
-            path: source.path,
-            ast: getSyntaxTree(source.code)
-        };
-    } catch (error) {
-        if (options.ignoreErrors) {
-            return null;
-        }
-
-        error.message = source.path + ': ' + error.message;
-        throw error;
+    if (typeof parsing === 'object') {
+        _.extend(parserOptions, parsing);
     }
-}
 
-function filterSource (source) {
-    return !!source;
-}
+    // We must enable locations for the
+    // resulting AST, otherwise the metrics
+    // will be missing line information.
+    parserOptions.loc = true;
 
-function getSyntaxTree (source) {
-    return esprima.parse(source, { loc: true });
-}
+    if (Array.isArray(source)) {
+        ast = parseProject(source, parser, parserOptions, options);
+    } else {
+        ast = parser(source, parserOptions);
+    }
 
-function performAnalysis (ast, options) {
     return core.analyse(ast, walker, options);
 }
 
-function analyseSource (source, options) {
-    return performAnalysis(getSyntaxTree(source), options);
+function defaultParser (source, parserOptions) {
+    return esprima.parse(source, parserOptions);
 }
+
+function parseProject (sources, parser, parserOptions, options) {
+    return sources
+        .map(function parseProjectModule(source) {
+            try {
+                return {
+                    path: source.path,
+                    ast: parser(source.code, parserOptions)
+                };
+            } catch (error) {
+                if (options.ignoreErrors) {
+                    return null;
+                }
+
+                error.message = source.path + ': ' + error.message;
+                throw error;
+            }
+        })
+        .filter(_.negate(_.isNil));
+}
+
