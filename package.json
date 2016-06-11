@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "eslint": "2.11.1",
+    "eslint": "2.12.0",
     "esprima": "2.7.2",
     "mocha": "2.5.3",
     "mockery": "1.7.0",
