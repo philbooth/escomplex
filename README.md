@@ -353,7 +353,7 @@ first.
 [complexity-report]: https://github.com/escomplex/complexity-report
 [escomplex-ast-moz]: https://github.com/escomplex/escomplex-ast-moz
 [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
-[esprima]: http://esprima.org/
+[espree]: https://www.npmjs.com/package/espree
 [acorn]: http://marijnhaverbeke.nl/acorn
 [plato]: https://github.com/es-analysis/plato
 [jsc]: https://github.com/bahmutov/js-complexity-viz

@@ -42,13 +42,14 @@
   ],
   "dependencies": {
     "check-types": "7.0.0",
+    "debug": "^2.2.0",
+    "espree": "^3.1.5",
     "lodash": "^4.13.1",
     "snyk": "1.14.3"
   },
   "devDependencies": {
     "chai": "3.5.0",
     "eslint": "2.12.0",
-    "esprima": "2.7.2",
     "mocha": "2.5.3",
     "mockery": "1.7.0",
     "sinon": "1.17.4",
@@ -56,11 +57,13 @@
   },
   "scripts": {
     "lint": "eslint test src",
-    "test": "snyk test --dev && mocha --ui tdd --reporter spec --colors"
+    "test": "npm run test:scan && npm run test:unit",
+    "test:unit": "mocha --ui tdd --reporter spec --colors",
+    "test:scan": "snyk test"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
-    "parser": "esprima",
+    "parser": "espree",
     "env": {
       "node": true,
       "mocha": true
