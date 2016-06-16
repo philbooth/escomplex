@@ -1,6 +1,6 @@
 # escomplex
 
-[![Build status][ci-image]][ci-status]
+[![Build Status](https://travis-ci.org/escomplex/escomplex.svg?branch=master)](https://travis-ci.org/escomplex/escomplex)
 [![Dependencies][dep-image]][dep-status]
 [![Dev Dependencies][devdep-image]][devdep-status]
 [![Known Vulnerabilities](https://snyk.io/test/github/escomplex/escomplex/badge.svg)](https://snyk.io/test/github/escomplex/escomplex)
@@ -344,8 +344,6 @@ first.
 
 [MIT][license]
 
-[ci-image]: https://secure.travis-ci.org/escomplex/escomplex.png?branch=master
-[ci-status]: http://travis-ci.org/#!/escomplex/escomplex
 [dep-image]:https://david-dm.org/escomplex/escomplex.svg
 [dep-status]:https://david-dm.org/escomplex/escomplex
 [devdep-image]:https://david-dm.org/escomplex/escomplex/dev-status.svg
