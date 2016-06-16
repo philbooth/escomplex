@@ -2,23 +2,25 @@
 'use strict';
 
 var _ = require('lodash');
-var esprima = require('esprima');
+var espree = require('espree');
 var walker = require('./walker');
 var core = require('./core');
+var debug = require('debug')('escomplex');
+var defaultParserOptions = require('./config').parserOptions;
 
 module.exports.analyse = function analyse (source, options, parsing) {
     var ast;
     var parser = defaultParser;
-    var parserOptions = {
-        loc: true
-    };
+    var parserOptions = defaultParserOptions;
 
     if (typeof parsing === 'function') {
         parser = parsing;
+        debug('Custom parse function');
     }
 
     if (typeof parsing === 'object') {
         _.extend(parserOptions, parsing);
+        debug('Custom parser options');
     }
 
     // We must enable locations for the
@@ -32,11 +34,13 @@ module.exports.analyse = function analyse (source, options, parsing) {
         ast = parser(source, parserOptions);
     }
 
+    debug('Parsed AST: ');
+    debug(JSON.stringify(ast, null, 2));
     return core.analyse(ast, walker, options);
 }
 
 function defaultParser (source, parserOptions) {
-    return esprima.parse(source, parserOptions);
+    return espree.parse(source, parserOptions);
 }
 
 function parseProject (sources, parser, parserOptions, options) {

@@ -3,6 +3,7 @@
 'use strict';
 
 var check = require('check-types'), report;
+var debug = require('debug')('escomplex:module');
 
 exports.analyse = analyse;
 
@@ -24,6 +25,8 @@ function analyse (ast, walker, options) {
     // TODO: loc is moz-specific, move to walker?
     report = createReport(ast.loc);
 
+    debug('Walking the AST:');
+    debug(JSON.stringify(ast, null, 2));
     walker.walk(ast, settings, {
         processNode: processNode,
         createScope: createScope,
@@ -97,6 +100,8 @@ function createFunctionReport (name, lines, params) {
     };
 
     if (check.object(lines)) {
+        debug('Calculating line information...');
+        debug(JSON.stringify(lines));
         result.line = lines.start.line;
         result.sloc.physical = lines.end.line - lines.start.line + 1;
     }
@@ -134,6 +139,7 @@ function incrementCounter (node, syntax, name, incrementFn, currentReport) {
 }
 
 function incrementLogicalSloc (currentReport, amount) {
+    debug('incrementing sloc by ' + amount);
     report.aggregate.sloc.logical += amount;
 
     if (currentReport) {
@@ -239,6 +245,8 @@ function calculateMetrics (settings) {
     var count, indices, sums, averages;
 
     count = report.functions.length;
+    debug('calculateMetrics: ' + count + ' functions found.');
+
     indices = {
         loc: 0,
         cyclomatic: 1,

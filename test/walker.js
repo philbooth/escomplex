@@ -2,8 +2,9 @@
 
 var assert = require('chai').assert;
 var sinon = require('sinon');
-var esprima = require('esprima');
+var espree = require('espree');
 var walker = require('../src/walker');
+var parserOptions = require('../src/config').parserOptions;
 
 // List of test cases taken directly from the ESTree
 // spec (https://github.com/estree/estree)
@@ -17,7 +18,7 @@ suite('AST Walker', function () {
         };
 
         this.walk = function parse (code) {
-            var tree = esprima.parse(code);
+            var tree = espree.parse(code, parserOptions);
             walker.walk(tree, {}, this.callbacks);
         };
     });

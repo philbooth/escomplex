@@ -2,11 +2,10 @@
 
 'use strict';
 
-var check, safeName, syntaxDefinitions;
-
-check = require('check-types');
-safeName = require('./safeName');
-syntaxDefinitions = require('./syntax');
+var check = require('check-types');
+var safeName = require('./safeName');
+var syntaxDefinitions = require('./syntax');
+var debug = require('debug')('escomplex:walker');
 
 exports.walk = walk;
 
@@ -41,7 +40,9 @@ function walk (tree, settings, callbacks) {
         var syntax;
 
         if (check.object(node)) {
+            debug('node type: ' + node.type);
             syntax = syntaxes[node.type];
+            debug('syntax: ' + JSON.stringify(syntax));
 
             if (check.object(syntax)) {
                 callbacks.processNode(node, syntax);

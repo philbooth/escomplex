@@ -2,7 +2,7 @@
 
 var assert = require('chai').assert;
 var escomplex = require('../src');
-var esprima = require('esprima');
+var espree = require('espree');
 
 suite('index parser overrides', function () {
     test('AST callback for module does not alter behavior', function () {
@@ -13,7 +13,7 @@ suite('index parser overrides', function () {
             {},
             function (source) {
                 wasCalled = true;
-                return esprima.parse(source, { loc: true });
+                return espree.parse(source, { loc: true });
             }
         );
         assert.ok(wasCalled);
@@ -35,7 +35,7 @@ suite('index parser overrides', function () {
             {},
             function (source) {
                 callCount++;
-                return esprima.parse(source, { loc: true });
+                return espree.parse(source, { loc: true });
             }
         );
         assert.equal(callCount, sources.length);

@@ -4,7 +4,7 @@
 
 var assert = require('chai').assert;
 var mozWalker = require('../src/walker');
-var esprima = require('esprima');
+var espree = require('espree');
 var modulePath = '../src/project';
 
 suite('project:', function () {
@@ -128,8 +128,8 @@ suite('project:', function () {
 
             setup(function () {
                 result = cr.analyse([
-                    { ast: esprima.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', { loc: true }), path: 'b' },
-                    { ast: esprima.parse('if (true) { "foo"; } else { "bar"; }', { loc: true }), path: 'a' }
+                    { ast: espree.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', { loc: true }), path: 'b' },
+                    { ast: espree.parse('if (true) { "foo"; } else { "bar"; }', { loc: true }), path: 'a' }
                 ], mozWalker);
             });
 
@@ -284,10 +284,10 @@ suite('project:', function () {
             var modules = [], reportsOnly;
             setup(function() {
                 modules.push({
-                    ast: esprima.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', { loc: true }),
+                    ast: espree.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', { loc: true }),
                     path: 'b'
                 });
-                modules.push({ ast: esprima.parse('if (true) { "foo"; } else { "bar"; }', { loc: true }), path: 'a' });
+                modules.push({ ast: espree.parse('if (true) { "foo"; } else { "bar"; }', { loc: true }), path: 'a' });
                 reportsOnly = cr.analyse(modules, mozWalker, {skipCalculation: true});
             });
 
@@ -329,9 +329,9 @@ suite('project:', function () {
               this.path3 = '/mod/a.js';
 
               var result = cr.analyse([
-                  { ast: esprima.parse('require("./mod")',   { loc: true }), path: this.path1 },
-                  { ast: esprima.parse('require("./a")',     { loc: true }), path: this.path2 },
-                  { ast: esprima.parse('require("../b.js")', { loc: true }), path: this.path3 }
+                  { ast: espree.parse('require("./mod")',   { loc: true }), path: this.path1 },
+                  { ast: espree.parse('require("./a")',     { loc: true }), path: this.path2 },
+                  { ast: espree.parse('require("../b.js")', { loc: true }), path: this.path3 }
               ], mozWalker);
 
               this.processResults = cr.processResults(result);
@@ -383,10 +383,10 @@ suite('project:', function () {
 
             setup(function () {
                 result = cr.analyse([
-                    { ast: esprima.parse('require("./a");"d";', { loc: true }), path: '/d.js' },
-                    { ast: esprima.parse('require("./b");"c";', { loc: true }), path: '/a/c.js' },
-                    { ast: esprima.parse('require("./c");"b";', { loc: true }), path: '/a/b.js' },
-                    { ast: esprima.parse('require("./a/b");require("./a/c");"a";', { loc: true }), path: '/a.js' }
+                    { ast: espree.parse('require("./a");"d";', { loc: true }), path: '/d.js' },
+                    { ast: espree.parse('require("./b");"c";', { loc: true }), path: '/a/c.js' },
+                    { ast: espree.parse('require("./c");"b";', { loc: true }), path: '/a/b.js' },
+                    { ast: espree.parse('require("./a/b");require("./a/c");"a";', { loc: true }), path: '/a.js' }
                 ], mozWalker);
             });
 
@@ -447,12 +447,12 @@ suite('project:', function () {
 
             setup(function () {
                 result = cr.analyse([
-                    { ast: esprima.parse('"f";', { loc: true }), path: '/a/c/f.js' },
-                    { ast: esprima.parse('require("./f");"e";', { loc: true }), path: '/a/c/e.js' },
-                    { ast: esprima.parse('"d";', { loc: true }), path: '/a/b/d.js' },
-                    { ast: esprima.parse('require("./c/e");"c";', { loc: true }), path: '/a/c.js' },
-                    { ast: esprima.parse('require("./b/d");"b";', { loc: true }), path: '/a/b.js' },
-                    { ast: esprima.parse('require("./a/b");require("./a/c");"a";', { loc: true }), path: '/a.js' }
+                    { ast: espree.parse('"f";', { loc: true }), path: '/a/c/f.js' },
+                    { ast: espree.parse('require("./f");"e";', { loc: true }), path: '/a/c/e.js' },
+                    { ast: espree.parse('"d";', { loc: true }), path: '/a/b/d.js' },
+                    { ast: espree.parse('require("./c/e");"c";', { loc: true }), path: '/a/c.js' },
+                    { ast: espree.parse('require("./b/d");"b";', { loc: true }), path: '/a/b.js' },
+                    { ast: espree.parse('require("./a/b");require("./a/c");"a";', { loc: true }), path: '/a.js' }
                 ], mozWalker);
             });
 
