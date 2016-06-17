@@ -49,17 +49,21 @@
   },
   "devDependencies": {
     "chai": "3.5.0",
+    "coveralls": "^2.11.9",
     "eslint": "2.13.0",
     "mocha": "2.5.3",
+    "mocha-lcov-reporter": "^1.2.0",
     "mockery": "1.7.0",
+    "nyc": "^6.6.1",
     "sinon": "1.17.4",
     "spooks": "2.0.0"
   },
   "scripts": {
     "lint": "eslint test src",
-    "test": "npm run test:scan && npm run test:unit",
+    "test": "npm run test:scan && npm run test:unit && npm run coveralls",
     "test:unit": "mocha --ui tdd --reporter spec --colors",
-    "test:scan": "snyk test"
+    "test:scan": "snyk test",
+    "coveralls": "nyc npm run test:unit && nyc report --reporter=text-lcov | coveralls"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",

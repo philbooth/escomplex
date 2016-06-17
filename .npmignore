@@ -1,6 +1,7 @@
 .git
 .gitignore
 .travis.yml
+.nyc_output
 CONTRIBUTING.md
 config
 test
