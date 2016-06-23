@@ -81,6 +81,7 @@ function getDefaultSettings () {
 }
 
 function createReport (lines) {
+    debug('aggregate report: ' + JSON.stringify(createFunctionReport(undefined, lines, 0), null, 2));
     return {
         aggregate: createFunctionReport(undefined, lines, 0),
         functions: [],
@@ -101,9 +102,11 @@ function createFunctionReport (name, lines, params) {
 
     if (check.object(lines)) {
         debug('Calculating line information...');
-        debug(JSON.stringify(lines));
+        debug('start line: ' + lines.start.line);
+        debug('end line: ' + lines.end.line);
         result.line = lines.start.line;
         result.sloc.physical = lines.end.line - lines.start.line + 1;
+        debug('physical lines: ' + result.sloc.physical);
     }
 
     return result;

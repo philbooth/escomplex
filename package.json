@@ -44,19 +44,21 @@
     "check-types": "7.0.0",
     "debug": "^2.2.0",
     "espree": "^3.1.5",
-    "lodash": "^4.13.1",
-    "snyk": "1.14.3"
+    "lodash": "^4.13.1"
   },
   "devDependencies": {
+    "acorn": "^3.2.0",
     "chai": "3.5.0",
     "coveralls": "^2.11.9",
     "eslint": "2.13.1",
+    "esprima": "^2.7.2",
     "mocha": "2.5.3",
     "mocha-lcov-reporter": "^1.2.0",
     "mockery": "1.7.0",
     "nyc": "^6.6.1",
     "sinon": "1.17.4",
-    "spooks": "2.0.0"
+    "spooks": "2.0.0",
+    "snyk": "1.15.0"
   },
   "scripts": {
     "lint": "eslint test src",
