@@ -271,11 +271,11 @@ function calculateMetrics (settings) {
 
     averages = sums.map(function (sum) { return sum / count; });
 
-    calculateMaintainabilityIndex(
+    report.maintainability = calculateMaintainabilityIndex(
         averages[indices.effort],
         averages[indices.cyclomatic],
         averages[indices.loc],
-        settings
+        settings.newmi
     );
 
     Object.keys(indices).forEach(function (index) {
@@ -320,23 +320,25 @@ function sumMaintainabilityMetrics (sums, indices, data) {
     sums[indices.params] += data.params;
 }
 
-function calculateMaintainabilityIndex (averageEffort, averageCyclomatic, averageLoc, settings) {
+function calculateMaintainabilityIndex (averageEffort, averageCyclomatic, averageLoc, newmi) {
     if (averageCyclomatic === 0) {
         throw new Error('Encountered function with cyclomatic complexity zero!');
     }
 
-    report.maintainability =
+    var maintainability =
         171 -
         (3.42 * Math.log(averageEffort)) -
         (0.23 * Math.log(averageCyclomatic)) -
         (16.2 * Math.log(averageLoc));
 
-    if (report.maintainability > 171) {
-        report.maintainability = 171;
+    if (maintainability > 171) {
+        maintainability = 171;
     }
 
-    if (settings.newmi) {
-        report.maintainability = Math.max(0, (report.maintainability * 100) / 171);
+    if (newmi) {
+        maintainability = Math.max(0, (maintainability * 100) / 171);
     }
+
+    return maintainability;
 }
 
