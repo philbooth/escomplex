@@ -7,6 +7,10 @@ var mozWalker = require('../src/walker');
 var parsers = require('./helpers/parsers');
 var modulePath = '../src/module';
 
+function equal(actual, expected, digits) {
+    return Math.abs(actual - expected) < Math.pow(10, digits * -1);
+}
+
 suite('module:', function () {
     test('require does not throw', function () {
         assert.doesNotThrow(function () {
@@ -563,7 +567,7 @@ suite('module:', function () {
                 });
 
                 test('mean Halstead effort is correct', function () {
-                    assert.strictEqual(report.effort, 2.3774437510817346);
+                    assert.ok(equal(report.effort, 2.377443751081734, 15));
                 });
 
                 test('mean parameter count is correct', function () {
