@@ -1,9 +1,20 @@
 /* globals exports, require */
 'use strict'
-var check = require('check-types')
+var _isObject = require('lodash.isobject')
+var _isFunction = require('lodash.isfunction')
+var _isNumber = require('lodash.isnumber')
+var assert = require('assert')
 var report
 var debug = require('debug')('escomplex:module')
 exports.analyse = analyse
+
+var defaultSettings = {
+  forin: false,
+  logicalor: true,
+  newmi: false,
+  switchcase: true,
+  trycatch: false
+}
 
 function analyse (ast, walker, options) {
   // TODO: Asynchronise
@@ -11,26 +22,23 @@ function analyse (ast, walker, options) {
   var currentReport
   var clearDependencies = true
   var scopeStack = []
-  check.assert.object(ast, 'Invalid syntax tree')
-  check.assert.object(walker, 'Invalid walker')
-  check.assert.function(walker.walk, 'Invalid walker.walk method')
-  if (check.object(options)) {
-    settings = options
-  } else {
-    settings = getDefaultSettings()
-  }
+
+  assert(_isObject(ast), 'Invalid syntax tree')
+  assert(_isObject(walker), 'Invalid walker')
+  assert(_isFunction(walker.walk), 'Invalid walker.walk method')
+
+  settings = _isObject(options) ? options : defaultSettings
 
   // TODO: loc is moz-specific, move to walker?
   report = createReport(ast.loc)
   debug('Walking the AST:')
   debug(JSON.stringify(ast, null, 2))
   walker.walk(ast, settings, {
-    createScope: createScope,
+    createScope: pushScope,
     popScope: popScope,
     processNode: processNode
   })
   calculateMetrics(settings)
-  return report
 
   function processNode (node, syntax) {
     processLloc(node, syntax, currentReport)
@@ -44,7 +52,7 @@ function analyse (ast, walker, options) {
     }
   }
 
-  function createScope (name, loc, parameterCount) {
+  function pushScope (name, loc, parameterCount) {
     currentReport = createFunctionReport(name, loc, parameterCount)
     report.functions.push(currentReport)
     report.aggregate.params += parameterCount
@@ -59,16 +67,8 @@ function analyse (ast, walker, options) {
       currentReport = undefined
     }
   }
-}
 
-function getDefaultSettings () {
-  return {
-    forin: false,
-    logicalor: true,
-    newmi: false,
-    switchcase: true,
-    trycatch: false
-  }
+  return report
 }
 
 function createReport (lines) {
@@ -90,7 +90,7 @@ function createFunctionReport (name, lines, params) {
       logical: 0
     }
   }
-  if (check.object(lines)) {
+  if (_isObject(lines)) {
     debug('Calculating line information...')
     debug('start line: ' + lines.start.line)
     debug('end line: ' + lines.end.line)
@@ -122,12 +122,10 @@ function processLloc (node, syntax, currentReport) {
 
 function incrementCounter (node, syntax, name, incrementFn, currentReport) {
   var amount = syntax[name]
-  if (check.number(amount)) {
+  if (_isNumber(amount)) {
     incrementFn(currentReport, amount)
-  } else {
-    if (check.function(amount)) {
-      incrementFn(currentReport, amount(node))
-    }
+  } else if (_isFunction(amount)) {
+    incrementFn(currentReport, amount(node))
   }
 }
 
@@ -159,15 +157,15 @@ function processOperands (node, syntax, currentReport) {
 }
 
 function processHalsteadMetric (node, syntax, metric, currentReport) {
-  if (check.array(syntax[metric])) {
+  if (Array.isArray(syntax[metric])) {
     syntax[metric].forEach(function (s) {
       var identifier
-      if (check.function(s.identifier)) {
+      if (_isFunction(s.identifier)) {
         identifier = s.identifier(node)
       } else {
         identifier = s.identifier
       }
-      if (check.function(s.filter) === false || s.filter(node) === true) {
+      if (_isFunction(s.filter) === false || s.filter(node) === true) {
         halsteadItemEncountered(currentReport, metric, identifier)
       }
     })
@@ -218,9 +216,9 @@ function incrementTotalHalsteadItems (baseReport, metric) {
 
 function processDependencies (node, syntax, clearDependencies) {
   var dependencies
-  if (check.function(syntax.dependencies)) {
+  if (_isFunction(syntax.dependencies)) {
     dependencies = syntax.dependencies(node, clearDependencies)
-    if (check.object(dependencies) || check.array(dependencies)) {
+    if (_isObject(dependencies) || Array.isArray(dependencies)) {
       report.dependencies = report.dependencies.concat(dependencies)
     }
     return true

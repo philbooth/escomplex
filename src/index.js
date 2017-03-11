@@ -1,6 +1,8 @@
 /* globals require, exports */
 'use strict'
-var _ = require('lodash')
+var _assign = require('lodash.assign')
+var _negate = require('lodash.negate')
+var _isNil = require('lodash.isnil')
 var espree = require('espree')
 var walker = require('./walker')
 var core = require('./core')
@@ -15,7 +17,7 @@ module.exports.analyse = function analyse (source, options, parsing) {
     debug('Custom parse function')
   }
   if (typeof parsing === 'object') {
-    _.extend(parserOptions, parsing)
+    _assign(parserOptions, parsing)
     debug('Custom parser options')
   }
 
@@ -51,5 +53,5 @@ function parseProject (sources, parser, parserOptions, options) {
       error.message = source.path + ': ' + error.message
       throw error
     }
-  }).filter(_.negate(_.isNil))
+  }).filter(_negate(_isNil))
 }

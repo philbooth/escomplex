@@ -1,22 +1,22 @@
-/* globals exports, require */
 'use strict'
-var path
-var check
-var moduleAnalyser
+
+var _isString = require('lodash.isstring')
+var assert = require('assert')
+var path = require('path')
+var moduleAnalyser = require('./module')
+
 exports.analyse = analyse
 exports.processResults = processResults
-path = require('path')
-check = require('check-types')
-moduleAnalyser = require('./module')
 
 function analyse (modules, walker, options) {
   // TODO: Asynchronize.
   var reports
   options = options || {}
-  check.assert.array(modules, 'Invalid modules')
+  assert(Array.isArray(modules), 'Invalid modules')
+
   reports = modules.map(function (m) {
     var report
-    check.assert.nonEmptyString(m.path, 'Invalid path')
+    assert(_isString(m.path) && m.path.length > 0, 'Invalid path')
     try {
       report = moduleAnalyser.analyse(m.ast, walker, options)
       report.path = m.path
@@ -237,7 +237,7 @@ function setCoreSize (result) {
 
 function getMedian (values) {
   values.sort(compareNumbers)
-  if (check.odd(values.length)) {
+  if (values.length % 2 === 1) {
     return values[(values.length - 1) / 2]
   }
   return (values[(values.length - 2) / 2] + values[values.length / 2]) / 2
