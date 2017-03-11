@@ -1,27 +1,36 @@
-'use strict';
-
-var parsers = [{
+'use strict'
+var parsers = [
+  {
     name: 'acorn',
-    parser: require('acorn'),
-    options: { locations: true, onComment: [] }
-},{
+    options: {
+      locations: true,
+      onComment: []
+    },
+    parser: require('acorn')
+  },
+  {
     name: 'espree',
-    parser: require('espree'),
-    options: { loc: true, ecmaVersion: 6 }
-},{
+    options: {
+      ecmaVersion: 6,
+      loc: true
+    },
+    parser: require('espree')
+  },
+  {
     name: 'esprima',
-    parser: require('esprima'),
-    options: { loc: true }
-}];
-
+    options: {
+      loc: true
+    },
+    parser: require('esprima')
+  }
+]
 module.exports.forEach = function forEachParser (tests) {
-    for(var i = 0; i < parsers.length; i++) {
-        var parserName = parsers[i].name;
-        var parser = parsers[i].parser;
-        var options = parsers[i].options;
-        suite('using the ' + parserName + ' parser:', function () {
-            tests(parserName, parser, options);
-        });
-    }
+  for (var i = 0; i < parsers.length; i++) {
+    var parserName = parsers[i].name
+    var parser = parsers[i].parser
+    var options = parsers[i].options
+    suite('using the ' + parserName + ' parser:', function () {
+      tests(parserName, parser, options)
+    })
+  }
 }
-

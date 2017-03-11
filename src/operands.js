@@ -1,12 +1,11 @@
-/*globals exports */
-
-'use strict';
-
-exports.actualise = actualiseOperands;
+/* globals exports */
+'use strict'
+exports.actualise = actualiseOperands
 
 function actualiseOperands (identifiers) {
-    return identifiers.map(function (identifier) {
-        return { identifier: identifier };
-    });
+  return identifiers.map(function (identifier) {
+    return {
+      identifier: identifier
+    }
+  })
 }
-

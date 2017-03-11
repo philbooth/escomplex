@@ -1,17 +1,13 @@
 /**
  * Code complexity reporting for Mozilla-format abstract syntax trees.
  */
-
-/*globals exports, require */
-
-'use strict';
-
-var check = require('check-types');
-var projectHandler = require('./project');
-var moduleHandler = require('./module');
-
-module.exports.analyse = analyse;
-module.exports.processResults = processResults;
+/* globals exports, require */
+'use strict'
+var check = require('check-types')
+var projectHandler = require('./project')
+var moduleHandler = require('./module')
+module.exports.analyse = analyse
+module.exports.processResults = processResults
 
 /**
  * Public function `analyse`.
@@ -24,12 +20,12 @@ module.exports.processResults = processResults;
  * @param [options] {object}  Options to modify the complexity calculation.
  *
  */
-function analyse (ast, walker, options) {
-    if (check.array(ast)) {
-        return projectHandler.analyse(ast, walker, options);
-    }
 
-    return moduleHandler.analyse(ast, walker, options);
+function analyse (ast, walker, options) {
+  if (check.array(ast)) {
+    return projectHandler.analyse(ast, walker, options)
+  }
+  return moduleHandler.analyse(ast, walker, options)
 }
 
 /**
@@ -41,6 +37,7 @@ function analyse (ast, walker, options) {
  * @param noCoreSize {boolean} Don't compute coresize or the visibility matrix.
  *
  */
-function processResults(report, noCoreSize) {
-    return projectHandler.processResults(report, noCoreSize);
+
+function processResults (report, noCoreSize) {
+  return projectHandler.processResults(report, noCoreSize)
 }

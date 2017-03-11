@@ -51,25 +51,18 @@
   "devDependencies": {
     "acorn": "^3.2.0",
     "chai": "3.5.0",
-    "eslint": "^3.0.1",
     "mocha": "^3.2.0",
-    "mocha-lcov-reporter": "^1.2.0",
     "mockery": "1.7.0",
-    "nyc": "^7.0.0",
     "sinon": "^1.17.7",
-    "spooks": "2.0.0"
+    "spooks": "2.0.0",
+    "standard": "^9.0.1"
   },
   "scripts": {
-    "lint": "eslint test src",
+    "lint": "standard",
     "test": "npm run test:unit",
     "test:unit": "mocha --ui tdd --reporter dot --colors"
   },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "parser": "espree",
-    "env": {
-      "node": true,
-      "mocha": true
-    }
+  "standard": {
+    "globals": [ "suite", "test", "setup", "teardown" ]
   }
 }
