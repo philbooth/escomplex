@@ -1,12 +1,10 @@
-/* globals require, exports */
 'use strict'
+var _isString = require('lodash.isstring')
 var traits = require('../traits')
-var check = require('check-types')
-exports.get = get
 
-function get () {
+module.exports.get = function get () {
   return traits.actualise(0, 0, undefined, function (node) {
-    if (check.string(node.value)) {
+    if (_isString(node.value)) {
       // Avoid conflicts between string literals and identifiers.
       return '"' + node.value + '"'
     }

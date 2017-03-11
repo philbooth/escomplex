@@ -1,10 +1,13 @@
-/* globals exports, require */
 'use strict'
-var check = require('check-types')
+
+var _isObject = require('lodash.isobject')
+var _isFunction = require('lodash.isfunction')
+var assert = require('assert')
 var safeName = require('./safeName')
 var syntaxDefinitions = require('./syntax')
 var debug = require('debug')('escomplex:walker')
-exports.walk = walk
+
+module.exports.walk = walk
 
 // Settings
 // - trycatch (Boolean)
@@ -14,15 +17,15 @@ exports.walk = walk
 //
 
 function walk (tree, settings, callbacks) {
-  var syntaxes
-  check.assert.object(tree, 'Invalid syntax tree')
-  check.assert.array(tree.body, 'Invalid syntax tree body')
-  check.assert.object(settings, 'Invalid settings')
-  check.assert.object(callbacks, 'Invalid callbacks')
-  check.assert.function(callbacks.processNode, 'Invalid processNode callback')
-  check.assert.function(callbacks.createScope, 'Invalid createScope callback')
-  check.assert.function(callbacks.popScope, 'Invalid popScope callback')
-  syntaxes = syntaxDefinitions.get(settings)
+  assert(_isObject(tree), 'Invalid syntax tree')
+  assert(Array.isArray(tree.body), 'Invalid syntax tree body')
+  assert(_isObject(settings), 'Invalid settings')
+  assert(_isObject(callbacks), 'Invalid callbacks')
+  assert(_isFunction(callbacks.processNode), 'Invalid processNode callback')
+  assert(_isFunction(callbacks.createScope), 'Invalid createScope callback')
+  assert(_isFunction(callbacks.popScope), 'Invalid popScope callback')
+
+  var syntaxes = syntaxDefinitions.get(settings)
   visitNodes(tree.body)
 
   function visitNodes (nodes, assignedName) {
@@ -33,11 +36,11 @@ function walk (tree, settings, callbacks) {
 
   function visitNode (node, assignedName) {
     var syntax
-    if (check.object(node)) {
+    if (_isObject(node)) {
       debug('node type: ' + node.type)
       syntax = syntaxes[node.type]
       debug('syntax: ' + JSON.stringify(syntax))
-      if (check.object(syntax)) {
+      if (_isObject(syntax)) {
         callbacks.processNode(node, syntax)
         if (syntax.newScope) {
           callbacks.createScope(safeName(node.id, assignedName), node.loc, node.params.length)
@@ -52,15 +55,15 @@ function walk (tree, settings, callbacks) {
 
   function visitChildren (node) {
     var syntax = syntaxes[node.type]
-    if (check.array(syntax.children)) {
+    if (Array.isArray(syntax.children)) {
       syntax.children.forEach(function (child) {
-        visitChild(node[child], check.function(syntax.assignableName) ? syntax.assignableName(node) : '')
+        visitChild(node[child], _isFunction(syntax.assignableName) ? syntax.assignableName(node) : '')
       })
     }
   }
 
   function visitChild (child, assignedName) {
-    var visitor = check.array(child) ? visitNodes : visitNode
+    var visitor = Array.isArray(child) ? visitNodes : visitNode
     visitor(child, assignedName)
   }
 }

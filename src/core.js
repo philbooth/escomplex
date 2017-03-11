@@ -3,7 +3,6 @@
  */
 /* globals exports, require */
 'use strict'
-var check = require('check-types')
 var projectHandler = require('./project')
 var moduleHandler = require('./module')
 module.exports.analyse = analyse
@@ -22,7 +21,7 @@ module.exports.processResults = processResults
  */
 
 function analyse (ast, walker, options) {
-  if (check.array(ast)) {
+  if (Array.isArray(ast)) {
     return projectHandler.analyse(ast, walker, options)
   }
   return moduleHandler.analyse(ast, walker, options)
