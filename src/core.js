@@ -1,10 +1,8 @@
-/**
- * Code complexity reporting for Mozilla-format abstract syntax trees.
- */
-/* globals exports, require */
 'use strict'
-var projectHandler = require('./project')
-var moduleHandler = require('./module')
+
+const projectHandler = require('./project')
+const moduleHandler = require('./module')
+
 module.exports.analyse = analyse
 module.exports.processResults = processResults
 

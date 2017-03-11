@@ -1,23 +1,8 @@
-/* globals require, exports */
 'use strict'
-var operatorTraits = require('./operators')
-var operandTraits = require('./operands')
-exports.actualise = actualise
 
-function actualise (lloc, cyclomatic, operators, operands, children, assignableName, newScope, dependencies) {
-  return {
-    assignableName: assignableName,
-    children: safeArray(children),
-    cyclomatic: cyclomatic,
-    dependencies: dependencies,
-    lloc: lloc,
-    newScope: newScope,
-    operands: operandTraits.actualise(safeArray(operands)),
-    operators: operatorTraits.actualise(safeArray(operators))
-  }
-}
-
-function safeArray (thing) {
+const operatorTraits = require('./operators')
+const operandTraits = require('./operands')
+const safeArray = thing => {
   if (typeof thing === 'undefined') {
     return []
   }
@@ -28,3 +13,23 @@ function safeArray (thing) {
     thing
   ]
 }
+
+module.exports.actualise = (
+  lloc,
+  cyclomatic,
+  operators,
+  operands,
+  children,
+  assignableName,
+  newScope,
+  dependencies
+) => ({
+  assignableName,
+  children: safeArray(children),
+  cyclomatic,
+  dependencies,
+  lloc,
+  newScope,
+  operands: operandTraits.actualise(safeArray(operands)),
+  operators: operatorTraits.actualise(safeArray(operators))
+})
