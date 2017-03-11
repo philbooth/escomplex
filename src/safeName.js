@@ -1,8 +1,9 @@
 'use strict'
-var _isObject = require('lodash.isobject')
-var _isString = require('lodash.isstring')
 
-module.exports = function (object, defaultName) {
+const _isObject = require('lodash.isobject')
+const _isString = require('lodash.isstring')
+
+module.exports = (object, defaultName) => {
   if (
     _isObject(object) &&
     _isString(object.name) &&

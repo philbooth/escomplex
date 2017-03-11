@@ -1,17 +1,19 @@
-/* globals require, exports */
 'use strict'
-var _assign = require('lodash.assign')
-var _negate = require('lodash.negate')
-var _isNil = require('lodash.isnil')
-var espree = require('espree')
-var walker = require('./walker')
-var core = require('./core')
-var debug = require('debug')('escomplex')
-var defaultParserOptions = require('./config').parserOptions
-module.exports.analyse = function analyse (source, options, parsing) {
+
+const _assign = require('lodash.assign')
+const _negate = require('lodash.negate')
+const _isNil = require('lodash.isnil')
+const espree = require('espree')
+const walker = require('./walker')
+const core = require('./core')
+const debug = require('debug')('escomplex')
+const defaultParserOptions = require('./config').parserOptions
+
+module.exports.analyse = (source, options, parsing) => {
   var ast
   var parser = defaultParser
-  var parserOptions = defaultParserOptions
+  const parserOptions = defaultParserOptions
+
   if (typeof parsing === 'function') {
     parser = parsing
     debug('Custom parse function')
@@ -40,7 +42,7 @@ function defaultParser (source, parserOptions) {
 }
 
 function parseProject (sources, parser, parserOptions, options) {
-  return sources.map(function parseProjectModule (source) {
+  return sources.map(source => {
     try {
       return {
         ast: parser(source.code, parserOptions),
@@ -53,5 +55,6 @@ function parseProject (sources, parser, parserOptions, options) {
       error.message = source.path + ': ' + error.message
       throw error
     }
-  }).filter(_negate(_isNil))
+  })
+  .filter(_negate(_isNil))
 }

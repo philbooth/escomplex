@@ -1,14 +1,11 @@
-/* globals exports, require */
 'use strict'
-var _isObject = require('lodash.isobject')
-var _isFunction = require('lodash.isfunction')
-var _isNumber = require('lodash.isnumber')
-var assert = require('assert')
-var report
-var debug = require('debug')('escomplex:module')
-exports.analyse = analyse
 
-var defaultSettings = {
+const _isObject = require('lodash.isobject')
+const _isFunction = require('lodash.isfunction')
+const _isNumber = require('lodash.isnumber')
+const assert = require('assert')
+const debug = require('debug')('escomplex:module')
+const defaultSettings = {
   forin: false,
   logicalor: true,
   newmi: false,
@@ -16,12 +13,16 @@ var defaultSettings = {
   trycatch: false
 }
 
+module.exports.analyse = analyse
+
+var report
+
 function analyse (ast, walker, options) {
   // TODO: Asynchronise
   var settings
   var currentReport
   var clearDependencies = true
-  var scopeStack = []
+  const scopeStack = []
 
   assert(_isObject(ast), 'Invalid syntax tree')
   assert(_isObject(walker), 'Invalid walker')
@@ -81,7 +82,7 @@ function createReport (lines) {
 }
 
 function createFunctionReport (name, lines, params) {
-  var result = {
+  const result = {
     cyclomatic: 1,
     halstead: createInitialHalsteadState(),
     name: name,
@@ -121,7 +122,7 @@ function processLloc (node, syntax, currentReport) {
 }
 
 function incrementCounter (node, syntax, name, incrementFn, currentReport) {
-  var amount = syntax[name]
+  const amount = syntax[name]
   if (_isNumber(amount)) {
     incrementFn(currentReport, amount)
   } else if (_isFunction(amount)) {
@@ -158,7 +159,7 @@ function processOperands (node, syntax, currentReport) {
 
 function processHalsteadMetric (node, syntax, metric, currentReport) {
   if (Array.isArray(syntax[metric])) {
-    syntax[metric].forEach(function (s) {
+    syntax[metric].forEach(s => {
       var identifier
       if (_isFunction(s.identifier)) {
         identifier = s.identifier(node)
@@ -245,7 +246,7 @@ function calculateMetrics (settings) {
     0,
     0
   ]
-  report.functions.forEach(function (functionReport) {
+  report.functions.forEach(functionReport => {
     calculateCyclomaticDensity(functionReport)
     calculateHalsteadMetrics(functionReport.halstead)
     sumMaintainabilityMetrics(sums, indices, functionReport)
@@ -257,11 +258,14 @@ function calculateMetrics (settings) {
     sumMaintainabilityMetrics(sums, indices, report.aggregate)
     count = 1
   }
-  averages = sums.map(function (sum) {
-    return sum / count
-  })
-  report.maintainability = calculateMaintainabilityIndex(averages[indices.effort], averages[indices.cyclomatic], averages[indices.loc], settings.newmi)
-  Object.keys(indices).forEach(function (index) {
+  averages = sums.map(sum => sum / count)
+  report.maintainability = calculateMaintainabilityIndex(
+    averages[indices.effort],
+    averages[indices.cyclomatic],
+    averages[indices.loc],
+    settings.newmi
+  )
+  Object.keys(indices).forEach(index => {
     report[index] = averages[indices[index]]
   })
 }
