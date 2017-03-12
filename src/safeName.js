@@ -1,17 +1,23 @@
-/*globals require, module */
+'use strict'
 
-'use strict';
+const _isObject = require('lodash.isobject')
+const _isString = require('lodash.isstring')
 
-var check = require('check-types');
+module.exports = (object, defaultName) => {
+  if (
+    _isObject(object) &&
+    _isString(object.name) &&
+    object.name.length > 0
+  ) {
+    return object.name
+  }
 
-module.exports = function (object, defaultName) {
-    if (check.object(object) && check.nonEmptyString(object.name)) {
-        return object.name;
-    }
+  if (
+    _isString(defaultName) &&
+    defaultName.length > 0
+  ) {
+    return defaultName
+  }
 
-    if (check.nonEmptyString(defaultName)) {
-        return defaultName;
-    }
-
-    return '<anonymous>';
-};
+  return '<anonymous>'
+}

@@ -1,12 +1,3 @@
-/*globals exports */
+'use strict'
 
-'use strict';
-
-exports.actualise = actualiseOperands;
-
-function actualiseOperands (identifiers) {
-    return identifiers.map(function (identifier) {
-        return { identifier: identifier };
-    });
-}
-
+module.exports.actualise = identifiers => identifiers.map(identifier => ({identifier}))
