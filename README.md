@@ -318,6 +318,7 @@ Refer to [a more in-depth description of the metrics used][metrics] for more det
   A web application health tool.
 * [grunt-complexity][grunt]:
   A JavaScript complexity analysis grunt task.
+* [atom-linter-escomplex][atom-linter-escomplex]: Lining code complexity in Atom editor.
 * [brackets-crjs][brackets]:
   Brackets extension.
 * [jscomplexity]:
@@ -351,6 +352,7 @@ first.
 [devdep-status]:https://david-dm.org/escomplex/escomplex#info=devDependencies&view=table
 [complexity-report]: https://github.com/escomplex/complexity-report
 [escomplex-ast-moz]: https://github.com/escomplex/escomplex-ast-moz
+[atom-linter-escomplex]: https://github.com/antono/atom-linter-escomplex
 [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
 [espree]: https://www.npmjs.com/package/espree
 [acorn]: http://marijnhaverbeke.nl/acorn
