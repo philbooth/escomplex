@@ -18,16 +18,17 @@ suite('index parser overrides', function () {
       var sources = [
         {
           path: 'one',
-          source: 'var a;'
+          code: 'var a;'
         },
         {
           path: 'two',
-          source: 'var b;'
+          code: 'var b;'
         }
       ]
       var callCount = 0
       var expected = escomplex.analyse(sources, {})
       var actual = escomplex.analyse(sources, {}, function (source) {
+        assert.ok(source)
         callCount++
         return parser.parse(source, options)
       })
@@ -38,11 +39,11 @@ suite('index parser overrides', function () {
       var sources = [
         {
           path: 'one',
-          source: 'var a;'
+          code: 'var a;'
         },
         {
           path: 'two',
-          source: 'var b;'
+          code: 'var b;'
         }
       ]
       var expected = escomplex.analyse(sources, {})
