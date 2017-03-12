@@ -1,5 +1,7 @@
 # escomplex
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/escomplex/escomplex.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/escomplex/escomplex.svg?branch=master)](https://travis-ci.org/escomplex/escomplex)
 [![Coverage Status](https://coveralls.io/repos/github/escomplex/escomplex/badge.svg?branch=coveralls-support)](https://coveralls.io/github/escomplex/escomplex?branch=coveralls-support)
 [![Known Vulnerabilities](https://snyk.io/test/github/escomplex/escomplex/badge.svg)](https://snyk.io/test/github/escomplex/escomplex)
