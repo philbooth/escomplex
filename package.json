@@ -41,7 +41,7 @@
     "metrics"
   ],
   "dependencies": {
-    "debug": "^2.2.0",
+    "debug": "^2.6.2",
     "espree": "^3.1.5",
     "esprima": "^2.7.3",
     "lodash.assign": "^4.2.0",
