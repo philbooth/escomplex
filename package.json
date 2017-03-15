@@ -50,6 +50,7 @@
     "lodash.isnumber": "^3.0.3",
     "lodash.isobject": "^3.0.2",
     "lodash.isstring": "^4.0.1",
+    "lodash.merge": "^4.6.0",
     "lodash.negate": "^3.0.2",
     "minimatch": "^3.0.2"
   },
@@ -64,7 +65,7 @@
   },
   "scripts": {
     "lint": "standard",
-    "test": "npm run test:unit",
+    "test": "npm run lint && npm run test:unit",
     "test:unit": "mocha --ui tdd --reporter dot --colors"
   },
   "standard": {
