@@ -25,8 +25,15 @@ function walk (tree, settings, callbacks) {
   assert(_isFunction(callbacks.createScope), 'Invalid createScope callback')
   assert(_isFunction(callbacks.popScope), 'Invalid popScope callback')
 
-  const syntaxes = syntaxDefinitions.get(settings)
   visitNodes(tree.body)
+
+  function getSyntax (type) {
+    const definition = syntaxDefinitions[type]
+
+    if (_isFunction(definition)) {
+      return definition(settings)
+    }
+  }
 
   function visitNodes (nodes, assignedName) {
     nodes.forEach(node => visitNode(node, assignedName))
@@ -35,7 +42,7 @@ function walk (tree, settings, callbacks) {
   function visitNode (node, assignedName) {
     if (_isObject(node)) {
       debug('node type: ' + node.type)
-      const syntax = syntaxes[node.type]
+      const syntax = getSyntax(node.type)
       debug('syntax: ' + JSON.stringify(syntax))
       if (_isObject(syntax)) {
         callbacks.processNode(node, syntax)
@@ -51,7 +58,7 @@ function walk (tree, settings, callbacks) {
   }
 
   function visitChildren (node) {
-    const syntax = syntaxes[node.type]
+    const syntax = getSyntax(node.type)
     if (Array.isArray(syntax.children)) {
       syntax.children.forEach(child => visitChild(
         node[child],
