@@ -2,8 +2,8 @@
 
 const _merge = require('lodash.merge')
 const _isString = require('lodash.isstring')
-const safeName = require('./safeName')
-const safeArray = require('./safeArray')
+const safeName = require('../safeName')
+const safeArray = require('../safeArray')
 
 const DEFAULTS = {
   assignableName: undefined,
@@ -179,6 +179,8 @@ const ContinueStatement = settings => defineSyntax({
   children: [ 'label' ]
 })
 
+const DebuggerStatement = settings => defineSyntax({})
+
 const DoWhileStatement = settings => defineSyntax({
   lloc: 2,
   cyclomatic: node => node.test ? 1 : 0,
@@ -188,6 +190,8 @@ const DoWhileStatement = settings => defineSyntax({
     'body'
   ]
 })
+
+const EmptyStatement = settings => defineSyntax({})
 
 const ExpressionStatement = settings => defineSyntax({
   lloc: 1,
@@ -252,6 +256,8 @@ const IfStatement = settings => defineSyntax({
     'alternate'
   ]
 })
+
+const LabeledStatement = settings => defineSyntax({})
 
 const Literal = settings => defineSyntax({
   operands: node => {
@@ -405,7 +411,9 @@ module.exports = {
   CatchClause,
   ConditionalExpression,
   ContinueStatement,
+  DebuggerStatement,
   DoWhileStatement,
+  EmptyStatement,
   ExpressionStatement,
   ForInStatement,
   ForStatement,
@@ -413,6 +421,7 @@ module.exports = {
   FunctionExpression,
   Identifier,
   IfStatement,
+  LabeledStatement,
   Literal,
   LogicalExpression,
   MemberExpression,
