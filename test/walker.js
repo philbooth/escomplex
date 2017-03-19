@@ -19,17 +19,15 @@ parsers.forEach(function (parserName, parser, options) {
         walker.walk(tree, {}, this.callbacks)
       }
     })
-    suite('Unsupported Syntax', function () {
+    suite('Statements', function () {
+      test('debugger statement', function () {
+        this.walk('debugger;')
+        assert.strictEqual(this.callbacks.processNode.callCount, 1)
+      })
       test('empty statement', function () {
         this.walk(';')
-        assert.strictEqual(this.callbacks.processNode.callCount, 0)
+        assert.strictEqual(this.callbacks.processNode.callCount, 1)
       })
-      test('labeled statement', function () {
-        this.walk('foo: a;')
-        assert.strictEqual(this.callbacks.processNode.callCount, 0)
-      })
-    })
-    suite('Statements', function () {
       test('empty block statement', function () {
         this.walk('{}')
         var blockNode = this.callbacks.processNode.firstCall.args[0]
@@ -56,19 +54,88 @@ parsers.forEach(function (parserName, parser, options) {
         assert.strictEqual(statement.consequent.body[0].expression.value, true)
         assert.strictEqual(statement.alternate.body[0].expression.value, false)
       })
-      test('break statement')
-      test('continue statement')
-      test('with statement')
-      test('switch statement')
-      test('return statement')
-      test('throw statement')
-      test('try statement')
-      test('while statement')
-      test('do-while statement')
-      test('for statement')
-      test('for-in statement')
-      test('for-of statement')
-      test('debugger statement')
+      test('labeled statement', function () {
+        this.walk('foo: a;')
+        assert.strictEqual(this.callbacks.processNode.callCount, 1)
+      })
+      test('break statement (with label)', function () {
+        this.walk('foo: break foo')
+        var statement = this.callbacks.processNode.firstCall.args[0].body
+        assert.strictEqual(statement.type, 'BreakStatement')
+        assert.strictEqual(statement.label.type, 'Identifier')
+      })
+      test('continue statement', function () {
+        this.walk('while (true) { continue }')
+        var statement = this.callbacks.processNode.firstCall.args[0].body.body[0]
+        assert.strictEqual(statement.type, 'ContinueStatement')
+        assert.strictEqual(statement.label, null)
+      })
+      test('with statement', function () {
+        this.walk('with (foo) {}')
+        var statement = this.callbacks.processNode.firstCall.args[0]
+        assert.strictEqual(statement.type, 'WithStatement')
+        assert.strictEqual(statement.object.type, 'Identifier')
+        assert.strictEqual(statement.body.type, 'BlockStatement')
+      })
+      test('switch statement', function () {
+        this.walk('switch (foo) {}')
+        var statement = this.callbacks.processNode.firstCall.args[0]
+        assert.strictEqual(statement.type, 'SwitchStatement')
+        assert.strictEqual(statement.discriminant.type, 'Identifier')
+        assert.strictEqual(statement.cases.length, 0)
+      })
+      test('return statement', function () {
+        this.walk('function foo() { return 1 }')
+        var statement = this.callbacks.processNode.firstCall.args[0].body.body[0]
+        assert.strictEqual(statement.type, 'ReturnStatement')
+        assert.strictEqual(statement.argument.type, 'Literal')
+        assert.strictEqual(statement.argument.value, 1)
+      })
+      test('throw statement', function () {
+        this.walk('function foo() { throw "foo" }')
+        var statement = this.callbacks.processNode.firstCall.args[0].body.body[0]
+        assert.strictEqual(statement.type, 'ThrowStatement')
+        assert.strictEqual(statement.argument.type, 'Literal')
+      })
+      test('try statement', function () {
+        this.walk('try {} finally {}')
+        var statement = this.callbacks.processNode.firstCall.args[0]
+        assert.strictEqual(statement.type, 'TryStatement')
+        assert.strictEqual(statement.block.type, 'BlockStatement')
+        assert.strictEqual(statement.handler, null)
+        assert.strictEqual(statement.finalizer.type, 'BlockStatement')
+      })
+      test('while statement', function () {
+        this.walk('while (true) {}')
+        var statement = this.callbacks.processNode.firstCall.args[0]
+        assert.strictEqual(statement.type, 'WhileStatement')
+        assert.strictEqual(statement.test.type, 'Literal')
+        assert.strictEqual(statement.body.type, 'BlockStatement')
+      })
+      test('do-while statement', function () {
+        this.walk('do {} while (true)')
+        var statement = this.callbacks.processNode.firstCall.args[0]
+        assert.strictEqual(statement.type, 'DoWhileStatement')
+        assert.strictEqual(statement.body.type, 'BlockStatement')
+        assert.strictEqual(statement.test.type, 'Literal')
+      })
+      test('for statement', function () {
+        this.walk('for (var i = 0; i < 10; i++) {}')
+        var statement = this.callbacks.processNode.firstCall.args[0]
+        assert.strictEqual(statement.type, 'ForStatement')
+        assert.strictEqual(statement.init.type, 'VariableDeclaration')
+        assert.strictEqual(statement.test.type, 'BinaryExpression')
+        assert.strictEqual(statement.update.type, 'UpdateExpression')
+        assert.strictEqual(statement.body.type, 'BlockStatement')
+      })
+      test('for-in statement', function () {
+        this.walk('for (var o in foo) {}')
+        var statement = this.callbacks.processNode.firstCall.args[0]
+        assert.strictEqual(statement.type, 'ForInStatement')
+        assert.strictEqual(statement.left.type, 'VariableDeclaration')
+        assert.strictEqual(statement.right.type, 'Identifier')
+        assert.strictEqual(statement.body.type, 'BlockStatement')
+      })
     })
     suite('Declarations', function () {
       test('function declaration', function () {
@@ -160,8 +227,28 @@ parsers.forEach(function (parserName, parser, options) {
         assert.strictEqual(expression.elements[0].value, 1)
         assert.strictEqual(expression.elements[1].value, 2)
       })
-      test('object expression')
-      test('property expression')
+      test('object expression', function () {
+        this.walk('({})')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'ObjectExpression')
+        assert.strictEqual(expression.properties.length, 0)
+      })
+      test('object expression with properties', function () {
+        this.walk('({ a: "foo", "bar": "baz" })')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'ObjectExpression')
+        assert.strictEqual(expression.properties.length, 2)
+        assert.strictEqual(expression.properties[0].type, 'Property')
+        assert.strictEqual(expression.properties[0].key.type, 'Identifier')
+        assert.strictEqual(expression.properties[0].key.name, 'a')
+        assert.strictEqual(expression.properties[0].value.type, 'Literal')
+        assert.strictEqual(expression.properties[0].value.value, 'foo')
+        assert.strictEqual(expression.properties[1].type, 'Property')
+        assert.strictEqual(expression.properties[1].key.type, 'Literal')
+        assert.strictEqual(expression.properties[1].key.value, 'bar')
+        assert.strictEqual(expression.properties[1].value.type, 'Literal')
+        assert.strictEqual(expression.properties[1].value.value, 'baz')
+      })
       test('function expression', function () {
         this.walk('(function foo() {})')
         var expression = this.callbacks.processNode.firstCall.args[0].expression
@@ -176,11 +263,44 @@ parsers.forEach(function (parserName, parser, options) {
         assert.strictEqual(expression.id.name, 'foo')
         assert.strictEqual(expression.generator, true)
       })
-      test('sequence expression')
-      test('unary expression')
-      test('binary expression')
-      test('assignment expression')
-      test('update expression')
+      test('sequence expression', function () {
+        this.walk('"a","b"')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'SequenceExpression')
+        assert.strictEqual(expression.expressions.length, 2)
+      })
+      test('unary expression', function () {
+        this.walk('!true')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'UnaryExpression')
+        assert.strictEqual(expression.operator, '!')
+        assert.strictEqual(expression.prefix, true)
+        assert.strictEqual(expression.argument.type, 'Literal')
+      })
+      test('binary expression', function () {
+        this.walk('1 + 1')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'BinaryExpression')
+        assert.strictEqual(expression.operator, '+')
+        assert.strictEqual(expression.left.type, 'Literal')
+        assert.strictEqual(expression.right.type, 'Literal')
+      })
+      test('assignment expression', function () {
+        this.walk('a = 1')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'AssignmentExpression')
+        assert.strictEqual(expression.operator, '=')
+        assert.strictEqual(expression.left.type, 'Identifier')
+        assert.strictEqual(expression.right.type, 'Literal')
+      })
+      test('update expression', function () {
+        this.walk('a++')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'UpdateExpression')
+        assert.strictEqual(expression.operator, '++')
+        assert.strictEqual(expression.argument.type, 'Identifier')
+        assert.strictEqual(expression.prefix, false)
+      })
       test('logical expression: &&', function () {
         this.walk('1 && 1')
         var expression = this.callbacks.processNode.firstCall.args[0].expression
@@ -193,55 +313,89 @@ parsers.forEach(function (parserName, parser, options) {
         assert.strictEqual(expression.type, 'LogicalExpression')
         assert.strictEqual(expression.operator, '||')
       })
-      test('conditional expression')
-      test('call expression')
-      test('new expression')
-      test('member expression')
-      test('super expression')
-      test('arrow function expression')
-      test('yield expression')
-      test('tagged template expression')
-    })
-    suite('Classes', function () {
-      test('class')
-      test('class body')
-      test('method definition')
-      test('class declaration')
-      test('meta property')
-    })
-    suite('Modules', function () {
-      test('module declaration')
-      test('module specifier')
-      test('import declaration')
-      test('import specifier')
-      test('import default specifier')
-      test('import namespace specifier')
-      test('export named declaration')
-      test('export specifier')
-      test('export default declaration')
-      test('export all declaration')
+      test('conditional expression', function () {
+        this.walk('true ? 1 : 0')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'ConditionalExpression')
+        assert.strictEqual(expression.test.type, 'Literal')
+        assert.strictEqual(expression.test.value, true)
+        assert.strictEqual(expression.alternate.type, 'Literal')
+        assert.strictEqual(expression.alternate.value, 0)
+        assert.strictEqual(expression.consequent.type, 'Literal')
+        assert.strictEqual(expression.consequent.value, 1)
+      })
+      test('call expression', function () {
+        this.walk('foo("bar")')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'CallExpression')
+        assert.strictEqual(expression.callee.type, 'Identifier')
+        assert.strictEqual(expression.arguments.length, 1)
+        assert.strictEqual(expression.arguments[0].type, 'Literal')
+      })
+      test('new expression', function () {
+        this.walk('new Foo("bar")')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'NewExpression')
+        assert.strictEqual(expression.callee.type, 'Identifier')
+        assert.strictEqual(expression.arguments.length, 1)
+        assert.strictEqual(expression.arguments[0].type, 'Literal')
+      })
+      test('member expression (computed)', function () {
+        this.walk('foo["bar"]')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'MemberExpression')
+        assert.strictEqual(expression.object.type, 'Identifier')
+        assert.strictEqual(expression.property.type, 'Literal')
+        assert.strictEqual(expression.computed, true)
+      })
+      test('member expression (non-computed)', function () {
+        this.walk('foo.bar')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'MemberExpression')
+        assert.strictEqual(expression.object.type, 'Identifier')
+        assert.strictEqual(expression.property.type, 'Identifier')
+        assert.strictEqual(expression.computed, false)
+      })
     })
     suite('Clauses', function () {
-      test('switchcase')
-      test('case clause')
+      test('switchcase', function () {
+        this.walk('switch (1) { case foo: "bar"; default: "baz" }')
+        var cases = this.callbacks.processNode.args[0][0].cases
+        assert.strictEqual(cases.length, 2)
+        assert.strictEqual(cases[0].type, 'SwitchCase')
+        assert.strictEqual(cases[0].test.type, 'Identifier')
+        assert.strictEqual(cases[1].type, 'SwitchCase')
+        assert.strictEqual(cases[1].test, null)
+      })
+      test('catch clause', function () {
+        this.walk('try {} catch (foo) {}')
+        var clause = this.callbacks.processNode.args[0][0].handler
+        assert.strictEqual(clause.type, 'CatchClause')
+        assert.strictEqual(clause.param.type, 'Identifier')
+        assert.strictEqual(clause.body.type, 'BlockStatement')
+        assert.strictEqual(clause.body.body.length, 0)
+      })
     })
     suite('Miscellaneous', function () {
-      test('identifier')
-      test('literal')
-      test('regexp literal')
-      test('unary operator')
-      test('binary operator')
-      test('logical operator')
-      test('assignment operator')
-      test('update operator')
-      test('spread element')
-      test('template literal')
-      test('template element')
-      test('object pattern')
-      test('assignment property')
-      test('assignment pattern')
-      test('array pattern')
-      test('rest element')
+      test('identifier', function () {
+        this.walk('foo')
+        var expression = this.callbacks.processNode.args[0][0].expression
+        assert.strictEqual(expression.type, 'Identifier')
+        assert.strictEqual(expression.name, 'foo')
+      })
+      test('literal', function () {
+        this.walk('1')
+        var expression = this.callbacks.processNode.args[0][0].expression
+        assert.strictEqual(expression.type, 'Literal')
+        assert.strictEqual(expression.value, 1)
+      })
+      test('regexp literal', function () {
+        this.walk('/foo/i')
+        var expression = this.callbacks.processNode.args[0][0].expression
+        assert.strictEqual(expression.type, 'Literal')
+        assert.strictEqual(expression.regex.pattern, 'foo')
+        assert.strictEqual(expression.regex.flags, 'i')
+      })
     })
   })
 })
