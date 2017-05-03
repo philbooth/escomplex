@@ -32,8 +32,6 @@ module.exports.analyse = (source, options, parsing) => {
   } else {
     ast = parser(source, parserOptions)
   }
-  debug('Parsed AST: ')
-  debug(JSON.stringify(ast, null, 2))
   return core.analyse(ast, walker, options)
 }
 
