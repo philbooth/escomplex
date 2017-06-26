@@ -58,7 +58,7 @@
     "acorn": "^5.0.0",
     "chai": "3.5.0",
     "mocha": "^3.2.0",
-    "mockery": "2.0.0",
+    "mockery": "2.1.0",
     "sinon": "^2.0.0",
     "spooks": "2.0.0",
     "standard": "^10.0.0"
