@@ -5,6 +5,7 @@ const _isFunction = require('lodash.isfunction')
 const _isNumber = require('lodash.isnumber')
 const assert = require('assert')
 const debug = require('debug')('escomplex:module')
+const HalsteadMetrics = require('./metrics/halstead')
 const defaultSettings = {
   forin: false,
   logicalor: true,
@@ -73,7 +74,6 @@ function analyse (ast, walker, options) {
 }
 
 function createReport (lines) {
-  debug('aggregate report: ' + JSON.stringify(createFunctionReport(undefined, lines, 0), null, 2))
   return {
     aggregate: createFunctionReport(undefined, lines, 0),
     dependencies: [],
@@ -84,7 +84,7 @@ function createReport (lines) {
 function createFunctionReport (name, lines, params) {
   const result = {
     cyclomatic: 1,
-    halstead: createInitialHalsteadState(),
+    halstead: new HalsteadMetrics(),
     name: name,
     params: params,
     sloc: {
@@ -100,21 +100,6 @@ function createFunctionReport (name, lines, params) {
     debug('physical lines: ' + result.sloc.physical)
   }
   return result
-}
-
-function createInitialHalsteadState () {
-  return {
-    operands: createInitialHalsteadItemState(),
-    operators: createInitialHalsteadItemState()
-  }
-}
-
-function createInitialHalsteadItemState () {
-  return {
-    distinct: 0,
-    identifiers: [],
-    total: 0
-  }
 }
 
 function processLloc (node, syntax, currentReport) {
@@ -233,7 +218,6 @@ function calculateMetrics (settings) {
   var sums
   var averages
   count = report.functions.length
-  debug('calculateMetrics: ' + count + ' functions found.')
   indices = {
     cyclomatic: 1,
     effort: 2,
@@ -248,11 +232,11 @@ function calculateMetrics (settings) {
   ]
   report.functions.forEach(functionReport => {
     calculateCyclomaticDensity(functionReport)
-    calculateHalsteadMetrics(functionReport.halstead)
+    functionReport.halstead.calculate()
     sumMaintainabilityMetrics(sums, indices, functionReport)
   })
   calculateCyclomaticDensity(report.aggregate)
-  calculateHalsteadMetrics(report.aggregate.halstead)
+  report.aggregate.halstead.calculate()
   if (count === 0) {
     // Sane handling of modules that contain no functions.
     sumMaintainabilityMetrics(sums, indices, report.aggregate)
@@ -272,24 +256,6 @@ function calculateMetrics (settings) {
 
 function calculateCyclomaticDensity (data) {
   data.cyclomaticDensity = (data.cyclomatic / data.sloc.logical) * 100
-}
-
-function calculateHalsteadMetrics (data) {
-  data.length = data.operators.total + data.operands.total
-  if (data.length === 0) {
-    nilHalsteadMetrics(data)
-  } else {
-    data.vocabulary = data.operators.distinct + data.operands.distinct
-    data.difficulty = (data.operators.distinct / 2) * (data.operands.distinct === 0 ? 1 : data.operands.total / data.operands.distinct)
-    data.volume = data.length * (Math.log(data.vocabulary) / Math.log(2))
-    data.effort = data.difficulty * data.volume
-    data.bugs = data.volume / 3000
-    data.time = data.effort / 18
-  }
-}
-
-function nilHalsteadMetrics (data) {
-  data.vocabulary = data.difficulty = data.volume = data.effort = data.bugs = data.time = 0
 }
 
 function sumMaintainabilityMetrics (sums, indices, data) {
