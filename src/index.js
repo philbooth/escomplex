@@ -34,7 +34,7 @@ function analyseModule (source, options, parsing) {
 
 function getParserOptions (options) {
   const results = defaultParserOptions
-  if (typeof parsing === 'object') {
+  if (typeof options === 'object') {
     _assign(results, options)
   }
 
