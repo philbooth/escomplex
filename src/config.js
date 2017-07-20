@@ -1,6 +1,6 @@
 'use strict'
 
 module.exports.parserOptions = {
-  ecmaVersion: 7,
+  ecmaVersion: 8,
   loc: true
 }

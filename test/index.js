@@ -119,7 +119,7 @@ suite('index:', function () {
       test('espree.parse was given correct options first time', function () {
         assert.isObject(log.args['espree.parse'][0][1])
         assert.isTrue(log.args['espree.parse'][0][1].loc)
-        assert.equal(log.args['espree.parse'][0][1].ecmaVersion, 7)
+        assert.equal(log.args['espree.parse'][0][1].ecmaVersion, 8)
         assert.lengthOf(Object.keys(log.args['espree.parse'][0][1]), 2)
       })
       test('espree.parse was passed two arguments second time', function () {
@@ -131,7 +131,7 @@ suite('index:', function () {
       test('espree.parse was given correct options second time', function () {
         assert.isObject(log.args['espree.parse'][1][1])
         assert.isTrue(log.args['espree.parse'][1][1].loc)
-        assert.equal(log.args['espree.parse'][1][1].ecmaVersion, 7)
+        assert.equal(log.args['espree.parse'][1][1].ecmaVersion, 8)
         assert.lengthOf(Object.keys(log.args['espree.parse'][1][1]), 2)
       })
       test('core.analyse was called once', function () {
@@ -217,7 +217,7 @@ suite('index:', function () {
       test('espree.parse was given correct options', function () {
         assert.isObject(log.args['espree.parse'][0][1])
         assert.isTrue(log.args['espree.parse'][0][1].loc)
-        assert.equal(log.args['espree.parse'][0][1].ecmaVersion, 7)
+        assert.equal(log.args['espree.parse'][0][1].ecmaVersion, 8)
         assert.lengthOf(Object.keys(log.args['espree.parse'][0][1]), 2)
       })
       test('core.analyse was called once', function () {
