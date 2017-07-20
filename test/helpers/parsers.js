@@ -17,6 +17,22 @@ var parsers = [
     parser: require('espree')
   },
   {
+    name: 'espree',
+    options: {
+      ecmaVersion: 7,
+      loc: true
+    },
+    parser: require('espree')
+  },
+  {
+    name: 'espree',
+    options: {
+      ecmaVersion: 8,
+      loc: true
+    },
+    parser: require('espree')
+  },
+  {
     name: 'esprima',
     options: {
       loc: true
